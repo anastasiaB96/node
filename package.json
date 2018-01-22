@@ -11,6 +11,8 @@
   "dependencies": {
     "awilix": "^3.0.3",
     "awilix-koa": "^1.0.0-2",
+    "config": "^1.28.1",
+    "winston": "^2.4.0",
     "koa": "^2.4.1",
     "koa-router": "^7.3.0",
     "lodash": "^4.17.4"
