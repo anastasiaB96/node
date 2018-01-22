@@ -1,9 +1,17 @@
 {
   "parser": "babel-eslint",
-  "plugins": [],
+  "globals": {
+    "Promise": true,
+    "Symbol": true,
+    "Map": true,
+    "Set": true,
+    "JSON": true
+  },
+  "env": {
+    "node": true
+  },
   "extends": [
     "standard",
     "prettier"
-  ],
-  "env": {}
+  ]
 }

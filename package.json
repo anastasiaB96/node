@@ -9,10 +9,10 @@
     "lint": "eslint --fix server && prettier --write \"server/**/*.js\""
   },
   "dependencies": {
+    "awilix": "^3.0.3",
+    "awilix-koa": "^1.0.0-2",
     "koa": "^2.4.1",
     "koa-router": "^7.3.0",
-    "awilix": "^2.10.0",
-    "awilix-koa": "^1.0.2",
     "lodash": "^4.17.4"
   },
   "devDependencies": {
