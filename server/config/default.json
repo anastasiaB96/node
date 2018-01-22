@@ -1,5 +1,10 @@
 {
   "server": {
     "port": 3004
+  },
+  "logger": {
+    "transports": [
+      "console"
+    ]
   }
 }
