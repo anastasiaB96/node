@@ -1,8 +1,8 @@
 'use strict';
 
 import * as http from 'http';
-import app from '../app';
-import logger from '../libs/logger';
+import { app, appContainer } from '../app';
+import logger from './logger';
 
 export async function createServer() {
   logger.info('Server creating.');
@@ -10,6 +10,7 @@ export async function createServer() {
   const server = http.createServer(app.callback());
 
   server.on('close', () => {
+    appContainer.dispose();
     logger.info('Server closing.')
   });
 
