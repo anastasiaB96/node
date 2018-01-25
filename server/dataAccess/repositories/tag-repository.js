@@ -1,14 +1,14 @@
-export default class TagsRepository {
+export default class TagRepository {
   constructor(logger) {
     this.logger = logger;
-    this.__todos = [
+    this._tags = [
       {id: 1, name: 'tag1'},
       {id: 2, name: 'tag2'}
     ];
   }
 
-  async get() {
+  async getAll() {
     this.logger.debug(`Getting all tags`);
-    return this.__todos;
+    return this._tags;
   }
 }
