@@ -3,26 +3,31 @@ import logger from './logger';
 
 class Container {
   constructor() {
-    this._baseRegisterOptions = {
+    this._baseResolverOptions = {
       cwd: `${__dirname}/..`,
       formatName: 'camelCase',
       resolverOptions: {
         lifetime: Lifetime.SCOPED
       }
     };
+
+    this._init();
+  }
+
+  _init() {
     this._container = createContainer({ injectionMode: InjectionMode.CLASSIC });
   }
 
   _configureServices(container) {
-    container.loadModules(['businessLogic/services/**/*.js'], this._baseRegisterOptions);
+    container.loadModules(['businessLogic/services/**/*.js'], this._baseResolverOptions);
   }
 
   _configureRepositories(container) {
-    const registerOptions = Object.assign({}, this._baseRegisterOptions, {resolverOptions: {
+    const resolverOptions = Object.assign({}, this._baseResolverOptions, {resolverOptions: {
       lifetime: Lifetime.SINGLETON
     }});
 
-    container.loadModules(['dataAccess/repositories/**/*.js'], registerOptions);
+    container.loadModules(['dataAccess/repositories/**/*.js'], resolverOptions);
   }
 
   _configureLibs(container) {

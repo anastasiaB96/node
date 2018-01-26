@@ -1,18 +1,26 @@
 'use strict';
 
 import winston from 'winston';
-import config from 'config';
 
-const loggerConfig = config.get('logger');
+/*const logger = new winston.Logger({
+  transports: [new (winston.transports.Console)({
+    timestamp: true
+  })]
+});*/
 
-const logger = new winston.Logger({
-  transports: [new (winston.transports.Console)()]
-});
+class Logger {
+  constructor() {
+    this._init();
+  }
 
-/*class Logger {
-  constructor(logger) {
-    this._logger = new logger.Logger({
-      transports: [new (logger.transports.Console)()]
+  _init() {
+    this._logger = new winston.Logger({
+      transports: [
+        new (winston.transports.Console)({
+          timestamp: true,
+          handleExceptions: true
+        })
+      ]
     });
   }
 
@@ -25,6 +33,6 @@ const logger = new winston.Logger({
   }
 }
 
-const logger = new Logger(winston);*/
+const logger = new Logger();
 
 export default logger;
