@@ -9,6 +9,6 @@ export default class TagRepository {
 
   async getAll() {
     this.logger.debug(`Getting all tags`);
-    return this._tags;
+    return Promise.resolve(this._tags);
   }
 }

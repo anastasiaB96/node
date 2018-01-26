@@ -4,6 +4,6 @@ export default class TagService {
   }
 
   async getAll() {
-    return this.tagRepository.getAll();
+    return await this.tagRepository.getAll();
   }
 }

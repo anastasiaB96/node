@@ -6,9 +6,8 @@ class TagController {
     this.logger = logger;
   }
 
-  getAll(ctx) {
-    console.log(this.tagService);
-    ctx.ok(this.tagService.getAll());
+  async getAll(ctx) {
+    ctx.ok(await this.tagService.getAll());
   }
 }
 

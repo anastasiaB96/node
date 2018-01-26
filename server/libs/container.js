@@ -1,4 +1,4 @@
-import { createContainer, Lifetime, InjectionMode } from 'awilix';
+import { createContainer, Lifetime, InjectionMode, asValue } from 'awilix';
 import logger from './logger';
 
 class Container {
@@ -10,14 +10,14 @@ class Container {
         lifetime: Lifetime.SCOPED
       }
     };
-    this._container = createContainer({ resolutionMode: InjectionMode.CLASSIC });
+    this._container = createContainer({ injectionMode: InjectionMode.CLASSIC });
   }
 
-  _registerServices(container) {
+  _configureServices(container) {
     container.loadModules(['businessLogic/services/**/*.js'], this._baseRegisterOptions);
   }
 
-  _registerRepositories(container) {
+  _configureRepositories(container) {
     const registerOptions = Object.assign({}, this._baseRegisterOptions, {resolverOptions: {
       lifetime: Lifetime.SINGLETON
     }});
@@ -25,14 +25,16 @@ class Container {
     container.loadModules(['dataAccess/repositories/**/*.js'], registerOptions);
   }
 
-  _registerLibs(container) {
-    container.register({ logger });
+  _configureLibs(container) {
+    container.register({
+      logger: asValue(logger)
+    });
   }
 
-  register() {
-    this._registerServices(this._container);
-    this._registerRepositories(this._container);
-    this._registerLibs(this._container);
+  getConfiguredContainer() {
+    this._configureServices(this._container);
+    this._configureRepositories(this._container);
+    this._configureLibs(this._container);
 
     return this._container;
   }
