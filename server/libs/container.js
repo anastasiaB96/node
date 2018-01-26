@@ -1,3 +1,5 @@
+'use strict';
+
 import { createContainer, Lifetime, InjectionMode, asValue } from 'awilix';
 import logger from './logger';
 
@@ -19,7 +21,10 @@ class Container {
   }
 
   _configureServices(container) {
-    container.loadModules(['businessLogic/services/**/*.js'], this._baseResolverOptions);
+    container.loadModules([
+      'businessLogic/services/**/*.js',
+      'businessLogic/externalServices/**/*.js'
+    ], this._baseResolverOptions);
   }
 
   _configureRepositories(container) {

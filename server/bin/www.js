@@ -2,15 +2,13 @@
 
 import config from 'config';
 import { createServer } from '../libs/server';
-import env from '../libs/env';
 import logger from '../libs/logger';
 
 const port = config.get('server.port');
 
 createServer().then(
   app => app.listen(port, () => {
-    const mode = env.NODE_ENV;
-    logger.info(`Server listening on ${port} in ${mode} mode`);
+    logger.info(`Server listening on ${port}`);
   }),
   err => {
     logger.error('Error while starting up server', err);

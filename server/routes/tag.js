@@ -1,3 +1,5 @@
+'use strict';
+
 import { createController } from 'awilix-koa';
 
 class TagController {

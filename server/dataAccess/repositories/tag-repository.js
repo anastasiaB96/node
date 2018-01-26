@@ -1,3 +1,5 @@
+'use strict';
+
 export default class TagRepository {
   constructor(logger) {
     this.logger = logger;
