@@ -22,8 +22,8 @@ class Container {
 
   _configureServices(container) {
     container.loadModules([
-      'businessLogic/services/**/*.js',
-      'businessLogic/externalServices/**/*.js'
+      'business/services/**/*.js',
+      'business/externalServices/**/*.js'
     ], this._baseResolverOptions);
   }
 
@@ -32,7 +32,7 @@ class Container {
       lifetime: Lifetime.SINGLETON
     }});
 
-    container.loadModules(['dataAccess/repositories/**/*.js'], resolverOptions);
+    container.loadModules(['store/repositories/**/*.js'], resolverOptions);
   }
 
   _configureLibs(container) {
