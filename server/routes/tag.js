@@ -15,4 +15,4 @@ class TagController {
 
 export default createController(TagController)
   .prefix('/tag')
-  .get('', 'getAll')
+  .get('', 'getAll');

@@ -3,18 +3,28 @@
 import { createController } from 'awilix-koa';
 
 class AuthController {
-  constructor(userService) {
-    this.userService = userService;
+  constructor(passport) {
+    this.passport = passport;
   }
 
-  async signUp(ctx) {
+  async register(ctx) {
   }
 
-  async signIn(ctx) {
+  async login(ctx) {
+    return this.passport.auth('local', async (err, user, info) => {
+      console.log('4 ' + user);
+      console.log('5 ' + info);
+      if (user === false) {
+        ctx.status = 401;
+        ctx.body = info.message;
+      } else {
+        ctx.ok('6 Success login');
+      }
+    })(ctx);
   }
 }
 
 export default createController(AuthController)
   .prefix('/auth')
-  .post('sign-up', 'signUp')
-  .post('sign-in', 'signIn')
+  .post('/register', 'register')
+  .post('/login', 'login')

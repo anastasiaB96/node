@@ -2,13 +2,15 @@
 
 import winston from 'winston';
 
-/*const logger = new winston.Logger({
-  transports: [new (winston.transports.Console)({
-    timestamp: true
-  })]
-});*/
+const logger = new winston.Logger({
+  transports: [
+    new (winston.transports.Console)({
+      timestamp: true
+    })
+  ]
+});
 
-class Logger {
+/*class Logger {
   constructor() {
     this._init();
   }
@@ -16,7 +18,7 @@ class Logger {
   _init() {
     this._logger = new winston.Logger({
       transports: [
-        new (winston.transports.Console)({
+        new winston.transports.Console({
           timestamp: true,
           handleExceptions: true
         })
@@ -33,6 +35,6 @@ class Logger {
   }
 }
 
-const logger = new Logger();
+const logger = new Logger();*/
 
 export default logger;

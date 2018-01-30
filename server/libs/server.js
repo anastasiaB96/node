@@ -11,7 +11,7 @@ export async function createServer() {
 
   server.on('close', () => {
     app.container.dispose();
-    logger.info('Server closing.')
+    logger.info('Server closing.');
   });
 
   logger.info('Server created.');

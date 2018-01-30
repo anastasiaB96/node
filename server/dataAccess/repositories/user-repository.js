@@ -5,25 +5,21 @@ export default class UserRepository {
     this._users = [
       {
         id: 1,
-        email: 'user1',
-        password: '123'
+        email: 'test1',
+        password: 'test1'
       }
-    ]
+    ];
   }
 
-  async create() {
-
-  }
-
-  async update() {
-
+  async create(userData) {
+    this._users.push(userData);
   }
 
   async findByEmail(email) {
     const user = this._users.find(user => user.email === email);
 
     if (!user) {
-      return null
+      return null;
     }
 
     return Promise.resolve({ ...user });

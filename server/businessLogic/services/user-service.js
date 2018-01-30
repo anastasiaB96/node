@@ -5,12 +5,8 @@ export default class UserService {
     this.userRepository = userRepository;
   }
 
-  async create() {
-    return this.userRepository.create();
-  }
-
-  async update() {
-    return this.userRepository.update();
+  async create(userData) {
+    this.userRepository.create(userData);
   }
 
   async findByEmail(email) {

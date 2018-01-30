@@ -3,10 +3,7 @@
 export default class TagRepository {
   constructor(logger) {
     this.logger = logger;
-    this._tags = [
-      {id: 1, name: 'tag1'},
-      {id: 2, name: 'tag2'}
-    ];
+    this._tags = [{ id: 1, name: 'tag1' }, { id: 2, name: 'tag2' }];
   }
 
   async getAll() {
