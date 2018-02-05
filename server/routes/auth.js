@@ -8,17 +8,23 @@ class AuthController {
   }
 
   async register(ctx) {
+    return this.passport.auth('signup', async (err, user, info) => {
+      if (user === false) {
+        ctx.status = 401;
+        ctx.body = info;
+      } else {
+        ctx.ok('Success signup');
+      }
+    })(ctx);
   }
 
   async login(ctx) {
-    return this.passport.auth('local', async (err, user, info) => {
-      console.log('4 ' + user);
-      console.log('5 ' + info);
+    return this.passport.auth('login', async (err, user, info) => {
       if (user === false) {
         ctx.status = 401;
-        ctx.body = info.message;
+        ctx.body = info;
       } else {
-        ctx.ok('6 Success login');
+        ctx.ok('Success login');
       }
     })(ctx);
   }

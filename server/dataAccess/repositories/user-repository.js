@@ -11,8 +11,16 @@ export default class UserRepository {
     ];
   }
 
-  async create(userData) {
-    this._users.push(userData);
+  async create({ email, password }) {
+    const user = {
+      id: this._users.length,
+      email,
+      password
+    };
+
+    this._users.push(user);
+
+    return Promise.resolve(user);
   }
 
   async findByEmail(email) {

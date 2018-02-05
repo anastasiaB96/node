@@ -1,5 +1,13 @@
 {
   "server": {
     "port": 3004
+  },
+  "db": {
+    "dialect": "postgres",
+    "host": "localhost",
+    "database": "stackoverflow",
+    "username": "nastassia.baranava",
+    "password": "9122930",
+    "port": "5432"
   }
 }
