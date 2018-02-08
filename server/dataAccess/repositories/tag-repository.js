@@ -1,13 +1,16 @@
 'use strict';
 
 export default class TagRepository {
-  constructor(logger) {
+  constructor(logger, Question) {
     this.logger = logger;
-    this._tags = [{ id: 1, name: 'tag1' }, { id: 2, name: 'tag2' }];
+    this.question = Question;
   }
 
   async getAll() {
-    this.logger.info(`Getting all tags`);
-    return Promise.resolve(this._tags);
+    return await this.question.findAll({
+      where: {
+        title: 'test'
+      }
+    });
   }
 }

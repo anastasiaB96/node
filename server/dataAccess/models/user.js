@@ -1,28 +1,20 @@
 'use strict';
 
 import { Sequelize } from 'sequelize';
-import BaseModel from './base-model';
+import Base from './base';
 
-export default class UserModel extends BaseModel {
-  static init(sequelize) {
-    return super.init({
-      firstName: {
+export default class User extends Base {
+  static get schema() {
+    return Object.assign({}, super.defaultProperties, {
+      first_name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      lastName: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      username: {
+      last_name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
       password_hash: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      salt: {
         type: Sequelize.STRING,
         allowNull: false,
       },
@@ -32,22 +24,23 @@ export default class UserModel extends BaseModel {
         validate: {
           isEmail: true
         }
-      },
-      isActive: {
-        type: Sequelize.BOOLEAN
       }
-    }, sequelize);
+    })
+  }
+
+  static init(sequelize) {
+    return super.init(this.schema, sequelize);
   };
 
   static associate(models) {
-    this.hasMany(models.PostModel, {
+    this.hasMany(models.Question, {
       onDelete: "CASCADE",
       foreignKey: {
         allowNull: false
       }
     });
 
-    this.hasMany(models.CommentModel, {
+    this.hasMany(models.Answer, {
       onDelete: "CASCADE",
       foreignKey: {
         allowNull: false

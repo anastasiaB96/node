@@ -1,11 +1,9 @@
 'use strict';
 
-import config from 'config';
 import fs from 'fs';
 import path from 'path';
 import { Sequelize } from 'sequelize';
-
-const dbConfig = config.get('db');
+import dbConfig from '../config';
 
 class ModelsStore {
   constructor() {
@@ -22,7 +20,7 @@ class ModelsStore {
 
     return Object.assign({}, ...fs.readdirSync(__dirname)
       .filter(file =>
-        (file.indexOf('.') !== 0) && (file !== 'index.js') && (file !== 'base-model.js')
+        (file.indexOf('.') !== 0) && (file !== 'index.js') && (file !== 'base.js')
       )
       .map(function (file) {
         const model = require(path.join(__dirname, file)).default;
