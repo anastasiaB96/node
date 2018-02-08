@@ -17,6 +17,8 @@ const app = new Koa();
 const appContainer = (app.container = container.getConfiguredContainer());
 const passport = container.getRegistration('passport');
 
+console.log(appContainer.registrations);
+
 app
   .use(errorHandler)
   .use(compress())

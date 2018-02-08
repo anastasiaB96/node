@@ -3,6 +3,7 @@
 import { createContainer, Lifetime, InjectionMode, asValue, asClass } from 'awilix';
 import logger from './logger';
 import Passport from './passport';
+import modelsStore from '../dataAccess/models';
 
 class Container {
   constructor() {
@@ -21,26 +22,21 @@ class Container {
     this._container = createContainer({ injectionMode: InjectionMode.CLASSIC });
   }
 
-  _configureLibs(container) {
+  _registerLibs(container) {
     container.register({
-      logger: asValue(logger)
-    });
-  }
-
-  _configurePassport(container) {
-    container.register({
+      logger: asValue(logger),
       passport: asClass(Passport)
     });
   }
 
-  _configureServices(container) {
+  _registerServices(container) {
     container.loadModules(
       ['businessLogic/services/**/*.js', 'businessLogic/externalServices/**/*.js'],
       this._baseResolverOptions
     );
   }
 
-  _configureRepositories(container) {
+  _registerRepositories(container) {
     const resolverOptions = Object.assign({}, this._baseResolverOptions, {
       resolverOptions: {
         lifetime: Lifetime.SINGLETON
@@ -50,11 +46,21 @@ class Container {
     container.loadModules(['dataAccess/repositories/**/*.js'], resolverOptions);
   }
 
+  _registerModels(container) {
+    const definedModels = modelsStore.models;
+
+    for (const modelName of Object.keys(definedModels)) {
+      container.register({
+        [modelName]: asValue(definedModels[modelName])
+      });
+    }
+  }
+
   getConfiguredContainer() {
-    this._configureServices(this._container);
-    this._configureRepositories(this._container);
-    this._configureLibs(this._container);
-    this._configurePassport(this._container);
+    this._registerRepositories(this._container);
+    this._registerServices(this._container);
+    this._registerModels(this._container);
+    this._registerLibs(this._container);
 
     return this._container;
   }
