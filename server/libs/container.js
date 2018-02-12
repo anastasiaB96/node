@@ -7,8 +7,8 @@ import { IocContainerHelper } from '../businessLogic/helpers/iocContainerHelper'
 
 export default class Container {
   constructor() {
-    this._container = this._initContainer();
-    this.registrations = this._container.registrations;
+    this.context = this._initContainer();
+    this.registrations = this.context.registrations;
   }
 
   _registerServices(container) {
@@ -33,6 +33,6 @@ export default class Container {
   }
 
   getRegistration(name) {
-    return this._container.cradle[name];
+    return this.context.cradle[name];
   }
 }

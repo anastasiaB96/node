@@ -5,16 +5,16 @@ import Base from './base';
 
 export default class User extends Base {
   static get schema() {
-    return Object.assign({}, super.defaultProperties, {
-      first_name: {
+    return {
+      firstName: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      last_name: {
+      lastName: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      password_hash: {
+      passwordHash: {
         type: Sequelize.STRING,
         allowNull: false,
       },
@@ -25,26 +25,22 @@ export default class User extends Base {
           isEmail: true
         }
       }
-    })
+    };
   }
 
   static init(sequelize) {
     return super.init(this.schema, sequelize);
   };
 
-  static associate(models) {
-    this.hasMany(models.Question, {
-      onDelete: "CASCADE",
-      foreignKey: {
-        allowNull: false
-      }
+  static associate({ Question, Answer }) {
+    this.hasMany(Question, {
+      as: 'question',
+      foreignKey: 'userId'
     });
 
-    this.hasMany(models.Answer, {
-      onDelete: "CASCADE",
-      foreignKey: {
-        allowNull: false
-      }
+    this.hasMany(Answer, {
+      as: 'answer',
+      foreignKey: 'userId'
     });
   }
 };

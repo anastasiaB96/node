@@ -8,15 +8,15 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      first_name: {
+      firstName: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      last_name: {
+      lastName: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      password_hash: {
+      passwordHash: {
         allowNull: false,
         type: Sequelize.STRING
       },
@@ -24,11 +24,11 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      created_at: {
+      createdAt: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updated_at: {
+      updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
       }
