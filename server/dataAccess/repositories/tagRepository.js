@@ -1,9 +1,9 @@
 'use strict';
 
 export default class TagRepository {
-  constructor(logger, Question) {
+  constructor(logger, dbContext) {
     this.logger = logger;
-    this.question = Question;
+    this.question = dbContext.models['Question'];
   }
 
   async getAll() {

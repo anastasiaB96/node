@@ -2,7 +2,7 @@
   "server": {
     "port": 3004
   },
-  "database": {
+  "db": {
     "database": "posts",
     "username": "anastasia",
     "password": "9122930",

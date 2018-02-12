@@ -1,5 +1,5 @@
 'use strict';
 
-const dbConfig = require('config').get('database');
+const dbConfig = require('config').get('db');
 
 module.exports = dbConfig;

@@ -8,8 +8,8 @@ import respond from 'koa-respond';
 import session from 'koa-session';
 
 import container from '../libs/container';
-import { errorHandler } from '../middlewares/error-handler';
-import { notFoundHandler } from '../middlewares/not-found';
+import { errorHandler } from '../middlewares/errorHandler';
+import { notFoundHandler } from '../middlewares/notFound';
 import store from './session';
 
 const app = new Koa();

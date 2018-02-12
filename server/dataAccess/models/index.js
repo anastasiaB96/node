@@ -5,11 +5,14 @@ import path from 'path';
 import { Sequelize } from 'sequelize';
 import dbConfig from '../config';
 
-class ModelsStore {
+export default class DatabaseContext {
   constructor() {
-    this._sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
-      dialect: dbConfig.dialect,
-    });
+    this._sequelize = new Sequelize(
+      dbConfig.database,
+      dbConfig.username,
+      dbConfig.password,
+      { dialect: dbConfig.dialect }
+    );
 
     this.models = this._getDefinedModels();
     this._associateModels(this.models);
@@ -38,7 +41,3 @@ class ModelsStore {
     }
   }
 }
-
-const modelsStore = new ModelsStore();
-
-export default modelsStore;
