@@ -26,7 +26,7 @@ app
   .use(passport.init())
   .use(passport.session())
   .use(scopePerRequest(appContainer))
-  .use(loadControllers('routes/*.js', { cwd: `${__dirname}/..` }))
+  .use(loadControllers('web/*.js', { cwd: `${__dirname}/..` }))
   .use(notFoundHandler);
 
 export default app;
