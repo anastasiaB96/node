@@ -7,15 +7,15 @@ import bodyParser from 'koa-bodyparser';
 import respond from 'koa-respond';
 import session from 'koa-session';
 
-import container from '../libs/container';
+import Container from '../libs/container';
 import { errorHandler } from '../middlewares/errorHandler';
 import { notFoundHandler } from '../middlewares/notFound';
 import store from './session';
 
 const app = new Koa();
 
-const appContainer = (app.container = container.getConfiguredContainer());
-const passport = container.getRegistration('passport');
+const appContainer = (app.container = new Container());
+const passport = appContainer.getRegistration('passport');
 
 app
   .use(errorHandler)

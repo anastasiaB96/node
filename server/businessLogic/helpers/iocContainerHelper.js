@@ -2,6 +2,8 @@
 
 import { Lifetime } from 'awilix';
 
+import { IocContainerHelper as IocContainerDataAccessHelper } from '../../dataAccess/helpers/iocContainerHelper';
+
 export class IocContainerHelper {
   static registerServices(container) {
     container.loadModules(
@@ -14,5 +16,7 @@ export class IocContainerHelper {
         }
       }
     );
+
+    IocContainerDataAccessHelper.registerRepositories(container);
   }
 }

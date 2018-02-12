@@ -4,6 +4,14 @@ import { Lifetime, asClass } from 'awilix';
 import DatabaseContext from '../models';
 
 export class IocContainerHelper {
+  static registerDbContext(container) {
+    container.register({
+      dbContext: asClass(DatabaseContext, {
+        lifetime: Lifetime.SINGLETON
+      })
+    });
+  }
+
   static registerRepositories(container) {
     container.loadModules(
       ['repositories/**/*.js'],
@@ -15,13 +23,7 @@ export class IocContainerHelper {
         }
       }
     );
-  }
 
-  static registerDbContext(container) {
-    container.register({
-      dbContext: asClass(DatabaseContext, {
-        lifetime: Lifetime.SINGLETON
-      })
-    });
+    this.registerDbContext(container);
   }
 }

@@ -3,28 +3,16 @@
 import { createContainer, Lifetime, InjectionMode, asValue, asClass } from 'awilix';
 import logger from './logger';
 import Passport from './passport';
-import { IocContainerHelper as IocBusinessHelper } from '../businessLogic/helpers/iocContainerHelper';
-import { IocContainerHelper as IocDataAccessHelper } from '../dataAccess/helpers/iocContainerHelper';
+import { IocContainerHelper } from '../businessLogic/helpers/iocContainerHelper';
 
-class Container {
+export default class Container {
   constructor() {
-    this._init();
-  }
-
-  _init() {
-    this._container = createContainer({ injectionMode: InjectionMode.CLASSIC });
+    this._container = this._initContainer();
+    this.registrations = this._container.registrations;
   }
 
   _registerServices(container) {
-    IocBusinessHelper.registerServices(container);
-  }
-
-  _registerRepositories(container) {
-    IocDataAccessHelper.registerRepositories(container);
-  }
-
-  _registerDbContext(container) {
-    IocDataAccessHelper.registerDbContext(container);
+    IocContainerHelper.registerServices(container);
   }
 
   _registerLibs(container) {
@@ -36,20 +24,15 @@ class Container {
     });
   }
 
-  getConfiguredContainer() {
-    this._registerServices(this._container);
-    this._registerRepositories(this._container);
-    this._registerDbContext(this._container);
-    this._registerLibs(this._container);
+  _initContainer() {
+    const container = createContainer({ injectionMode: InjectionMode.CLASSIC });
+    this._registerServices(container);
+    this._registerLibs(container);
 
-    return this._container;
+    return container;
   }
 
   getRegistration(name) {
     return this._container.cradle[name];
   }
 }
-
-const container = new Container();
-
-export default container;
