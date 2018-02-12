@@ -11,10 +11,6 @@ export default class Container {
     this.registrations = this.context.registrations;
   }
 
-  _registerServices(container) {
-    IocContainerHelper.registerServices(container);
-  }
-
   _registerLibs(container) {
     container.register({
       logger: asValue(logger),
@@ -24,10 +20,14 @@ export default class Container {
     });
   }
 
+  _registerServices(container) {
+    IocContainerHelper.registerServices(container);
+  }
+
   _initContainer() {
     const container = createContainer({ injectionMode: InjectionMode.CLASSIC });
-    this._registerServices(container);
     this._registerLibs(container);
+    this._registerServices(container);
 
     return container;
   }

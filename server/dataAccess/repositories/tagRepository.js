@@ -3,10 +3,10 @@
 export default class TagRepository {
   constructor(logger, dbContext) {
     this.logger = logger;
-    this.questions = dbContext.models.Question;
+    this.Model = dbContext.models.Question;
   }
 
   async getAll() {
-    return await this.questions.findAll();
+    return await this.Model.findAll();
   }
 }

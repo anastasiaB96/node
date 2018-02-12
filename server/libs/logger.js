@@ -2,7 +2,7 @@
 
 import winston from 'winston';
 
-const logger = new winston.Logger({
+export default new winston.Logger({
   transports: [
     new (winston.transports.Console)({
       timestamp: true
@@ -35,6 +35,4 @@ const logger = new winston.Logger({
   }
 }
 
-const logger = new Logger();*/
-
-export default logger;
+export default new Logger();*/

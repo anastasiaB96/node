@@ -11,7 +11,15 @@ export default class DatabaseContext {
       dbConfig.database,
       dbConfig.username,
       dbConfig.password,
-      { dialect: dbConfig.dialect }
+      {
+        dialect: dbConfig.dialect,
+        host: dbConfig.host,
+        port: dbConfig.port,
+        define: {
+          timestamps: true,
+          syncOnAssociation: false
+        }
+      }
     );
 
     this.models = this._getDefinedModels();
