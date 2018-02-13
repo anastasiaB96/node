@@ -1,34 +1,16 @@
 'use strict';
 
-import passport from 'koa-passport';
+import { KoaPassport } from 'koa-passport';
 import LocalStrategy from 'passport-local';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 
 export default class Passport {
   constructor(userService) {
-    this._passport = passport;
+    this._passport = new KoaPassport();
     this.userService = userService;
 
-    this._passport.use('signup', this._createLocalSignupStrategy());
     this._passport.use('login', this._createLocalLoginStrategy());
     this._passport.use('jwt', this._createJwtStrategy());
-  }
-
-  _createLocalSignupStrategy() {
-    return new LocalStrategy({
-      usernameField: 'email',
-      passwordField: 'password',
-      session: false
-    }, async (email, password, done) => {
-      const user = await this.userService.findByEmail(email);
-
-      if (user) {
-        return done(null, false, { message: 'User already exists' });
-      } else {
-        const user = await this.userService.create({email, password});
-        return done(null, user);
-      }
-    });
   }
 
   _createLocalLoginStrategy() {
@@ -40,9 +22,15 @@ export default class Passport {
       const user = await this.userService.findByEmail(email);
 
       if (user) {
-        return done(null, user);
+        const isValid = await user.validPassword(password);
+
+        if (isValid) {
+          return done(null, user);
+        } else {
+          return done(null, false, { message: 'Invalid password' });
+        }
       } else {
-        return done(null, false, { message: 'Auth error' });
+        return done(null, false, { message: 'User doesn\'t exist' });
       }
     });
   }
@@ -54,18 +42,8 @@ export default class Passport {
     opts.issuer = 'accounts.examplesoft.com';
     opts.audience = 'yoursite.net';
 
-    return new JwtStrategy(opts, function(jwt_payload, done) {
-      this.userService.findByEmail({id: jwt_payload.sub}, function(err, user) {
-        if (err) {
-          return done(err, false);
-        }
+    return new JwtStrategy(opts, (jwt_payload, done) => {
 
-        if (user) {
-          return done(null, user);
-        } else {
-          return done(null, false);
-        }
-      });
     })
   }
 

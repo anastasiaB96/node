@@ -1,6 +1,7 @@
 'use strict';
 
 import { Sequelize } from 'sequelize';
+import bcrypt from 'bcrypt';
 import Base from './base';
 
 export default class User extends Base {
@@ -14,22 +15,31 @@ export default class User extends Base {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      passwordHash: {
+      password: {
         type: Sequelize.STRING,
         allowNull: false,
       },
       email: {
         type: Sequelize.STRING,
-        allowNull: false,
-        validate: {
-          isEmail: true
-        }
+        allowNull: false
       }
     };
   }
 
+  static beforeCreate(user) {
+    return this.generateHash(user.password).then(hashedPassword => {
+      user.password = hashedPassword;
+    });
+  }
+
+  static get hooks() {
+    return {
+      beforeCreate: User.beforeCreate
+    }
+  }
+
   static init(sequelize) {
-    return super.init(this.schema, sequelize);
+    return super.init(User.schema, { sequelize, hooks: User.hooks });
   };
 
   static associate({ Question, Answer }) {
@@ -42,5 +52,13 @@ export default class User extends Base {
       as: 'answer',
       foreignKey: 'userId'
     });
+  }
+
+  static generateHash(password) {
+    return bcrypt.hash(password, bcrypt.genSaltSync(8));
+  }
+
+  validPassword(password) {
+    return bcrypt.compare(password, this.password);
   }
 };

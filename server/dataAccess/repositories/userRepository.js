@@ -1,35 +1,17 @@
 'use strict';
 
-export default class UserRepository {
-  constructor() {
-    this._users = [
-      {
-        id: 1,
-        email: 'test1',
-        password: 'test1'
-      }
-    ];
+import BaseRepository from './baseRepository';
+
+export default class UserRepository extends BaseRepository {
+  constructor(logger, dbContext) {
+    super(logger, dbContext, 'User');
   }
 
-  async create({ email, password }) {
-    const user = {
-      id: this._users.length,
-      email,
-      password
-    };
-
-    this._users.push(user);
-
-    return Promise.resolve(user);
+  async create(user) {
+    return this.Model.create(user);
   }
 
   async findByEmail(email) {
-    const user = this._users.find(user => user.email === email);
-
-    if (!user) {
-      return null;
-    }
-
-    return Promise.resolve({ ...user });
+    return this.Model.find({ where: { email } });
   }
 }

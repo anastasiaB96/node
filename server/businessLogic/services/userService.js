@@ -5,11 +5,17 @@ export default class UserService {
     this.userRepository = userRepository;
   }
 
-  async create(userData) {
-    this.userRepository.create(userData);
-  }
-
   async findByEmail(email) {
     return this.userRepository.findByEmail(email);
+  }
+
+  async create(user) {
+    const existingUser = await this.userRepository.findByEmail(user.email);
+
+    if (existingUser) {
+      return null;
+    }
+
+    return this.userRepository.create(user);
   }
 }

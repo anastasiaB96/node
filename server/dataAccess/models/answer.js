@@ -14,7 +14,7 @@ export default class Answer extends Base {
   }
 
   static init(sequelize) {
-    return super.init(this.schema, sequelize);
+    return super.init(this.schema, { sequelize });
   };
 
   static associate({ User, Question }) {

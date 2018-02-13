@@ -1,12 +1,13 @@
 'use strict';
 
-export default class TagRepository {
+import BaseRepository from './baseRepository';
+
+export default class TagRepository extends BaseRepository {
   constructor(logger, dbContext) {
-    this.logger = logger;
-    this.Model = dbContext.models.Question;
+    super(logger, dbContext, 'Question');
   }
 
   async getAll() {
-    return await this.Model.findAll();
+    return this.Model.findAll();
   }
 }
