@@ -27,7 +27,7 @@ export default class User extends Base {
   }
 
   static beforeCreate(user) {
-    return this.generateHash(user.password).then(hashedPassword => {
+    return User.generateHash(user.password).then(hashedPassword => {
       user.password = hashedPassword;
     });
   }

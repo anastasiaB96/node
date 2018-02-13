@@ -5,10 +5,6 @@ export default class UserService {
     this.userRepository = userRepository;
   }
 
-  async findByEmail(email) {
-    return this.userRepository.findByEmail(email);
-  }
-
   async create(user) {
     const existingUser = await this.userRepository.findByEmail(user.email);
 
@@ -17,5 +13,9 @@ export default class UserService {
     }
 
     return this.userRepository.create(user);
+  }
+
+  async findByEmail(email) {
+    return this.userRepository.findByEmail(email);
   }
 }

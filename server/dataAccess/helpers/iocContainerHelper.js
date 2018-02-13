@@ -24,6 +24,6 @@ export class IocContainerHelper {
       }
     );
 
-    this.registerDbContext(container);
+    IocContainerHelper.registerDbContext(container);
   }
 }

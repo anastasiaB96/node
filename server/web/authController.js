@@ -9,13 +9,12 @@ class AuthController {
   }
 
   async register(ctx) {
-    const user = ctx.request.body;
-    const createdUser = await this.userService.create(user);
+    const createdUser = await this.userService.create(ctx.request.body);
 
     if (createdUser) {
-      ctx.ok('Success login')
+      ctx.ok(createdUser);
     } else {
-      ctx.send(409, 'User already exists');
+      ctx.unauthorized('User already exists');
     }
   }
 
@@ -24,8 +23,7 @@ class AuthController {
       if (user) {
         ctx.ok('Success login');
       } else {
-        ctx.status = 401;
-        ctx.body = info;
+        ctx.unauthorized(info);
       }
     })(ctx);
   }

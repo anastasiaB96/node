@@ -9,11 +9,11 @@ export default class Passport {
     this._passport = new KoaPassport();
     this.userService = userService;
 
-    this._passport.use('login', this._createLocalLoginStrategy());
-    this._passport.use('jwt', this._createJwtStrategy());
+    this._passport.use('login', this._localLoginStrategy);
+    this._passport.use('jwt', this._jwtStrategy);
   }
 
-  _createLocalLoginStrategy() {
+  get _localLoginStrategy() {
     return new LocalStrategy({
       usernameField: 'email',
       passwordField: 'password',
@@ -35,7 +35,7 @@ export default class Passport {
     });
   }
 
-  _createJwtStrategy() {
+  get _jwtStrategy() {
     const opts = {};
     opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
     opts.secretOrKey = 'secret';
