@@ -1,18 +1,22 @@
 'use strict';
 
 import { createController } from 'awilix-koa';
+import { jwtCheck } from '../middlewares/jwtCheck';
 
 class TagController {
-  constructor(tagService, logger) {
+  constructor(passport, tagService, logger) {
+    this.passport = passport;
     this.tagService = tagService;
     this.logger = logger;
   }
 
   async getAll(ctx) {
-    ctx.ok(await this.tagService.getAll());
+    ctx.ok('TAAAAAGS');
   }
 }
 
 export default createController(TagController)
   .prefix('/tag')
-  .get('', 'getAll');
+  .get('', 'getAll', {
+    before: [jwtCheck]
+  });

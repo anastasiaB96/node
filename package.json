@@ -13,6 +13,7 @@
     "awilix-koa": "^1.0.2",
     "bcrypt": "^1.0.3",
     "config": "^1.28.1",
+    "es6-promisify": "^6.0.0",
     "fejl": "^1.0.2",
     "jsonwebtoken": "^7.3.0",
     "jwks-rsa": "^1.2.1",

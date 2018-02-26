@@ -3,6 +3,7 @@
 import { KoaPassport } from 'koa-passport';
 import LocalStrategy from 'passport-local';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
+import jwt from 'jsonwebtoken';
 
 export default class Passport {
   constructor(userService) {
@@ -22,10 +23,17 @@ export default class Passport {
       const user = await this.userService.findByEmail(email);
 
       if (user) {
-        const isValid = await user.validPassword(password);
+        const isValid = user.validPassword(password);
 
         if (isValid) {
-          return done(null, user);
+          const payload = {
+            id: user.id,
+            displayName: user.displayName,
+            email: user.email
+          };
+          const token = jwt.sign(payload, 'secret');
+
+          return done(null, { userName: user.firstName, token: 'JWT ' + token });
         } else {
           return done(null, false, { message: 'Invalid password' });
         }
@@ -36,14 +44,19 @@ export default class Passport {
   }
 
   get _jwtStrategy() {
-    const opts = {};
-    opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-    opts.secretOrKey = 'secret';
-    opts.issuer = 'accounts.examplesoft.com';
-    opts.audience = 'yoursite.net';
+    const jwtOptions = {
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: 'secret'
+    };
 
-    return new JwtStrategy(opts, (jwt_payload, done) => {
+    return new JwtStrategy(jwtOptions, async (jwt_payload, done) => {
+      const user = await this.userService.findById(jwt_payload.id);
 
+      if (user) {
+        done(null, user)
+      } else {
+        done(null, false)
+      }
     })
   }
 

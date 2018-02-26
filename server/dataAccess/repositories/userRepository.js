@@ -11,6 +11,10 @@ export default class UserRepository extends BaseRepository {
     return this.Model.create(user);
   }
 
+  async findById(id) {
+    return this.Model.find({ where: { id } });
+  }
+
   async findByEmail(email) {
     return this.Model.find({ where: { email } });
   }

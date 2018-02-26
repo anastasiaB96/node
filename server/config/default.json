@@ -9,5 +9,9 @@
     "host": "localhost",
     "port": 5432,
     "dialect": "postgres"
+  },
+  "auth": {
+    "accessTokenTtl": 300,
+    "refreshTokenTtl": 60
   }
 }

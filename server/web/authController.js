@@ -12,7 +12,13 @@ class AuthController {
     const createdUser = await this.userService.create(ctx.request.body);
 
     if (createdUser) {
-      ctx.ok(createdUser);
+      return this.passport.auth('login', async (err, userData, info) => {
+        if (userData) {
+          ctx.ok(userData);
+        } else {
+          ctx.unauthorized(info);
+        }
+      })(ctx);
     } else {
       ctx.unauthorized('User already exists');
     }
@@ -21,7 +27,8 @@ class AuthController {
   async login(ctx) {
     return this.passport.auth('login', async (err, user, info) => {
       if (user) {
-        ctx.ok('Success login');
+
+        ctx.ok(user);
       } else {
         ctx.unauthorized(info);
       }
