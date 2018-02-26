@@ -8,7 +8,6 @@ import { IocContainerHelper } from '../businessLogic/helpers/iocContainerHelper'
 export default class Container {
   constructor() {
     this.context = this._initContainer();
-    this.registrations = this.context.registrations;
   }
 
   _registerLibs(container) {

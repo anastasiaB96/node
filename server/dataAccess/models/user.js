@@ -21,7 +21,10 @@ export default class User extends Base {
       },
       email: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+          isEmail: true
+        }
       }
     };
   }
@@ -42,7 +45,7 @@ export default class User extends Base {
     return super.init(User.schema, { sequelize, hooks: User.hooks });
   };
 
-  static associate({ Question, Answer }) {
+  static associate({ Question, Answer, Role }) {
     this.hasMany(Question, {
       as: 'question',
       foreignKey: 'userId'
@@ -51,6 +54,15 @@ export default class User extends Base {
     this.hasMany(Answer, {
       as: 'answer',
       foreignKey: 'userId'
+    });
+
+    this.belongsToMany(Role, {
+      as: 'role',
+      foreignKey: 'userId',
+      through: {
+        model: 'UserRoles',
+        unique: false
+      }
     });
   }
 
