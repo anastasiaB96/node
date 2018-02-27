@@ -2,18 +2,20 @@
 
 import { createContainer, Lifetime, InjectionMode, asValue, asClass } from 'awilix';
 import logger from './logger';
-import passport from './passport';
+import Passport from './passport';
 import { IocContainerHelper } from '../businessLogic/helpers/iocContainerHelper';
 
-export default class Container {
+class IocContainer {
   constructor() {
-    this.context = this._initContainer();
+    this._container = createContainer({ injectionMode: InjectionMode.CLASSIC });
+    this._registerLibs(this._container);
+    this._registerServices(this._container);
   }
 
   _registerLibs(container) {
     container.register({
       logger: asValue(logger),
-      passport: asClass(passport)
+      passport: asClass(Passport)
     }, {
       lifetime: Lifetime.SINGLETON
     });
@@ -23,15 +25,9 @@ export default class Container {
     IocContainerHelper.registerServices(container);
   }
 
-  _initContainer() {
-    const container = createContainer({ injectionMode: InjectionMode.CLASSIC });
-    this._registerLibs(container);
-    this._registerServices(container);
-
-    return container;
-  }
-
-  getRegistration(name) {
-    return this.context.cradle[name];
+  getRegisteredContainer() {
+    return this._container;
   }
 }
+
+export default new IocContainer();

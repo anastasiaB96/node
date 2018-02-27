@@ -8,7 +8,7 @@ import jwt from 'jsonwebtoken';
 export default class Passport {
   constructor(userService) {
     this._passport = new KoaPassport();
-    this.userService = userService;
+    this._userService = userService;
 
     this._passport.use('login', this._initLocalLoginStrategy());
     this._passport.use('jwt', this._initJwtStrategy());
@@ -30,7 +30,7 @@ export default class Passport {
       passwordField: 'password',
       session: false
     }, async (email, password, done) => {
-      const user = await this.userService.findByEmail(email);
+      const user = await this._userService.findByEmail(email);
 
       if (user) {
         const isValid = await user.validPassword(password);
@@ -55,7 +55,7 @@ export default class Passport {
     };
 
     return new JwtStrategy(jwtOptions, async (jwt_payload, done) => {
-      const user = await this.userService.findById(jwt_payload.id);
+      const user = await this._userService.findById(jwt_payload.id);
 
       if (user) {
         done(null, user)

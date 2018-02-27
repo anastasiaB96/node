@@ -7,15 +7,15 @@ import bodyParser from 'koa-bodyparser';
 import respond from 'koa-respond';
 import session from 'koa-session';
 
-import Container from '../libs/container';
+import iocContainer from '../libs/iocContainer';
 import { errorHandler } from '../middlewares/errorHandler';
 import { notFoundHandler } from '../middlewares/notFound';
 import store from './session';
 
 const app = new Koa();
 
-const appContainer = (app.container = new Container());
-const passport = appContainer.getRegistration('passport');
+const appContainer = (app.container = iocContainer.getRegisteredContainer());
+const passport = appContainer.resolve('passport');
 
 app
   .use(errorHandler)
@@ -24,7 +24,7 @@ app
   .use(bodyParser())
   .use(session({ store }, app))
   .use(passport.init())
-  .use(scopePerRequest(appContainer.context))
+  .use(scopePerRequest(appContainer))
   .use(loadControllers('web/**/*.js', { cwd: `${__dirname}/..` }))
   .use(notFoundHandler);
 

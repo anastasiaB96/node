@@ -5,7 +5,7 @@ export async function jwtCheck(ctx, next) {
 
   return passport.auth('jwt', async (err, user) => {
     if (user) {
-      return next();
+      await next();
     } else {
       ctx.unauthorized('Unauthorized user');
     }

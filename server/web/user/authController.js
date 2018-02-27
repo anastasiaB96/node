@@ -12,7 +12,7 @@ class AuthController {
     const createdUser = await this.userService.create(ctx.request.body);
 
     if (createdUser) {
-      return next();
+      await next();
     } else {
       ctx.unauthorized('User already exists');
     }
