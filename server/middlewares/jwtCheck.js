@@ -3,12 +3,11 @@
 export async function jwtCheck(ctx, next) {
   const passport = ctx.state.container.resolve('passport');
 
-  await passport.auth('jwt', async (err, user) => {
-    console.log(user);
+  return passport.auth('jwt', async (err, user) => {
     if (user) {
-      next();
+      return next();
     } else {
-      ctx.unauthorized('No such user');
+      ctx.unauthorized('Unauthorized user');
     }
   } )(ctx, next);
 }

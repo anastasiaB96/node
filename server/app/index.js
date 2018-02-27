@@ -24,9 +24,8 @@ app
   .use(bodyParser())
   .use(session({ store }, app))
   .use(passport.init())
-  .use(passport.session())
   .use(scopePerRequest(appContainer.context))
-  .use(loadControllers('web/*.js', { cwd: `${__dirname}/..` }))
+  .use(loadControllers('web/**/*.js', { cwd: `${__dirname}/..` }))
   .use(notFoundHandler);
 
 export default app;

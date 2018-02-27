@@ -1,6 +1,6 @@
 'use strict';
 
-import BaseRepository from './baseRepository';
+import BaseRepository from '../baseRepository';
 
 export default class UserRepository extends BaseRepository {
   constructor(logger, dbContext) {

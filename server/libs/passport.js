@@ -10,11 +10,21 @@ export default class Passport {
     this._passport = new KoaPassport();
     this.userService = userService;
 
-    this._passport.use('login', this._localLoginStrategy);
-    this._passport.use('jwt', this._jwtStrategy);
+    this._passport.use('login', this._initLocalLoginStrategy());
+    this._passport.use('jwt', this._initJwtStrategy());
   }
 
-  get _localLoginStrategy() {
+  _generateJWTToken(user) {
+    const payload = {
+      id: user.id,
+      name: user.firstName,
+      email: user.email
+    };
+
+    return jwt.sign(payload, 'secret');
+  }
+
+  _initLocalLoginStrategy() {
     return new LocalStrategy({
       usernameField: 'email',
       passwordField: 'password',
@@ -23,27 +33,22 @@ export default class Passport {
       const user = await this.userService.findByEmail(email);
 
       if (user) {
-        const isValid = user.validPassword(password);
+        const isValid = await user.validPassword(password);
 
         if (isValid) {
-          const payload = {
-            id: user.id,
-            displayName: user.displayName,
-            email: user.email
-          };
-          const token = jwt.sign(payload, 'secret');
+          const token = this._generateJWTToken(user);
 
-          return done(null, { userName: user.firstName, token: 'JWT ' + token });
+          return done(null, { name: user.firstName, token: 'Bearer ' + token });
         } else {
-          return done(null, false, { message: 'Invalid password' });
+          return done(null, null, { message: 'Invalid credentials' });
         }
       } else {
-        return done(null, false, { message: 'User doesn\'t exist' });
+        return done(null, null, { message: 'User doesn\'t exist' });
       }
     });
   }
 
-  get _jwtStrategy() {
+  _initJwtStrategy() {
     const jwtOptions = {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: 'secret'
@@ -55,9 +60,9 @@ export default class Passport {
       if (user) {
         done(null, user)
       } else {
-        done(null, false)
+        done(null, null)
       }
-    })
+    });
   }
 
   init() {

@@ -2,7 +2,7 @@
 
 import { createContainer, Lifetime, InjectionMode, asValue, asClass } from 'awilix';
 import logger from './logger';
-import Passport from './passport';
+import passport from './passport';
 import { IocContainerHelper } from '../businessLogic/helpers/iocContainerHelper';
 
 export default class Container {
@@ -13,7 +13,7 @@ export default class Container {
   _registerLibs(container) {
     container.register({
       logger: asValue(logger),
-      passport: asClass(Passport)
+      passport: asClass(passport)
     }, {
       lifetime: Lifetime.SINGLETON
     });
