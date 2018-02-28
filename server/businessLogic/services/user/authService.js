@@ -15,33 +15,41 @@ export default class AuthService {
   }
 
   async register(data) {
-    const existingUser = await this.userService.findByEmail(data.email);
+    try {
+      const existingUser = await this.userService.findByEmail(data.email);
 
-    if (existingUser) {
-      return Promise.reject({ message: 'User already exists' });
-    } else {
-      return await this.userService.create(data);
+      if (existingUser) {
+        return Promise.reject({ message: 'User already exists' });
+      } else {
+        return await this.userService.create(data);
+      }
+    } catch (error) {
+      return Promise.reject({ message: 'Registration failed', ...error });
     }
   }
 
   async login(data) {
-    const { email, password } = data;
-    if (email && password) {
-      const user = await this.userService.findByEmail(email);
+    try {
+      const { email, password } = data;
+      if (email && password) {
+        const user = await this.userService.findByEmail(email);
 
-      if (user) {
-        const isValid = await user.validPassword(password);
+        if (user) {
+          const isValid = await user.validPassword(password);
 
-        if (isValid) {
-          const token = AuthService._generateJWTToken(user);
+          if (isValid) {
+            const token = AuthService._generateJWTToken(user);
 
-          return Promise.resolve({ name: user.firstName, token: 'Bearer ' + token });
+            return Promise.resolve({ name: user.firstName, token: 'Bearer ' + token });
+          } else {
+            return Promise.reject({ message: 'Invalid credentials' });
+          }
         } else {
-          return Promise.reject({ message: 'Invalid credentials' });
+          return Promise.reject({ message: 'User doesn\'t exist' });
         }
-      } else {
-        return Promise.reject({ message: 'User doesn\'t exist' });
       }
+    } catch (error) {
+      return Promise.reject({ message: 'Authentication failed', ...error });
     }
   }
 }
