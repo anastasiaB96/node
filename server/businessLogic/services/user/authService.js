@@ -2,14 +2,16 @@
 
 import jwt from 'jsonwebtoken';
 import config from 'config';
+import BaseService from '../baseService';
 
-export default class AuthService {
+export default class AuthService extends BaseService {
   constructor(userService) {
+    super();
     this.userService = userService;
   }
 
   static _generateJWTToken(user) {
-    const { password, ...userInfoWithoutPassword } = user.dataValues;
+    const { password, ...userInfoWithoutPassword } = user;
 
     return jwt.sign(userInfoWithoutPassword, config.get('auth.secret'), { expiresIn: '1h' });
   }
@@ -38,7 +40,7 @@ export default class AuthService {
           const isValid = await user.validPassword(password);
 
           if (isValid) {
-            const token = AuthService._generateJWTToken(user);
+            const token = AuthService._generateJWTToken(user.dataValues);
 
             return Promise.resolve({ name: user.firstName, token: 'Bearer ' + token });
           } else {
