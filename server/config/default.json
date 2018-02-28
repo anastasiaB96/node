@@ -11,7 +11,6 @@
     "dialect": "postgres"
   },
   "auth": {
-    "accessTokenTtl": 300,
-    "refreshTokenTtl": 60
+    "secret": "mego-secret-key"
   }
 }

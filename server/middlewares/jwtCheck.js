@@ -1,13 +1,8 @@
 'use strict';
 
-export async function jwtCheck(ctx, next) {
-  const passport = ctx.state.container.resolve('passport');
+import jwt from 'koa-jwt';
+import config from 'config';
 
-  return passport.auth('jwt', async (err, user) => {
-    if (user) {
-      await next();
-    } else {
-      ctx.unauthorized('Unauthorized user');
-    }
-  } )(ctx, next);
-}
+export const jwtCheck = jwt({
+  secret: config.get('auth.secret')
+});

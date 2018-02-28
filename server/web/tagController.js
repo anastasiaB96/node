@@ -4,8 +4,7 @@ import { createController } from 'awilix-koa';
 import { jwtCheck } from '../middlewares/jwtCheck';
 
 class TagController {
-  constructor(passport, tagService, logger) {
-    this.passport = passport;
+  constructor(tagService, logger) {
     this.tagService = tagService;
     this.logger = logger;
   }

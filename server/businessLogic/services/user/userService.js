@@ -6,12 +6,6 @@ export default class UserService {
   }
 
   async create(user) {
-    const existingUser = await this.userRepository.findByEmail(user.email);
-
-    if (existingUser) {
-      return null;
-    }
-
     return this.userRepository.create(user);
   }
 

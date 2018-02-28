@@ -5,4 +5,8 @@ export default class BaseRepository {
     this.logger = logger;
     this.Model = dbContext.models[modelName];
   }
+
+  async findById(id) {
+    return this.Model.find({ where: { id } });
+  }
 }

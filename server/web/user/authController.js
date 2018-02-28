@@ -1,29 +1,40 @@
 'use strict';
 
 import { createController } from 'awilix-koa';
-import { login } from '../../middlewares/login';
 
 class AuthController {
-  constructor(userService) {
-    this.userService = userService;
+  constructor(authService) {
+    this.authService = authService;
   }
 
-  async register(ctx, next) {
-    const createdUser = await this.userService.create(ctx.request.body);
+  async register(ctx) {
+    const userData = ctx.request.body;
 
-    if (createdUser) {
-      await next();
-    } else {
-      ctx.unauthorized('User already exists');
+    try {
+      const registeredUser = await this.authService.register(userData);
+
+      if (registeredUser) {
+        const loggedUser = await this.authService.login(userData);
+        ctx.ok(loggedUser);
+      }
+    } catch (error) {
+      ctx.unauthorized(error);
+    }
+  }
+
+  async login(ctx) {
+    const userData = ctx.request.body;
+
+    try {
+      const loggedUser = await this.authService.login(userData);
+      ctx.ok(loggedUser);
+    } catch(error) {
+      ctx.unauthorized(error);
     }
   }
 }
 
 export default createController(AuthController)
   .prefix('/auth')
-  .post('/register', 'register', {
-    after: [login]
-  })
-  .post('/login', '', {
-    before: [login]
-  })
+  .post('/register', 'register')
+  .post('/login', 'login')

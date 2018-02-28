@@ -1,8 +1,7 @@
 'use strict';
 
-import { createContainer, Lifetime, InjectionMode, asValue, asClass } from 'awilix';
+import { createContainer, Lifetime, InjectionMode, asValue } from 'awilix';
 import logger from './logger';
-import Passport from './passport';
 import { IocContainerHelper } from '../businessLogic/helpers/iocContainerHelper';
 
 class IocContainer {
@@ -14,8 +13,7 @@ class IocContainer {
 
   _registerLibs(container) {
     container.register({
-      logger: asValue(logger),
-      passport: asClass(Passport)
+      logger: asValue(logger)
     }, {
       lifetime: Lifetime.SINGLETON
     });
