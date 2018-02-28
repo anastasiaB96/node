@@ -13,27 +13,27 @@ export default class AuthService extends BaseService {
   static _generateJWTToken(user) {
     const { password, ...userInfoWithoutPassword } = user;
 
-    return jwt.sign(userInfoWithoutPassword, config.get('auth.secret'), { expiresIn: '1h' });
+    return jwt.sign(userInfoWithoutPassword, config.get('auth.secret'), { expiresIn: config.get('auth.tokenExpiration') });
   }
 
-  async register(data) {
+  async register(userInfo) {
     try {
-      const existingUser = await this.userService.findByEmail(data.email);
+      const existingUser = await this.userService.findByEmail(userInfo.email);
 
       if (existingUser) {
-        return this.baseRejection({ code: 403, message: 'User already exists' });
+        return this.reject('User already exists');
       } else {
-        const createdUser = await this.userService.create(data);
-        return this.baseResolve(createdUser);
+        const createdUser = await this.userService.create(userInfo);
+        return this.resolve(createdUser);
       }
     } catch (error) {
-      return this.baseRejection({ message: 'Registration failed', ...error });
+      return this.reject(error.name);
     }
   }
 
-  async login(data) {
+  async login(userInfo) {
     try {
-      const { email, password } = data;
+      const { email, password } = userInfo;
 
       if (email && password) {
         const user = await this.userService.findByEmail(email);
@@ -44,16 +44,18 @@ export default class AuthService extends BaseService {
           if (isValid) {
             const token = AuthService._generateJWTToken(user.dataValues);
 
-            return this.baseResolve({ name: user.firstName, token: 'Bearer ' + token });
+            return this.resolve({ name: user.firstName, token: 'Bearer ' + token });
           } else {
-            return this.baseRejection({ code: 403, message: 'Invalid credentials' });
+            return this.reject('Invalid credentials');
           }
         } else {
-          return this.baseRejection({ code: 403, message: 'User doesn\'t exist' });
+          return this.reject('User doesn\'t exist');
         }
+      } else {
+        return this.reject('Invalid credentials');
       }
     } catch (error) {
-      return this.baseRejection({ message: 'Authentication failed', ...error });
+      return this.reject(error.name);
     }
   }
 }

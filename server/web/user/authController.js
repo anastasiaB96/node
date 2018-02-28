@@ -15,7 +15,7 @@ class AuthController {
 
       ctx.created(registeredUser);
     } catch (error) {
-      ctx.send(error.code, error.message);
+      ctx.forbidden(error);
     }
   }
 

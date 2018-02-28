@@ -1,14 +1,14 @@
 'use strict';
 
 export default class BaseService {
-  baseRejection(error) {
+  reject(errorMessage) {
     return Promise.reject({
       success: false,
-      error
+      errorMessage
     })
   }
 
-  baseResolve(result) {
+  resolve(result) {
     return Promise.resolve({
       success: true,
       result
