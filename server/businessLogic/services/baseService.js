@@ -1,7 +1,17 @@
 'use strict';
 
 export default class BaseService {
-  mapResponse() {
+  baseRejection(error) {
+    return Promise.reject({
+      success: false,
+      error
+    })
+  }
 
+  baseResolve(result) {
+    return Promise.resolve({
+      success: true,
+      result
+    })
   }
 }

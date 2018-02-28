@@ -13,9 +13,9 @@ class AuthController {
       const userData = ctx.request.body;
       const registeredUser = await this.authService.register(userData);
 
-      ctx.ok(registeredUser);
+      ctx.created(registeredUser);
     } catch (error) {
-      ctx.unauthorized(error);
+      ctx.send(error.code, error.message);
     }
   }
 

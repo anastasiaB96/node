@@ -21,18 +21,20 @@ export default class AuthService extends BaseService {
       const existingUser = await this.userService.findByEmail(data.email);
 
       if (existingUser) {
-        return Promise.reject({ message: 'User already exists' });
+        return this.baseRejection({ code: 403, message: 'User already exists' });
       } else {
-        return await this.userService.create(data);
+        const createdUser = await this.userService.create(data);
+        return this.baseResolve(createdUser);
       }
     } catch (error) {
-      return Promise.reject({ message: 'Registration failed', ...error });
+      return this.baseRejection({ message: 'Registration failed', ...error });
     }
   }
 
   async login(data) {
     try {
       const { email, password } = data;
+
       if (email && password) {
         const user = await this.userService.findByEmail(email);
 
@@ -42,16 +44,16 @@ export default class AuthService extends BaseService {
           if (isValid) {
             const token = AuthService._generateJWTToken(user.dataValues);
 
-            return Promise.resolve({ name: user.firstName, token: 'Bearer ' + token });
+            return this.baseResolve({ name: user.firstName, token: 'Bearer ' + token });
           } else {
-            return Promise.reject({ message: 'Invalid credentials' });
+            return this.baseRejection({ code: 403, message: 'Invalid credentials' });
           }
         } else {
-          return Promise.reject({ message: 'User doesn\'t exist' });
+          return this.baseRejection({ code: 403, message: 'User doesn\'t exist' });
         }
       }
     } catch (error) {
-      return Promise.reject({ message: 'Authentication failed', ...error });
+      return this.baseRejection({ message: 'Authentication failed', ...error });
     }
   }
 }
