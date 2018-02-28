@@ -1,6 +1,7 @@
 'use strict';
 
 import { createController } from 'awilix-koa';
+import login from '../../middlewares/login';
 
 class AuthController {
   constructor(authService) {
@@ -8,29 +9,20 @@ class AuthController {
   }
 
   async register(ctx) {
-    const userData = ctx.request.body;
-
     try {
+      const userData = ctx.request.body;
       const registeredUser = await this.authService.register(userData);
 
-      if (registeredUser) {
-        const loggedUser = await this.authService.login(userData);
-        ctx.ok(loggedUser);
-      }
+      ctx.ok(registeredUser);
     } catch (error) {
       ctx.unauthorized(error);
     }
   }
 
   async login(ctx) {
-    const userData = ctx.request.body;
-
-    try {
-      const loggedUser = await this.authService.login(userData);
+    await login(ctx, (loggedUser) => {
       ctx.ok(loggedUser);
-    } catch(error) {
-      ctx.unauthorized(error);
-    }
+    });
   }
 }
 
