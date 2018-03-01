@@ -1,7 +1,8 @@
 'use strict';
 
 import { createController } from 'awilix-koa';
-import { jwtCheck } from '../middlewares/jwtCheck';
+import { jwtProtection } from '../middlewares/jwtProtection';
+import { adminProtection } from '../middlewares/adminProtection';
 
 class TagController {
   constructor(tagService, logger) {
@@ -17,5 +18,5 @@ class TagController {
 export default createController(TagController)
   .prefix('/tag')
   .get('', 'getAll', {
-    before: [jwtCheck]
+    before: [jwtProtection, adminProtection]
   });

@@ -58,4 +58,17 @@ export default class AuthService extends BaseService {
       return this.reject(error.name);
     }
   }
+
+  async permitAdmin(userInfo) {
+    try {
+      const { email } = userInfo;
+      const user = await this.userService.findByEmail(email);
+
+      if (user) {
+        return this.resolve();
+      }
+    } catch (error) {
+      this.reject('User doesn\'t exist');
+    }
+  }
 }
