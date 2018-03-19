@@ -6,8 +6,4 @@ export default class TagRepository extends BaseRepository {
   constructor(logger, dbContext) {
     super(logger, dbContext, 'Question');
   }
-
-  async getAll() {
-    return this.Model.findAll();
-  }
 }

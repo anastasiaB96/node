@@ -7,11 +7,11 @@ export default class UserRepository extends BaseRepository {
     super(logger, dbContext, 'User');
   }
 
-  async create(user) {
-    return this.Model.create(user);
-  }
-
   async findByEmail(email) {
     return this.Model.find({ where: { email } });
+  }
+
+  async addRole(user, role) {
+    return await user.addRole(role);
   }
 }

@@ -16,4 +16,8 @@ export default class UserService {
   async findByEmail(email) {
     return this.userRepository.findByEmail(email);
   }
+
+  async addRole(user, role) {
+    return this.userRepository.addRole(user, role);
+  }
 }

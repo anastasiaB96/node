@@ -30,9 +30,9 @@ class AuthController {
   async permitAdmin(ctx) {
     try {
       const userInfo = ctx.request.body;
-      const registeredUser = await this.authService.permitAdmin(userInfo);
+      const permittedUser = await this.authService.permitAdmin(userInfo);
 
-      ctx.created(registeredUser);
+      ctx.created(permittedUser);
     } catch (error) {
       ctx.forbidden(error);
     }

@@ -10,4 +10,4 @@ export const login = async (ctx, next) => {
   } catch(error) {
     ctx.unauthorized(error);
   }
-}
+};

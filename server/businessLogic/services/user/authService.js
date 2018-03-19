@@ -3,11 +3,13 @@
 import jwt from 'jsonwebtoken';
 import config from 'config';
 import BaseService from '../baseService';
+import ROLES from '../../../constants/roles';
 
 export default class AuthService extends BaseService {
-  constructor(userService) {
+  constructor(userService, roleService) {
     super();
     this.userService = userService;
+    this.roleService = roleService;
   }
 
   static _generateJWTToken(user) {
@@ -65,7 +67,13 @@ export default class AuthService extends BaseService {
       const user = await this.userService.findByEmail(email);
 
       if (user) {
-        return this.resolve();
+        const adminRole = await this.roleService.findByName(ROLES.admin);
+
+        if (adminRole) {
+          return await this.userService.addRole(user, adminRole);
+        } else {
+          this.reject('Sorry something goes wrong :(');
+        }
       }
     } catch (error) {
       this.reject('User doesn\'t exist');
