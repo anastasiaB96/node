@@ -73,11 +73,13 @@ export default class AuthService extends BaseService {
         if (adminRole) {
           return await this.userService.addRole(user, adminRole);
         } else {
-          this.reject('Sorry something goes wrong :(');
+          return this.reject('Role doesn\'t exist.');
         }
+      } else {
+        return this.reject('User doesn\'t exist');
       }
     } catch (error) {
-      this.reject('User doesn\'t exist');
+      return this.reject(error);
     }
   }
 }
