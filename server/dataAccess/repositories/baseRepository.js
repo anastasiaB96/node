@@ -14,7 +14,7 @@ export default class BaseRepository {
     return this.Model.find({ where: { id } });
   }
 
-  async findBy(condition) {
+  async find(condition) {
     return this.Model.find({ where: condition });
   }
 

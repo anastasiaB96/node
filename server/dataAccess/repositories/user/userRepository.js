@@ -5,10 +5,11 @@ import BaseRepository from '../baseRepository';
 export default class UserRepository extends BaseRepository {
   constructor(logger, dbContext) {
     super(logger, dbContext, 'User');
+    this.Role = dbContext.models['Role'];
   }
 
   async findByEmail(email) {
-    return this.Model.find({ where: { email } });
+    return this.Model.find({ where: { email }, include: [ { model: this.Role, as: 'role' } ] });
   }
 
   async addRole(user, role) {

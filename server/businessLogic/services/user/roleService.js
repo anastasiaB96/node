@@ -6,6 +6,6 @@ export default class RoleService {
   }
 
   async findByName(name) {
-    return this.roleRepository.findBy({ name });
+    return this.roleRepository.find({ name });
   }
 }

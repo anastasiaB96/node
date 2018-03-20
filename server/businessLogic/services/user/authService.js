@@ -26,6 +26,7 @@ export default class AuthService extends BaseService {
         return this.reject('User already exists');
       } else {
         const createdUser = await this.userService.create(userInfo);
+
         return this.resolve(createdUser);
       }
     } catch (error) {

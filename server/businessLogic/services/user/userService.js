@@ -1,12 +1,26 @@
 'use strict';
 
-export default class UserService {
-  constructor(userRepository) {
+import BaseService from '../baseService';
+import ROLES from '../../../constants/roles';
+
+export default class UserService extends BaseService {
+  constructor(userRepository, roleService) {
+    super();
     this.userRepository = userRepository;
+    this.roleService = roleService;
   }
 
   async create(user) {
-    return this.userRepository.create(user);
+    try {
+      const createdUser = await this.userRepository.create(user);
+      const defaultRole = await this.roleService.findByName(ROLES.user);
+
+      await this.addRole(createdUser, defaultRole);
+
+      return this.resolve(user);
+    } catch (error) {
+      return this.reject(error);
+    }
   }
 
   async findById(id) {
