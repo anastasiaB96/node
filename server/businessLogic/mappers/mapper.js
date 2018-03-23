@@ -7,7 +7,7 @@ export default class Mapper {
     this._mapper = objectMapper;
   }
 
-  mapFromTo(object, model) {
+  mapObject(object, model) {
     return this._mapper(object, model);
   }
 }

@@ -13,5 +13,8 @@
   "extends": [
     "standard",
     "prettier"
+  ],
+  "plugins": [
+    "jest"
   ]
 }
