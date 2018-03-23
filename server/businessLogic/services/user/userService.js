@@ -17,7 +17,7 @@ export default class UserService extends BaseService {
 
       await this.addRole(createdUser, defaultRole);
 
-      return this.resolve(user);
+      return this.resolve(createdUser);
     } catch (error) {
       return this.reject(error);
     }

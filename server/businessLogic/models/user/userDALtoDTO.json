@@ -1,0 +1,9 @@
+{
+  "dataValues.id": "id",
+  "dataValues.firstName": "firstName",
+  "dataValues.lastName": "lastName",
+  "dataValues.email": "email",
+  "dataValues.createdAt": "createdAt",
+  "dataValues.updatedAt": "updatedAt",
+  "dataValues.role.name": "role"
+}
