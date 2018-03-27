@@ -20,7 +20,7 @@ app
   .use(respond())
   .use(bodyParser())
   .use(scopePerRequest(appContainer))
-  .use(loadControllers('web/**/*.js', { cwd: `${__dirname}/..` }))
+  .use(loadControllers('web/controllers/**/*.js', { cwd: `${__dirname}/..` }))
   .use(notFoundHandler);
 
 export default app;

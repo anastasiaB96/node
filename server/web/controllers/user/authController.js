@@ -1,9 +1,9 @@
 'use strict';
 
 import { createController } from 'awilix-koa';
-import { login } from '../../middlewares/login';
-import { jwtProtection } from '../../middlewares/jwtProtection';
-import { adminProtection } from '../../middlewares/adminProtection';
+import { login } from '../../../middlewares/login';
+import { jwtProtection } from '../../../middlewares/jwtProtection';
+import { adminProtection } from '../../../middlewares/adminProtection';
 
 class AuthController {
   constructor(authService) {

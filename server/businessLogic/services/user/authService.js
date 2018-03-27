@@ -56,7 +56,7 @@ export default class AuthService extends BaseService {
         return this.reject('Invalid credentials');
       }
 
-      const token = AuthService._generateJWTToken(user.dataValues);
+      const token = AuthService._generateJWTToken(this.mapper.mapObject(user, userDALtoDTO));
 
       return this.resolve({ name: user.firstName, token: 'Bearer ' + token });
     } catch (error) {
