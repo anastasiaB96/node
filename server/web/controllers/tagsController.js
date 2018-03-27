@@ -3,11 +3,12 @@
 import { createController } from 'awilix-koa';
 import { jwtProtection } from '../../middlewares/jwtProtection';
 import { adminProtection } from '../../middlewares/adminProtection';
+import BaseController from './baseController';
 
-class TagsController {
+class TagsController extends BaseController {
   constructor(tagService, logger) {
+    super(logger);
     this.tagService = tagService;
-    this.logger = logger;
   }
 
   async get(ctx) {

@@ -8,10 +8,9 @@ import * as userDALtoDTO from '../../models/user/userDALtoDTO.json';
 
 export default class AuthService extends BaseService {
   constructor(userService, roleService, mapper) {
-    super();
+    super(mapper);
     this.userService = userService;
     this.roleService = roleService;
-    this.mapper = mapper;
   }
 
   static _generateJWTToken(user) {

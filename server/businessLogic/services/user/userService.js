@@ -4,8 +4,8 @@ import BaseService from '../baseService';
 import ROLES from '../../../constants/roles';
 
 export default class UserService extends BaseService {
-  constructor(userRepository, roleService) {
-    super();
+  constructor(mapper, userRepository, roleService) {
+    super(mapper);
     this.userRepository = userRepository;
     this.roleService = roleService;
   }
