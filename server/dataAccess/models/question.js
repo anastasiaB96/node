@@ -13,6 +13,9 @@ export default class Question extends Base {
       body: {
         type: Sequelize.TEXT,
         allowNull: false,
+      },
+      rating: {
+        type: Sequelize.INTEGER
       }
     };
   }

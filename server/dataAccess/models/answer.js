@@ -9,6 +9,9 @@ export default class Answer extends Base {
       body: {
         type: Sequelize.TEXT,
         allowNull: false,
+      },
+      rating: {
+        type: Sequelize.INTEGER
       }
     };
   }

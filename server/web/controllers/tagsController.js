@@ -18,10 +18,9 @@ class TagsController extends BaseController {
 export default createController(TagsController)
   .prefix('/tags')
   .get('', 'getAll')
-  .before([jwtProtection])
+  .get('/:id', 'getById')
+  .before([jwtProtection, adminProtection])
   .post('', 'create')
   .patch('/:id', 'update')
-  .delete('', 'deleteAll', {
-    before: [adminProtection]
-  })
+  .delete('', 'deleteAll')
   .delete('/:id', 'deleteById');

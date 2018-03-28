@@ -21,7 +21,7 @@ class QuestionsController extends BaseController {
   async create(ctx) {
     try {
       const questionInfo = BaseController.getContextBody(ctx);
-      const userId = BaseController.getUserId(ctx);
+      const userId = BaseController.getLoggedUserId(ctx);
       const createdQuestion = await this.service.create(userId, questionInfo);
 
       ctx.created(createdQuestion);

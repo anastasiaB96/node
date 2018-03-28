@@ -12,7 +12,7 @@ export default class BaseController {
     return get(ctx.request, 'body');
   }
 
-  static getUserId(ctx) {
+  static getLoggedUserId(ctx) {
     return get(ctx.state, 'jwtData.id');
   }
 

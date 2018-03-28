@@ -9,6 +9,10 @@ export default class Tag extends Base {
       name: {
         type: Sequelize.STRING,
         allowNull: false,
+      },
+      userId: {
+        type: Sequelize.INTEGER,
+        allowNull: false
       }
     };
   }
@@ -17,7 +21,13 @@ export default class Tag extends Base {
     return super.init(this.schema, { sequelize });
   };
 
-  static associate({ Question }) {
+  static associate({ User, Question }) {
+    this.belongsTo(User, {
+      as: 'user',
+      onUpdate: 'CASCADE',
+      onDelete: null
+    });
+
     this.belongsToMany(Question, {
       as: 'question',
       foreignKey: 'tagId',
