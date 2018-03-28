@@ -7,47 +7,39 @@ import BaseController from './baseController';
 
 class QuestionsController extends BaseController {
   constructor(logger, questionService) {
-    super(logger);
-    this.questionService = questionService;
+    super(logger, questionService);
   }
 
-  getAll() {
-
-  }
-
-  getById() {
+  async filterByTags() {
 
   }
 
-  filter() {
+  async getAnswers() {
 
   }
 
-  create() {
+  async create(ctx) {
+    try {
+      const questionInfo = BaseController.getContextBody(ctx);
+      const userId = BaseController.getUserId(ctx);
+
+      const createdQuestion = await this.service.create(userId, questionInfo);
+
+      ctx.created(createdQuestion);
+    } catch (error) {
+      ctx.forbidden(error);
+    }
+  }
+
+  async createAnswer(ctx) {
+    console.log(ctx.params);
+  }
+
+  async update() {
 
   }
 
-  update() {
-
-  }
-
-  deleteAll() {
-
-  }
-
-  delete() {
-
-  }
-
-  getAnswers() {
-
-  }
-
-  createAnswer() {
-
-  }
-
-  deleteAllAnswers() {
+  async deleteAllAnswers() {
 
   }
 }
@@ -56,26 +48,16 @@ export default createController(QuestionsController)
   .prefix('/questions')
   .get('', 'getAll')
   .get('/:id', 'getById')
-  .get('', 'filter')
-  .post('', 'create', {
-    before: [jwtProtection]
-  })
-  .put('/:id', 'update', {
-    before: [jwtProtection]
-  })
-  .delete('', 'deleteAll', {
-    before: [jwtProtection, adminProtection]
-  })
-  .delete('/:id', 'delete', {
-    before: [jwtProtection]
-  })
+  .get('', 'filterByTags')
   .get('/:id/answers', 'getAnswers')
-  .post('/:id/answers', 'createAnswer', {
-    before: [jwtProtection]
+  .before([jwtProtection])
+  .post('', 'create')
+  .post('/:id/answers', 'createAnswer')
+  .patch('/:id', 'update')
+  .delete('', 'deleteAll', {
+    before: [adminProtection]
   })
+  .delete('/:id', 'deleteById')
   .delete('/:id/answers', 'deleteAllAnswers', {
-    before: [jwtProtection, adminProtection]
-  })
-  .delete('/:id/answers/:id', 'deleteAnswer', {
-    before: [jwtProtection]
+    before: [adminProtection]
   })

@@ -7,12 +7,7 @@ import BaseController from './baseController';
 
 class AnswersController extends BaseController {
   constructor(logger, answerService) {
-    super(logger);
-    this.answerService = answerService;
-  }
-
-  getById() {
-
+    super(logger, answerService);
   }
 
   update() {
@@ -23,6 +18,9 @@ class AnswersController extends BaseController {
 export default createController(AnswersController)
   .prefix('/answers')
   .get('/:id', 'getById')
-  .put('/:id', 'update', {
-    before: [jwtProtection]
+  .before([jwtProtection])
+  .patch('/:id', 'update')
+  .delete('', 'deleteAll', {
+    before: [adminProtection]
   })
+  .delete('/:id', 'deleteById')

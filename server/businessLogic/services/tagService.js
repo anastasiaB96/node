@@ -1,11 +1,9 @@
 'use strict';
 
-export default class TagService {
-  constructor(tagRepository) {
-    this.tagRepository = tagRepository;
-  }
+import BaseService from './baseService';
 
-  async getAll() {
-    return this.tagRepository.findAll();
+export default class TagService extends BaseService {
+  constructor(mapper, tagRepository) {
+    super(mapper, tagRepository);
   }
 }

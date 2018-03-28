@@ -1,11 +1,13 @@
 'use strict';
 
-export default class RoleService {
-  constructor(roleRepository) {
-    this.roleRepository = roleRepository;
+import BaseService from '../baseService';
+
+export default class RoleService extends BaseService {
+  constructor(mapper, roleRepository) {
+    super(mapper, roleRepository);
   }
 
   async findByName(name) {
-    return this.roleRepository.find({ name });
+    return this.repository.find({ name });
   }
 }

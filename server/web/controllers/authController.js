@@ -1,21 +1,20 @@
 'use strict';
 
 import { createController } from 'awilix-koa';
-import { login } from '../../../middlewares/login';
-import { jwtProtection } from '../../../middlewares/jwtProtection';
-import { adminProtection } from '../../../middlewares/adminProtection';
-import BaseController from '../baseController';
+import { login } from '../../middlewares/login';
+import { jwtProtection } from '../../middlewares/jwtProtection';
+import { adminProtection } from '../../middlewares/adminProtection';
+import BaseController from './baseController';
 
 class AuthController extends BaseController {
   constructor(logger, authService) {
-    super(logger);
-    this.authService = authService;
+    super(logger, authService);
   }
 
   async register(ctx) {
     try {
-      const userInfo = this.getContextBody(ctx);
-      const registeredUser = await this.authService.register(userInfo);
+      const userInfo = BaseController.getContextBody(ctx);
+      const registeredUser = await this.service.register(userInfo);
 
       ctx.created(registeredUser);
     } catch (error) {
@@ -31,8 +30,8 @@ class AuthController extends BaseController {
 
   async permitAdmin(ctx) {
     try {
-      const userInfo = this.getContextBody(ctx);
-      await this.authService.permitAdmin(userInfo);
+      const userInfo = BaseController.getContextBody(ctx);
+      await this.service.permitAdmin(userInfo);
 
       ctx.success();
     } catch (error) {

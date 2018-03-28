@@ -24,14 +24,14 @@ export default class AuthService extends BaseService {
       const existingUser = await this.userService.findByEmail(userInfo.email);
 
       if (existingUser) {
-        return this.reject('User already exists');
+        return BaseService.reject('User already exists');
       }
 
       const createdUser = await this.userService.create(userInfo);
 
-      return this.resolve(this.mapper.mapObject(createdUser, userDALtoDTO));
+      return BaseService.resolve(this.mapper.mapObject(createdUser, userDALtoDTO));
     } catch (error) {
-      return this.reject(error.name);
+      return BaseService.reject(error.name);
     }
   }
 
@@ -40,26 +40,26 @@ export default class AuthService extends BaseService {
       const { email, password } = userInfo;
 
       if (!email || !password) {
-        return this.reject('Invalid credentials');
+        return BaseService.reject('Invalid credentials');
       }
 
       const user = await this.userService.findByEmail(email);
 
       if (!user) {
-        return this.reject('User doesn\'t exist');
+        return BaseService.reject('User doesn\'t exist');
       }
 
       const isValid = await user.validPassword(password);
 
       if (!isValid) {
-        return this.reject('Invalid credentials');
+        return BaseService.reject('Invalid credentials');
       }
 
       const token = AuthService._generateJWTToken(this.mapper.mapObject(user, userDALtoDTO));
 
-      return this.resolve({ name: user.firstName, token: 'Bearer ' + token });
+      return BaseService.resolve({ name: user.firstName, token: 'Bearer ' + token });
     } catch (error) {
-      return this.reject(error.name);
+      return BaseService.reject(error.name);
     }
   }
 
@@ -69,18 +69,18 @@ export default class AuthService extends BaseService {
       const user = await this.userService.findByEmail(email);
 
       if (!user) {
-        return this.reject('User doesn\'t exist');
+        return BaseService.reject('User doesn\'t exist');
       }
 
       const adminRole = await this.roleService.findByName(ROLES.admin);
 
       if (!adminRole) {
-        return this.reject('Role doesn\'t exist.');
+        return BaseService.reject('Role doesn\'t exist.');
       }
 
       return await this.userService.addRole(user, adminRole);
     } catch (error) {
-      return this.reject(error);
+      return BaseService.reject(error);
     }
   }
 }

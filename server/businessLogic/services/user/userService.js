@@ -5,33 +5,28 @@ import ROLES from '../../../constants/roles';
 
 export default class UserService extends BaseService {
   constructor(mapper, userRepository, roleService) {
-    super(mapper);
-    this.userRepository = userRepository;
+    super(mapper, userRepository);
     this.roleService = roleService;
   }
 
   async create(user) {
     try {
-      const createdUser = await this.userRepository.create(user);
+      const createdUser = await this.repository.create(user);
       const defaultRole = await this.roleService.findByName(ROLES.user);
 
       await this.addRole(createdUser, defaultRole);
 
-      return this.resolve(createdUser);
+      return BaseService.resolve(createdUser);
     } catch (error) {
-      return this.reject(error);
+      return BaseService.reject(error);
     }
   }
 
-  async findById(id) {
-    return this.userRepository.findById(id);
-  }
-
   async findByEmail(email) {
-    return this.userRepository.findByEmail(email);
+    return this.repository.findByEmail(email);
   }
 
   async addRole(user, role) {
-    return this.userRepository.addRole(user, role);
+    return this.repository.addRole(user, role);
   }
 }

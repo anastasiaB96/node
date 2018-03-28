@@ -6,18 +6,22 @@ import { adminProtection } from '../../middlewares/adminProtection';
 import BaseController from './baseController';
 
 class TagsController extends BaseController {
-  constructor(tagService, logger) {
-    super(logger);
-    this.tagService = tagService;
+  constructor(logger, tagService) {
+    super(logger, tagService);
   }
 
-  async get(ctx) {
-    ctx.ok('TAAAAAGS');
+  update() {
+
   }
 }
 
 export default createController(TagsController)
   .prefix('/tags')
-  .get('', 'get', {
-    before: [jwtProtection, adminProtection]
-  });
+  .get('', 'getAll')
+  .before([jwtProtection])
+  .post('', 'create')
+  .patch('/:id', 'update')
+  .delete('', 'deleteAll', {
+    before: [adminProtection]
+  })
+  .delete('/:id', 'deleteById');

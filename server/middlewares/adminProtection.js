@@ -4,7 +4,7 @@ import { get } from 'lodash';
 import ROLES from '../constants/roles';
 
 export const adminProtection = (ctx, next) => {
-  const userInfo = get(ctx, 'state.jwtData');
+  const userInfo = get(ctx.state, 'jwtData');
   const isAdmin = userInfo.role.includes(ROLES.admin);
 
   if (isAdmin) {
