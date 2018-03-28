@@ -6,8 +6,8 @@ export default class BaseRepository {
     this.Model = dbContext.models[modelName];
   }
 
-  async create(data) {
-    return this.Model.create(data);
+  async findAll() {
+    return this.Model.findAll();
   }
 
   async findById(id) {
@@ -18,7 +18,7 @@ export default class BaseRepository {
     return this.Model.find({ where: condition });
   }
 
-  async findAll() {
-    return this.Model.findAll();
+  async create(data) {
+    return this.Model.create(data);
   }
 }

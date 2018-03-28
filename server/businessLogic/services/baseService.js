@@ -27,4 +27,8 @@ export default class BaseService {
   async findById(id) {
     return this.repository.findById(id);
   }
+
+  async create(info) {
+    return this.repository.create(info);
+  }
 }

@@ -37,7 +37,7 @@ export default class Question extends Base {
       as: 'tag',
       foreignKey: 'questionId',
       through: {
-        model: 'QuestionTag',
+        model: 'QuestionTags',
         unique: false
       }
     });

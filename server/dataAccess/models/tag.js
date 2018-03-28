@@ -22,7 +22,7 @@ export default class Tag extends Base {
       as: 'question',
       foreignKey: 'tagId',
       through: {
-        model: 'QuestionTag',
+        model: 'QuestionTags',
         unique: false
       }
     });
