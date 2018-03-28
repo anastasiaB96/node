@@ -21,7 +21,7 @@ export default class Question extends Base {
     return super.init(this.schema, { sequelize });
   };
 
-  static associate({ Answer, User }) {
+  static associate({ Answer, User, Tag }) {
     this.hasMany(Answer, {
       as: 'answer',
       foreignKey: 'questionId'
@@ -31,6 +31,15 @@ export default class Question extends Base {
       as: 'user',
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
+    });
+
+    this.belongsToMany(Tag, {
+      as: 'tag',
+      foreignKey: 'questionId',
+      through: {
+        model: 'QuestionTag',
+        unique: false
+      }
     });
   }
 };

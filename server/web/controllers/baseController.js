@@ -46,7 +46,7 @@ export default class BaseController {
       const contextBody = BaseController.getContextBody(ctx);
       const created = await this.service.create(contextBody);
 
-      ctx.send(200, created);
+      ctx.created(created);
     } catch (error) {
       ctx.send(500, error);
     }
