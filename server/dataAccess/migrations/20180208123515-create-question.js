@@ -1,6 +1,7 @@
 'use strict';
-module.exports = {
-  up: (queryInterface, Sequelize) => {
+
+class Question {
+  up(queryInterface, Sequelize) {
     return queryInterface.createTable('Questions', {
       id: {
         allowNull: false,
@@ -32,8 +33,11 @@ module.exports = {
         type: Sequelize.DATE
       }
     });
-  },
-  down: (queryInterface, Sequelize) => {
+  }
+
+  down(queryInterface, Sequelize) {
     return queryInterface.dropTable('Questions');
   }
-};
+}
+
+export default new Question();

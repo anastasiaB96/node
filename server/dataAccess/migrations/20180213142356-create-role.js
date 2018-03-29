@@ -1,6 +1,7 @@
 'use strict';
-module.exports = {
-  up: (queryInterface, Sequelize) => {
+
+class Role {
+  up(queryInterface, Sequelize) {
     return queryInterface.createTable('Roles', {
       id: {
         allowNull: false,
@@ -24,8 +25,11 @@ module.exports = {
         type: Sequelize.DATE
       }
     });
-  },
-  down: (queryInterface, Sequelize) => {
+  }
+
+  down(queryInterface, Sequelize) {
     return queryInterface.dropTable('Roles');
   }
-};
+}
+
+export default new Role();
