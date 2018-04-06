@@ -22,7 +22,7 @@ class QuestionsController extends BaseController {
     try {
       const questionInfo = BaseController.getContextBody(ctx);
       const userId = BaseController.getLoggedUserId(ctx);
-      const createdQuestion = await this.service.create(userId, questionInfo);
+      const createdQuestion = await this.service.create({ userId, questionInfo });
 
       ctx.created(createdQuestion);
     } catch (error) {
@@ -31,7 +31,16 @@ class QuestionsController extends BaseController {
   }
 
   async createAnswer(ctx) {
-    console.log(ctx.params);
+    try {
+      const answerInfo = BaseController.getContextBody(ctx);
+      const questionId = BaseController.getParams(ctx).id;
+      const userId = BaseController.getLoggedUserId(ctx);
+      const createdAnswer = await this.service.createAnswer({ userId, questionId, answerInfo });
+
+      ctx.created(createdAnswer);
+    } catch (error) {
+      ctx.forbidden(error);
+    }
   }
 
   async update() {

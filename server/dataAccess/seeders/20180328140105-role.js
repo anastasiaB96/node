@@ -3,7 +3,7 @@
 import ROLES from '../../constants/roles';
 
 class Role {
-  async up(queryInterface, Sequelize) {
+  up(queryInterface, Sequelize) {
     return queryInterface.bulkInsert('Roles', [{
       name: ROLES.admin,
       description: 'Full access',

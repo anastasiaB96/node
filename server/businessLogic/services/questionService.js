@@ -3,22 +3,34 @@
 import BaseService from './baseService';
 
 export default class QuestionService extends BaseService {
-  constructor(mapper, questionRepository, userService) {
+  constructor(mapper, questionRepository, answerRepository, userService) {
     super(mapper, questionRepository);
+    this.answerRepository = answerRepository;
     this.userService = userService;
   }
 
-  async create(userId, questionInfo) {
+  async create({ userId, questionInfo }) {
     try {
-      const user = await this.userService.findById(userId);
+      const model = questionInfo;
+      model.userId = userId;
 
-      if (!user) {
-        return BaseService.reject('User doesn\'t exist');
-      }
-
-      const createdQuestion = await user.createQuestion(questionInfo);
+      const createdQuestion = await this.repository.create(model);
 
       return BaseService.resolve(createdQuestion);
+    } catch (error) {
+      return BaseService.reject(error);
+    }
+  }
+
+  async createAnswer({ userId, questionId, answerInfo }) {
+    try {
+      const model = answerInfo;
+      model.userId = userId;
+      model.questionId = questionId;
+
+      const createdAnswer = await this.answerRepository.create(model);
+
+      return BaseService.resolve(createdAnswer);
     } catch (error) {
       return BaseService.reject(error);
     }
