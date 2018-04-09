@@ -19,9 +19,9 @@ class QuestionsController extends BaseController {
       const questionId = BaseController.getParams(ctx).id;
       const answers = await this.service.getAnswers(questionId);
 
-      ctx.send(200, answers);
+      ctx.ok(answers);
     } catch (error) {
-      ctx.send(error.code, error.userMessage);
+      this.throwError(ctx, error);
     }
   }
 

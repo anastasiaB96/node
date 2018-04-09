@@ -81,6 +81,10 @@ export default class AuthService extends BaseService {
 
       const adminRole = await this.roleService.findByName(ROLES.admin);
 
+      if (!adminRole) {
+        return this.reject(ERRORS.badRequest);
+      }
+
       return await this.userService.addRole(user, adminRole);
     } catch (error) {
       return this.reject(ERRORS.internalServer);

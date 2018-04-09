@@ -33,4 +33,20 @@ export default class BaseService {
   async create(info) {
     return this.repository.create(info);
   }
+
+  async update(data, condition) {
+    return this.repository.update(data, condition);
+  }
+
+  async deleteAll() {
+    return this.repository.deleteAll();
+  }
+
+  async deleteById(id) {
+    return this.repository.deleteById(id);
+  }
+
+  async delete(condition) {
+    return this.repository.delete(condition);
+  }
 }

@@ -8,8 +8,6 @@ export default class Mapper {
   }
 
   mapObject(object, model) {
-    console.log(object);
-    console.log(model);
     return this._mapper(object, model);
   }
 }
