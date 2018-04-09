@@ -3,7 +3,7 @@
 import BaseService from './baseService';
 
 export default class TagService extends BaseService {
-  constructor(mapper, tagRepository) {
-    super(mapper, tagRepository);
+  constructor(errorsHelper, logger, mapper, tagRepository) {
+    super({ errorsHelper, logger, mapper, repository: tagRepository });
   }
 }

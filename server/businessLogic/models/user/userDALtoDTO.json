@@ -5,5 +5,5 @@
   "dataValues.email": "email",
   "dataValues.createdAt": "createdAt",
   "dataValues.updatedAt": "updatedAt",
-  "dataValues.role.name": "role"
+  "dataValues.role.name": "roles"
 }

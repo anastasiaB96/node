@@ -2,6 +2,7 @@
 
 import { createContainer, Lifetime, InjectionMode, asValue } from 'awilix';
 import logger from './logger';
+import errorsHelper from './errorsHelper';
 import { IocContainerHelper } from '../businessLogic/helpers/iocContainerHelper';
 
 class IocContainer {
@@ -13,7 +14,8 @@ class IocContainer {
 
   _registerLibs(container) {
     container.register({
-      logger: asValue(logger)
+      logger: asValue(logger),
+      errorsHelper: asValue(errorsHelper)
     }, {
       lifetime: Lifetime.SINGLETON
     });

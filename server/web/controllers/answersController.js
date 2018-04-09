@@ -6,8 +6,8 @@ import { adminProtection } from '../../middlewares/adminProtection';
 import BaseController from './baseController';
 
 class AnswersController extends BaseController {
-  constructor(logger, answerService) {
-    super(logger, answerService);
+  constructor(errorsHelper, answerService) {
+    super({ errorsHelper, service: answerService });
   }
 
   update() {
@@ -18,9 +18,12 @@ class AnswersController extends BaseController {
 export default createController(AnswersController)
   .prefix('/answers')
   .get('/:id', 'getById')
-  .before([jwtProtection])
-  .patch('/:id', 'update')
-  .delete('', 'deleteAll', {
-    before: [adminProtection]
+  .patch('/:id', 'update', {
+    before: [jwtProtection]
   })
-  .delete('/:id', 'deleteById')
+  .delete('', 'deleteAll', {
+    before: [jwtProtection, adminProtection]
+  })
+  .delete('/:id', 'deleteById', {
+    before: [jwtProtection]
+  })

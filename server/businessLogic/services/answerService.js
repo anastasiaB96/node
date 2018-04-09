@@ -3,7 +3,7 @@
 import BaseService from './baseService';
 
 export default class AnswerService extends BaseService {
-  constructor(mapper, answerRepository) {
-    super(mapper, answerRepository);
+  constructor(errorsHelper, logger, mapper, answerRepository) {
+    super({ errorsHelper, logger, mapper, repository: answerRepository });
   }
 }

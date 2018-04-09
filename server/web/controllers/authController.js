@@ -7,8 +7,8 @@ import { adminProtection } from '../../middlewares/adminProtection';
 import BaseController from './baseController';
 
 class AuthController extends BaseController {
-  constructor(logger, authService) {
-    super(logger, authService);
+  constructor(errorsHelper, authService) {
+    super({ errorsHelper, service: authService });
   }
 
   async register(ctx) {
@@ -18,7 +18,7 @@ class AuthController extends BaseController {
 
       ctx.created(registeredUser);
     } catch (error) {
-      ctx.forbidden(error);
+      this.throwError(ctx, error);
     }
   }
 
@@ -33,9 +33,9 @@ class AuthController extends BaseController {
       const userInfo = BaseController.getContextBody(ctx);
       await this.service.permitAdmin(userInfo);
 
-      ctx.success();
+      ctx.ok();
     } catch (error) {
-      ctx.forbidden(error);
+      this.throwError(ctx, error);
     }
   }
 }

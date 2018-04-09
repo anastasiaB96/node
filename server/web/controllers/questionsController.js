@@ -6,16 +6,23 @@ import { adminProtection } from '../../middlewares/adminProtection';
 import BaseController from './baseController';
 
 class QuestionsController extends BaseController {
-  constructor(logger, questionService) {
-    super(logger, questionService);
+  constructor(errorsHelper, questionService) {
+    super({ errorsHelper, service: questionService });
   }
 
   async filterByTags() {
 
   }
 
-  async getAnswers() {
+  async getAnswers(ctx) {
+    try {
+      const questionId = BaseController.getParams(ctx).id;
+      const answers = await this.service.getAnswers(questionId);
 
+      ctx.send(200, answers);
+    } catch (error) {
+      ctx.send(error.code, error.userMessage);
+    }
   }
 
   async create(ctx) {
@@ -26,7 +33,7 @@ class QuestionsController extends BaseController {
 
       ctx.created(createdQuestion);
     } catch (error) {
-      ctx.forbidden(error);
+      this.throwError(ctx, error);
     }
   }
 
@@ -39,7 +46,7 @@ class QuestionsController extends BaseController {
 
       ctx.created(createdAnswer);
     } catch (error) {
-      ctx.forbidden(error);
+      this.throwError(ctx, error);
     }
   }
 
@@ -56,16 +63,22 @@ export default createController(QuestionsController)
   .prefix('/questions')
   .get('', 'getAll')
   .get('/:id', 'getById')
-  .get('', 'filterByTags')
   .get('/:id/answers', 'getAnswers')
-  .before([jwtProtection])
-  .post('', 'create')
-  .post('/:id/answers', 'createAnswer')
-  .patch('/:id', 'update')
-  .delete('', 'deleteAll', {
-    before: [adminProtection]
+  .post('', 'create', {
+    before: [jwtProtection]
   })
-  .delete('/:id', 'deleteById')
+  .post('/:id/answers', 'createAnswer', {
+    before: [jwtProtection]
+  })
+  .patch('/:id', 'update', {
+    before: [jwtProtection]
+  })
+  .delete('', 'deleteAll', {
+    before: [jwtProtection, adminProtection]
+  })
+  .delete('/:id', 'deleteById', {
+    before: [jwtProtection]
+  })
   .delete('/:id/answers', 'deleteAllAnswers', {
-    before: [adminProtection]
+    before: [jwtProtection, adminProtection]
   })

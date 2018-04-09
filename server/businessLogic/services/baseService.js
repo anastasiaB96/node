@@ -1,23 +1,19 @@
 'use strict';
 
 export default class BaseService {
-  constructor(mapper, repository) {
+  constructor({ errorsHelper, logger, mapper, repository }) {
+    this.logger = logger;
     this.mapper = mapper;
     this.repository = repository;
+    this.errorsHelper = errorsHelper;
   }
 
-  static reject(errorMessage) {
-    return Promise.reject({
-      success: false,
-      errorMessage
-    })
+  resolve(operationResult) {
+    return Promise.resolve(operationResult)
   }
 
-  static resolve(result) {
-    return Promise.resolve({
-      success: true,
-      result
-    })
+  reject(error) {
+    return Promise.reject(error)
   }
 
   async findAll() {

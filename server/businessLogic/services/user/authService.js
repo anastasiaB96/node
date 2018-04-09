@@ -7,8 +7,8 @@ import ROLES from '../../../constants/roles';
 import * as userDALtoDTO from '../../models/user/userDALtoDTO.json';
 
 export default class AuthService extends BaseService {
-  constructor(userService, roleService, mapper) {
-    super(mapper);
+  constructor(errorsHelper, logger, mapper, userService, roleService) {
+    super({ errorsHelper, logger, mapper });
     this.userService = userService;
     this.roleService = roleService;
   }
@@ -24,14 +24,14 @@ export default class AuthService extends BaseService {
       const existingUser = await this.userService.findByEmail(userInfo.email);
 
       if (existingUser) {
-        return BaseService.reject('User already exists');
+        return this.reject(this.errorsHelper.errors.userExists);
       }
 
       const createdUser = await this.userService.create(userInfo);
 
-      return BaseService.resolve(this.mapper.mapObject(createdUser, userDALtoDTO));
+      return this.resolve(this.mapper.mapObject(createdUser, userDALtoDTO));
     } catch (error) {
-      return BaseService.reject(error.name);
+      return this.reject(this.errorsHelper.createInternalServerError());
     }
   }
 
@@ -40,26 +40,26 @@ export default class AuthService extends BaseService {
       const { email, password } = userInfo;
 
       if (!email || !password) {
-        return BaseService.reject('Invalid credentials');
+        return this.reject(this.errorsHelper.errors.invalidCredentials);
       }
 
       const user = await this.userService.findByEmail(email);
 
       if (!user) {
-        return BaseService.reject('User doesn\'t exist');
+        return this.reject(this.errorsHelper.errors.userNotExists);
       }
 
       const isValid = await user.validPassword(password);
 
       if (!isValid) {
-        return BaseService.reject('Invalid credentials');
+        return this.reject(this.errorsHelper.errors.invalidCredentials);
       }
 
       const token = AuthService._generateJWTToken(this.mapper.mapObject(user, userDALtoDTO));
 
-      return BaseService.resolve({ name: user.firstName, token: 'Bearer ' + token });
+      return this.resolve({ name: user.firstName, token: 'Bearer ' + token });
     } catch (error) {
-      return BaseService.reject(error.name);
+      return this.reject(this.errorsHelper.internalServerError);
     }
   }
 
@@ -69,18 +69,18 @@ export default class AuthService extends BaseService {
       const user = await this.userService.findByEmail(email);
 
       if (!user) {
-        return BaseService.reject('User doesn\'t exist');
+        return this.reject(this.errorsHelper.userNotExists);
       }
 
       const adminRole = await this.roleService.findByName(ROLES.admin);
 
       if (!adminRole) {
-        return BaseService.reject('Role doesn\'t exist.');
+        return this.reject('Role doesn\'t exist.');
       }
 
       return await this.userService.addRole(user, adminRole);
     } catch (error) {
-      return BaseService.reject(error);
+      return this.reject(this.errorsHelper.createInternalServerError());
     }
   }
 }

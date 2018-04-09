@@ -4,7 +4,7 @@ import BaseRepository from '../baseRepository';
 
 export default class UserRepository extends BaseRepository {
   constructor(logger, dbContext) {
-    super(logger, dbContext, 'User');
+    super({ logger, dbContext, modelName: 'User' });
     this.Role = dbContext.models['Role'];
   }
 

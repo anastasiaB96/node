@@ -3,9 +3,9 @@
 import { get } from 'lodash';
 
 export default class BaseController {
-  constructor(logger, service) {
-    this.logger = logger;
+  constructor({ errorsHelper, service }) {
     this.service = service;
+    this.errorsHelper = errorsHelper;
   }
 
   static getContextBody(ctx) {
@@ -20,13 +20,18 @@ export default class BaseController {
     return ctx.params;
   }
 
+  throwError(ctx, errorName) {
+    const error = this.errorsHelper.getHttpErrorInfo(errorName);
+    ctx.send(error.code, error.userMessage);
+  }
+
   async getAll(ctx) {
     try {
       const data = await this.service.findAll();
 
-      ctx.send(200, data);
+      ctx.ok(data);
     } catch (error) {
-      ctx.send(500, error);
+      this.throwError(ctx, error);
     }
   }
 
@@ -35,9 +40,9 @@ export default class BaseController {
       const id = BaseController.getParams(ctx).id;
       const data = await this.service.findById(id);
 
-      ctx.send(200, data);
+      ctx.ok(data);
     } catch (error) {
-      ctx.send(500, error);
+      this.throwError(ctx, error);
     }
   }
 
@@ -48,7 +53,7 @@ export default class BaseController {
 
       ctx.created(created);
     } catch (error) {
-      ctx.send(500, error);
+      this.throwError(ctx, error);
     }
   }
 

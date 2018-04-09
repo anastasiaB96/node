@@ -4,8 +4,8 @@ import BaseService from '../baseService';
 import ROLES from '../../../constants/roles';
 
 export default class UserService extends BaseService {
-  constructor(mapper, userRepository, roleService) {
-    super(mapper, userRepository);
+  constructor(errorsHelper, logger, mapper, userRepository, roleService) {
+    super({ errorsHelper, logger, mapper, repository: userRepository });
     this.roleService = roleService;
   }
 
@@ -16,9 +16,9 @@ export default class UserService extends BaseService {
 
       await this.addRole(createdUser, defaultRole);
 
-      return BaseService.resolve(createdUser);
+      return this.resolve(createdUser);
     } catch (error) {
-      return BaseService.reject(error);
+      return this.reject(this.errorsHelper.createInternalServerError());
     }
   }
 
