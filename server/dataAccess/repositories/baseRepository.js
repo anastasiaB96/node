@@ -22,8 +22,8 @@ export default class BaseRepository {
     return this.Model.create(data);
   }
 
-  async update(data, condition) {
-    return this.Model.update(data, { where: { condition } });
+  async updateById(data, id) {
+    return this.Model.update(data, { where: { id } });
   }
 
   async deleteAll() {

@@ -50,10 +50,6 @@ class QuestionsController extends BaseController {
     }
   }
 
-  async update() {
-
-  }
-
   async deleteAllAnswers() {
 
   }
@@ -70,7 +66,7 @@ export default createController(QuestionsController)
   .post('/:id/answers', 'createAnswer', {
     before: [jwtProtection]
   })
-  .patch('/:id', 'update', {
+  .patch('/:id', 'updateById', {
     before: [jwtProtection]
   })
   .delete('', 'deleteAll', {

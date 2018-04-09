@@ -34,8 +34,8 @@ export default class BaseService {
     return this.repository.create(info);
   }
 
-  async update(data, condition) {
-    return this.repository.update(data, condition);
+  async updateById(data, id) {
+    return this.repository.updateById(data, id);
   }
 
   async deleteAll() {

@@ -9,10 +9,6 @@ class TagsController extends BaseController {
   constructor(errorsHelper, tagService) {
     super({ errorsHelper, service: tagService });
   }
-
-  update() {
-
-  }
 }
 
 export default createController(TagsController)
@@ -22,7 +18,7 @@ export default createController(TagsController)
   .post('', 'create', {
     before: [jwtProtection, adminProtection]
   })
-  .patch('/:id', 'update', {
+  .patch('/:id', 'updateById', {
     before: [jwtProtection, adminProtection]
   })
   .delete('', 'deleteAll', {

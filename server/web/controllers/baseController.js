@@ -57,15 +57,36 @@ export default class BaseController {
     }
   }
 
-  async update() {
+  async updateById(ctx) {
+    try {
+      const id = BaseController.getParams(ctx).id;
+      const contextBody = BaseController.getContextBody(ctx);
+      const updated = await this.service.updateById(contextBody, id);
 
+      ctx.ok(updated);
+    } catch (error) {
+      this.throwError(ctx, error);
+    }
   }
 
   async deleteAll(ctx) {
+    try {
+      const result = await this.service.deleteAll();
 
+      ctx.ok(result);
+    } catch (error) {
+      this.throwError(ctx, error);
+    }
   }
 
   async deleteById(ctx) {
+    try {
+      const id = BaseController.getParams(ctx).id;
+      const result = await this.service.deleteById(id);
 
+      ctx.ok(result);
+    } catch (error) {
+      this.throwError(ctx, error);
+    }
   }
 }

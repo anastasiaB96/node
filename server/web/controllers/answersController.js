@@ -9,16 +9,12 @@ class AnswersController extends BaseController {
   constructor(errorsHelper, answerService) {
     super({ errorsHelper, service: answerService });
   }
-
-  update() {
-
-  }
 }
 
 export default createController(AnswersController)
   .prefix('/answers')
   .get('/:id', 'getById')
-  .patch('/:id', 'update', {
+  .patch('/:id', 'updateById', {
     before: [jwtProtection]
   })
   .delete('', 'deleteAll', {
