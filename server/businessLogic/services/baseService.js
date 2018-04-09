@@ -1,5 +1,7 @@
 'use strict';
 
+import ERRORS from '../../constants/errors';
+
 export default class BaseService {
   constructor({ errorsHelper, logger, mapper, repository }) {
     this.logger = logger;
@@ -13,6 +15,10 @@ export default class BaseService {
   }
 
   reject(error) {
+    if (error === ERRORS.internalServer) {
+      this.logger.error(error);
+    }
+
     return Promise.reject(error)
   }
 

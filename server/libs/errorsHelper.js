@@ -1,52 +1,45 @@
 'use strict';
 
+import ERRORS from '../constants/errors';
+
 class ErrorsHelper {
   constructor(logger) {
     this.logger = logger;
-    this.errors = {
-      badRequest: 'badRequest',
-      userExists: 'userExists',
-      userNotExists: 'userNotExists',
-      invalidCredentials: 'invalidCredentials',
-      internalServer: 'internalServer'
-    };
+    this._errors = ERRORS;
 
     this._httpErrors = {
-      [this.errors.badRequest]: {
+      [this._errors.badRequest]: {
         code: 400,
         userMessage: 'The JSON is invalid.'
       },
-      [this.errors.userExists]: {
+      [this._errors.userExists]: {
         code: 400,
         userMessage: 'User already exists.'
       },
-      [this.errors.userNotExists]: {
+      [this._errors.userNotExists]: {
         code: 400,
         userMessage: 'The user doesn\'t exists.'
       },
-      [this.errors.invalidCredentials]: {
+      [this._errors.invalidCredentials]: {
         code: 400,
         userMessage: 'Invalid credentials.'
       },
-      [this.errors.internalServer]: {
+      [this._errors.internalServer]: {
         code: 500,
-        userMessage: 'Invalid credentials.'
+        userMessage: 'Something goes wrong, please try again :('
       }
     };
   }
 
   getHttpErrorInfo(name) {
-    if (!this.errors[name]) {
-      return;
+    if (!this._errors[name]) {
+      return {
+        code: 400,
+        userMessage: 'Something goes wrong, please try again :('
+      };
     }
 
     return this._httpErrors[name];
-  }
-
-  createInternalServerError(error) {
-    this.logger.error(error);
-
-    return this.errors.internalServer;
   }
 }
 

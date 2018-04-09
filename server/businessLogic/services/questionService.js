@@ -1,6 +1,7 @@
 'use strict';
 
 import BaseService from './baseService';
+import ERRORS from '../../constants/errors';
 
 export default class QuestionService extends BaseService {
   constructor(errorsHelper, logger, mapper, questionRepository, answerRepository, userService) {
@@ -11,7 +12,7 @@ export default class QuestionService extends BaseService {
 
   async create({ userId, questionInfo }) {
     if (!userId || !questionId) {
-      return this.reject(this.errorsHelper.badRequest);
+      return this.reject(ERRORS.badRequest);
     }
 
     try {
@@ -22,13 +23,13 @@ export default class QuestionService extends BaseService {
 
       return this.resolve(createdQuestion);
     } catch (error) {
-      return this.reject(this.errorsHelper.createInternalServerError());
+      return this.reject(ERRORS.internalServer);
     }
   }
 
   async createAnswer({ userId, questionId, answerInfo }) {
     if (!userId || !questionId || !answerInfo) {
-      return this.reject(this.errorsHelper.badRequest);
+      return this.reject(ERRORS.badRequest);
     }
 
     try {
@@ -40,13 +41,13 @@ export default class QuestionService extends BaseService {
 
       return this.resolve(createdAnswer);
     } catch (error) {
-      return this.reject(this.errorsHelper.createInternalServerError());
+      return this.reject(ERRORS.internalServer);
     }
   }
 
   async getAnswers(questionId) {
     if (!questionId) {
-      return this.reject(this.errorsHelper.errors.badRequest);
+      return this.reject(ERRORS.badRequest);
     }
 
     try {
@@ -54,7 +55,7 @@ export default class QuestionService extends BaseService {
 
       return this.resolve(answers);
     } catch (error) {
-      return this.reject(this.errorsHelper.createInternalServerError());
+      return this.reject(ERRORS.internalServer);
     }
   }
 }

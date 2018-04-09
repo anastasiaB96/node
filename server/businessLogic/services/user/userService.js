@@ -2,6 +2,7 @@
 
 import BaseService from '../baseService';
 import ROLES from '../../../constants/roles';
+import ERRORS from '../../../constants/errors';
 
 export default class UserService extends BaseService {
   constructor(errorsHelper, logger, mapper, userRepository, roleService) {
@@ -18,7 +19,7 @@ export default class UserService extends BaseService {
 
       return this.resolve(createdUser);
     } catch (error) {
-      return this.reject(this.errorsHelper.createInternalServerError());
+      return this.reject(ERRORS.internalServer);
     }
   }
 
