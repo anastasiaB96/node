@@ -3,9 +3,9 @@
 import { createController } from 'awilix-koa';
 import { jwtProtection } from '../../middlewares/jwtProtection';
 import { adminProtection } from '../../middlewares/adminProtection';
-import BaseController from './baseController';
+import AuditableController from './auditableController';
 
-class AnswersController extends BaseController {
+class AnswersController extends AuditableController {
   constructor(errorsHelper, answerService) {
     super({ errorsHelper, service: answerService });
   }

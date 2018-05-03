@@ -23,11 +23,6 @@ export default class AuthService extends Service {
   async register(userInfo) {
     try {
       const { email } = userInfo;
-
-      if (!email) {
-        return this.reject(ERRORS.badRequest);
-      }
-
       const existingUser = await this.userService.findByEmail(email);
 
       if (existingUser) {
@@ -45,11 +40,6 @@ export default class AuthService extends Service {
   async login(userInfo) {
     try {
       const { email, password } = userInfo;
-
-      if (!email || !password) {
-        return this.reject(ERRORS.invalidCredentials);
-      }
-
       const user = await this.userService.findByEmail(email);
 
       if (!user) {

@@ -11,10 +11,6 @@ export default class QuestionService extends AuditableService {
   }
 
   async create({ userId, questionInfo }) {
-    if (!userId || !questionId) {
-      return this.reject(ERRORS.badRequest);
-    }
-
     try {
       const model = questionInfo;
       model.userId = userId;
@@ -28,10 +24,6 @@ export default class QuestionService extends AuditableService {
   }
 
   async createAnswer({ userId, questionId, answerInfo }) {
-    if (!userId || !questionId || !answerInfo) {
-      return this.reject(ERRORS.badRequest);
-    }
-
     try {
       const model = answerInfo;
       model.userId = userId;
@@ -46,10 +38,6 @@ export default class QuestionService extends AuditableService {
   }
 
   async getAnswers(questionId) {
-    if (!questionId) {
-      return this.reject(ERRORS.badRequest);
-    }
-
     try {
       const answers = await this.answerRepository.find({ questionId });
 

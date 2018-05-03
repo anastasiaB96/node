@@ -4,16 +4,16 @@ import { createController } from 'awilix-koa';
 import { login } from '../../middlewares/login';
 import { jwtProtection } from '../../middlewares/jwtProtection';
 import { adminProtection } from '../../middlewares/adminProtection';
-import BaseController from './baseController';
+import Controller from './controller';
 
-class AuthController extends BaseController {
+class AuthController extends Controller {
   constructor(errorsHelper, authService) {
     super({ errorsHelper, service: authService });
   }
 
   async register(ctx) {
     try {
-      const userInfo = BaseController.getContextBody(ctx);
+      const userInfo = this.getContextBody(ctx);
       const registeredUser = await this.service.register(userInfo);
 
       ctx.created(registeredUser);
@@ -30,7 +30,7 @@ class AuthController extends BaseController {
 
   async permitAdmin(ctx) {
     try {
-      const userInfo = BaseController.getContextBody(ctx);
+      const userInfo = this.getContextBody(ctx);
       await this.service.permitAdmin(userInfo);
 
       ctx.ok();

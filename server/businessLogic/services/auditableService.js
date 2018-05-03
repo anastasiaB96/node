@@ -3,9 +3,9 @@
 import Service from './service';
 
 export default class AuditableService extends Service {
-  async isOwner(id, userId) {
-    const essence = await this.findById(id);
+  async isOwner({ id, userId }) {
+    const info = await this.findById(id);
 
-    return essence.userId === userId;
+    return info.userId === userId;
   }
 }

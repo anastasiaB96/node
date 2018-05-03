@@ -3,9 +3,9 @@
 import { createController } from 'awilix-koa';
 import { jwtProtection } from '../../middlewares/jwtProtection';
 import { adminProtection } from '../../middlewares/adminProtection';
-import BaseController from './baseController';
+import AuditableController from './auditableController';
 
-class QuestionsController extends BaseController {
+class QuestionsController extends AuditableController {
   constructor(errorsHelper, questionService) {
     super({ errorsHelper, service: questionService });
   }
@@ -16,7 +16,7 @@ class QuestionsController extends BaseController {
 
   async getAnswers(ctx) {
     try {
-      const questionId = BaseController.getParams(ctx).id;
+      const questionId = this.getParams(ctx).id;
       const answers = await this.service.getAnswers(questionId);
 
       ctx.ok(answers);
@@ -27,8 +27,8 @@ class QuestionsController extends BaseController {
 
   async create(ctx) {
     try {
-      const questionInfo = BaseController.getContextBody(ctx);
-      const userId = BaseController.getLoggedUserId(ctx);
+      const questionInfo = this.getContextBody(ctx);
+      const userId = this.getLoggedUserId(ctx);
       const createdQuestion = await this.service.create({ userId, questionInfo });
 
       ctx.created(createdQuestion);
@@ -39,9 +39,9 @@ class QuestionsController extends BaseController {
 
   async createAnswer(ctx) {
     try {
-      const answerInfo = BaseController.getContextBody(ctx);
-      const questionId = BaseController.getParams(ctx).id;
-      const userId = BaseController.getLoggedUserId(ctx);
+      const answerInfo = this.getContextBody(ctx);
+      const questionId = this.getParams(ctx).id;
+      const userId = this.getLoggedUserId(ctx);
       const createdAnswer = await this.service.createAnswer({ userId, questionId, answerInfo });
 
       ctx.created(createdAnswer);

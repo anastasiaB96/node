@@ -7,9 +7,9 @@ export const adminProtection = (ctx, next) => {
   const userInfo = get(ctx.state, 'jwtData');
   const isAdmin = userInfo.roles.includes(ROLES.admin);
 
-  if (isAdmin) {
-    return next();
+  if (!isAdmin) {
+    ctx.forbidden('Sorry, you don\'t have requested permissions!');
   }
 
-  ctx.forbidden('Sorry, you don\'t have needed permissions!');
+  return next();
 };

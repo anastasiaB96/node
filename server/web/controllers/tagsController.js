@@ -3,9 +3,9 @@
 import { createController } from 'awilix-koa';
 import { jwtProtection } from '../../middlewares/jwtProtection';
 import { adminProtection } from '../../middlewares/adminProtection';
-import BaseController from './baseController';
+import AuditableController from './auditableController';
 
-class TagsController extends BaseController {
+class TagsController extends AuditableController {
   constructor(errorsHelper, tagService) {
     super({ errorsHelper, service: tagService });
   }
@@ -16,14 +16,14 @@ export default createController(TagsController)
   .get('', 'getAll')
   .get('/:id', 'getById')
   .post('', 'create', {
-    before: [jwtProtection, adminProtection]
+    before: [jwtProtection]
   })
   .patch('/:id', 'updateById', {
-    before: [jwtProtection, adminProtection]
+    before: [jwtProtection]
   })
   .delete('', 'deleteAll', {
     before: [jwtProtection, adminProtection]
   })
   .delete('/:id', 'deleteById', {
-    before: [jwtProtection, adminProtection]
+    before: [jwtProtection]
   });
