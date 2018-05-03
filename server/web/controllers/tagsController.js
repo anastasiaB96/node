@@ -16,14 +16,14 @@ export default createController(TagsController)
   .get('', 'getAll')
   .get('/:id', 'getById')
   .post('', 'create', {
-    before: [jwtProtection]
+    before: [jwtProtection, adminProtection]
   })
   .patch('/:id', 'updateById', {
-    before: [jwtProtection]
+    before: [jwtProtection, adminProtection]
   })
   .delete('', 'deleteAll', {
     before: [jwtProtection, adminProtection]
   })
   .delete('/:id', 'deleteById', {
-    before: [jwtProtection]
+    before: [jwtProtection, adminProtection]
   });
