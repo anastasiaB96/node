@@ -1,7 +1,6 @@
 'use strict';
 
 import { createController } from 'awilix-koa';
-import { login } from '../../middlewares/login';
 import { jwtProtection } from '../../middlewares/jwtProtection';
 import { adminProtection } from '../../middlewares/adminProtection';
 import Controller from './controller';
@@ -23,9 +22,14 @@ class AuthController extends Controller {
   }
 
   async login(ctx) {
-    await login(ctx, (loggedUser) => {
+    try {
+      const userData = this.getContextBody(ctx);
+      const loggedUser = await this.service.login(userData);
+
       ctx.ok(loggedUser);
-    });
+    } catch (error) {
+      this.throwError(ctx, error);
+    }
   }
 
   async permitAdmin(ctx) {

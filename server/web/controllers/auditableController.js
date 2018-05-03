@@ -12,17 +12,18 @@ export default class AuditableController extends Controller {
   }
 
   isAdmin(ctx) {
-    return adminProtection(ctx, () => {
-      return true;
-    });
+    let isAdmin = false;
+    adminProtection(ctx, () => { isAdmin = true; });
+
+    return isAdmin;
   }
 
-  async isPermissions(ctx) {
+  async isAdminOrOwnerPermissions(ctx) {
     return await this.isOwner(ctx) || this.isAdmin(ctx);
   }
 
   async updateById(ctx) {
-    if (!await this.isPermissions(ctx)) {
+    if (!await this.isAdminOrOwnerPermissions(ctx)) {
       ctx.forbidden('Sorry, you don\'t have requested permissions!');
     }
 
@@ -30,7 +31,7 @@ export default class AuditableController extends Controller {
   }
 
   async deleteById(ctx) {
-    if (!await this.isPermissions(ctx)) {
+    if (!await this.isAdminOrOwnerPermissions(ctx)) {
       ctx.forbidden('Sorry, you don\'t have requested permissions!');
     }
 
