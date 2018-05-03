@@ -1,8 +1,8 @@
 'use strict';
 
-import BaseRepository from './baseRepository';
+import Repository from './repository';
 
-export default class AnswerRepository extends BaseRepository {
+export default class AnswerRepository extends Repository {
   constructor(logger, dbContext) {
     super({ logger, dbContext, modelName: 'Answer' });
   }

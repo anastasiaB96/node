@@ -1,8 +1,8 @@
 'use strict';
 
-import BaseService from '../baseService';
+import Service from '../service';
 
-export default class RoleService extends BaseService {
+export default class RoleService extends Service {
   constructor(errorsHelper, logger, mapper, roleRepository) {
     super({ errorsHelper, logger, mapper, repository: roleRepository });
   }

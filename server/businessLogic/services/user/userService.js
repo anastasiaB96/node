@@ -1,10 +1,10 @@
 'use strict';
 
-import BaseService from '../baseService';
+import Service from '../service';
 import ROLES from '../../../constants/roles';
 import ERRORS from '../../../constants/errors';
 
-export default class UserService extends BaseService {
+export default class UserService extends Service {
   constructor(errorsHelper, logger, mapper, userRepository, roleService) {
     super({ errorsHelper, logger, mapper, repository: userRepository });
     this.roleService = roleService;

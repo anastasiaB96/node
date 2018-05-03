@@ -2,7 +2,7 @@
 
 import ERRORS from '../../constants/errors';
 
-export default class BaseService {
+export default class Service {
   constructor({ errorsHelper, logger, mapper, repository }) {
     this.logger = logger;
     this.mapper = mapper;

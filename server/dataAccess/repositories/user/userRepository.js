@@ -1,8 +1,8 @@
 'use strict';
 
-import BaseRepository from '../baseRepository';
+import Repository from '../repository';
 
-export default class UserRepository extends BaseRepository {
+export default class UserRepository extends Repository {
   constructor(logger, dbContext) {
     super({ logger, dbContext, modelName: 'User' });
     this.Role = dbContext.models['Role'];

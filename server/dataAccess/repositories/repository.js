@@ -1,6 +1,6 @@
 'use strict';
 
-export default class BaseRepository {
+export default class Repository {
   constructor({ logger, dbContext, modelName }) {
     this.logger = logger;
     this.Model = dbContext.models[modelName];
