@@ -7,7 +7,7 @@ import { IocContainerHelper as IocContainerDataAccessHelper } from '../../dataAc
 export class IocContainerHelper {
   static registerServices(container) {
     container.loadModules(
-      ['services/**/*.js', 'mappers/**/*.js'],
+      ['services/**/*.js', 'helpers/mapper.js'],
       {
         cwd: `${__dirname}/..`,
         formatName: 'camelCase',
