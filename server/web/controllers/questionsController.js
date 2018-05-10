@@ -54,6 +54,30 @@ class QuestionsController extends AuditableController {
       this.throwError(ctx, error);
     }
   }
+
+  async addRating(ctx) {
+    try {
+      const questionId = this.getParams(ctx).id;
+      const userId = this.getCurrentUserId(ctx);
+      await this.service.addRating(userId, questionId);
+
+      ctx.noContent();
+    } catch (error) {
+      this.throwError(ctx, error);
+    }
+  }
+
+  async removeRating(ctx) {
+    try {
+      const questionId = this.getParams(ctx).id;
+      const userId = this.getCurrentUserId(ctx);
+      await this.service.removeRating(userId, questionId);
+
+      ctx.noContent();
+    } catch (error) {
+      this.throwError(ctx, error);
+    }
+  }
 }
 
 export default createController(QuestionsController)
@@ -70,6 +94,9 @@ export default createController(QuestionsController)
   .patch('/:id', 'updateById', { // return strange data
     before: [jwtProtection]
   })
+  .patch('/:id/rating', 'addRating', {
+    before: [jwtProtection]
+  })
   .delete('/:id', 'deleteById', {
     before: [jwtProtection]
   })
@@ -78,4 +105,7 @@ export default createController(QuestionsController)
   })
   .delete('/:id/answers', 'deleteAllAnswers', {
     before: [jwtProtection, adminProtection]
+  })
+  .delete('/:id/rating', 'removeRating', {
+    before: [jwtProtection]
   })

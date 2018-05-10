@@ -4,10 +4,12 @@ import AuditableService from './auditableService';
 import ERRORS from '../../constants/errors';
 
 export default class QuestionService extends AuditableService {
-  constructor(errorsHelper, logger, mapper, questionRepository, answerService, userService) {
+  constructor(errorsHelper, logger, mapper, questionRepository, answerService, userService, questionRatingService) {
     super({ errorsHelper, logger, mapper, repository: questionRepository });
+
     this.answerService = answerService;
     this.userService = userService;
+    this.questionRatingService = questionRatingService;
   }
 
   async createAnswer(userId, info) {
@@ -38,5 +40,13 @@ export default class QuestionService extends AuditableService {
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }
+  }
+
+  async addRating(userId, questionId) {
+    return this.questionRatingService.create(userId, questionId);
+  }
+
+  async removeRating(userId, questionId) {
+    return this.questionRatingService.delete(userId, questionId);
   }
 }
