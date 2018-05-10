@@ -14,12 +14,12 @@ export default class Service {
     return Promise.resolve(operationResult)
   }
 
-  reject(error) {
-    if (error === ERRORS.internalServer) {
+  reject(errorType, error) {
+    if (errorType === ERRORS.internalServer) {
       this.logger.error(error);
     }
 
-    return Promise.reject(error)
+    return Promise.reject(errorType)
   }
 
   async findAll() {

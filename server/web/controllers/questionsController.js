@@ -66,7 +66,7 @@ export default createController(QuestionsController)
   .post('/:id/answers', 'createAnswer', {
     before: [jwtProtection]
   })
-  .patch('/:id', 'updateById', {
+  .patch('/:id', 'updateById', { // return strange data
     before: [jwtProtection]
   })
   .delete('', 'deleteAll', {

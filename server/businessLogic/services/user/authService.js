@@ -33,7 +33,7 @@ export default class AuthService extends Service {
 
       return this.resolve(this.mapper.mapObject(createdUser, userDALtoDTO));
     } catch (error) {
-      return this.reject(ERRORS.internalServer);
+      return this.reject(ERRORS.internalServer, error);
     }
   }
 
@@ -56,7 +56,7 @@ export default class AuthService extends Service {
 
       return this.resolve({ name: user.firstName, token: 'Bearer ' + token });
     } catch (error) {
-      return this.reject(ERRORS.internalServer);
+      return this.reject(ERRORS.internalServer, error);
     }
   }
 
@@ -77,7 +77,7 @@ export default class AuthService extends Service {
 
       return await this.userService.addRole(user, adminRole);
     } catch (error) {
-      return this.reject(ERRORS.internalServer);
+      return this.reject(ERRORS.internalServer, error);
     }
   }
 }
