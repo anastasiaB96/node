@@ -19,7 +19,7 @@ export default class QuestionService extends AuditableService {
 
       return this.resolve(createdQuestion);
     } catch (error) {
-      return this.reject(ERRORS.internalServer, error);
+      return this.reject({ errorType: ERRORS.internalServer }, error);
     }
   }
 
@@ -33,7 +33,7 @@ export default class QuestionService extends AuditableService {
 
       return this.resolve(createdAnswer);
     } catch (error) {
-      return this.reject(ERRORS.internalServer, error);
+      return this.reject({ errorType: ERRORS.internalServer }, error);
     }
   }
 
@@ -43,7 +43,7 @@ export default class QuestionService extends AuditableService {
 
       return this.resolve(answers);
     } catch (error) {
-      return this.reject(ERRORS.internalServer, error);
+      return this.reject({ errorType: ERRORS.internalServer }, error);
     }
   }
 }

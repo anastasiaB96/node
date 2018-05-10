@@ -7,39 +7,46 @@ class ErrorsHelper {
     this.logger = logger;
     this._errors = ERRORS;
 
-    this._httpErrors = {
+    this._defaultHttpErrors = {
       [this._errors.badRequest]: {
         code: 400,
         userMessage: 'The JSON is invalid.'
       },
-      [this._errors.userExists]: {
-        code: 400,
-        userMessage: 'User already exists.'
+      [this._errors.unauthorized]: {
+        code: 401,
+        userMessage: 'Requires user authentication.',
       },
-      [this._errors.userNotExists]: {
-        code: 400,
-        userMessage: 'The user doesn\'t exists.'
-      },
-      [this._errors.invalidCredentials]: {
-        code: 400,
-        userMessage: 'Invalid credentials.'
+      [this._errors.forbidden]: {
+        code: 403,
+        userMessage: 'Access is not allow.'
       },
       [this._errors.internalServer]: {
         code: 500,
         userMessage: 'Something goes wrong, please try again :('
+      },
+      [this._errors.notFound]: {
+        code: 404,
+        userMessage: 'Resource is not found.'
+      },
+      [this._errors.unprocessableEntity]: {
+        code: 422,
+        userMessage: 'Unprocessable Entity'
       }
     };
   }
 
-  getHttpErrorInfo(name) {
-    if (!this._errors[name]) {
+  getHttpErrorInfo(errorName, userMessage) {
+    if (!this._defaultHttpErrors[errorName]) {
       return {
-        code: 400,
-        userMessage: 'Something goes wrong, please try again :('
+        code: 500,
+        userMessage: userMessage || 'Something goes wrong, please try again :('
       };
     }
 
-    return this._httpErrors[name];
+    const errorInfo = this._defaultHttpErrors[errorName];
+    errorInfo.userMessage = userMessage || errorInfo.userMessage;
+
+    return errorInfo;
   }
 }
 

@@ -26,14 +26,14 @@ export default class AuthService extends Service {
       const existingUser = await this.userService.findByEmail(email);
 
       if (existingUser) {
-        return this.reject(ERRORS.userExists);
+        return this.reject({ errorType: ERRORS.forbidden, errorMessage: 'User already exists.' });
       }
 
       const createdUser = await this.userService.create(userInfo);
 
       return this.resolve(this.mapper.mapObject(createdUser, userDALtoDTO));
     } catch (error) {
-      return this.reject(ERRORS.internalServer, error);
+      return this.reject({ errorType: ERRORS.internalServer }, error);
     }
   }
 
@@ -43,20 +43,20 @@ export default class AuthService extends Service {
       const user = await this.userService.findByEmail(email);
 
       if (!user) {
-        return this.reject(ERRORS.userNotExists);
+        return this.reject({ errorType: ERRORS.notFound, errorMessage: 'User doesn\'t exists.' });
       }
 
       const isValid = await user.validPassword(password);
 
       if (!isValid) {
-        return this.reject(ERRORS.invalidCredentials);
+        return this.reject({ errorType: ERRORS.forbidden });
       }
 
       const token = AuthService._generateJWTToken(this.mapper.mapObject(user, userDALtoDTO));
 
       return this.resolve({ name: user.firstName, token: 'Bearer ' + token });
     } catch (error) {
-      return this.reject(ERRORS.internalServer, error);
+      return this.reject({ errorType: ERRORS.internalServer }, error);
     }
   }
 
@@ -66,18 +66,18 @@ export default class AuthService extends Service {
       const user = await this.userService.findByEmail(email);
 
       if (!user) {
-        return this.reject(ERRORS.userNotExists);
+        return this.reject({ errorType: ERRORS.notFound, errorMessage: 'User doesn\'t exists.' });
       }
 
       const adminRole = await this.roleService.findByName(ROLES.admin);
 
       if (!adminRole) {
-        return this.reject(ERRORS.badRequest);
+        return this.reject({ errorType: ERRORS.badRequest, userMessage: 'Role doesn\'t exists.' });
       }
 
       return await this.userService.addRole(user, adminRole);
     } catch (error) {
-      return this.reject(ERRORS.internalServer, error);
+      return this.reject({ errorType: ERRORS.internalServer }, error);
     }
   }
 }

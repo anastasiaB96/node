@@ -19,7 +19,7 @@ export default class UserService extends Service {
 
       return this.resolve(createdUser);
     } catch (error) {
-      return this.reject(ERRORS.internalServer, error);
+      return this.reject({ errorType: ERRORS.internalServer }, error);
     }
   }
 

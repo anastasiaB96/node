@@ -2,10 +2,11 @@
 
 const ERRORS = {
   badRequest: 'badRequest',
-  userExists: 'userExists',
-  userNotExists: 'userNotExists',
-  invalidCredentials: 'invalidCredentials',
-  internalServer: 'internalServer'
+  unauthorized: 'unauthorized',
+  forbidden: 'forbidden',
+  internalServer: 'internalServer',
+  notFound: 'notFound',
+  unprocessableEntity: 'unprocessableEntity'
 };
 
 export default ERRORS;

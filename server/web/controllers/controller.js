@@ -20,8 +20,8 @@ export default class Controller {
     return ctx.params;
   }
 
-  throwError(ctx, errorName) {
-    const error = this.errorsHelper.getHttpErrorInfo(errorName);
+  throwError(ctx, { errorType, errorMessage }) {
+    const error = this.errorsHelper.getHttpErrorInfo(errorType, errorMessage);
 
     ctx.send(error.code, error.userMessage);
   }
