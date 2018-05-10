@@ -10,7 +10,11 @@ class QuestionsController extends AuditableController {
     super({ errorsHelper, service: questionService });
   }
 
-  async filterByTags() {
+  async addTag(ctx) {
+
+  }
+
+  async filterByTags(ctx) {
 
   }
 
@@ -25,24 +29,14 @@ class QuestionsController extends AuditableController {
     }
   }
 
-  async create(ctx) {
-    try {
-      const questionInfo = this.getContextBody(ctx);
-      const userId = this.getLoggedUserId(ctx);
-      const createdQuestion = await this.service.create({ userId, questionInfo });
-
-      ctx.created(createdQuestion);
-    } catch (error) {
-      this.throwError(ctx, error);
-    }
-  }
-
   async createAnswer(ctx) {
     try {
-      const answerInfo = this.getContextBody(ctx);
-      const questionId = this.getParams(ctx).id;
-      const userId = this.getLoggedUserId(ctx);
-      const createdAnswer = await this.service.createAnswer({ userId, questionId, answerInfo });
+      const info = {
+        ...this.getContextBody(ctx),
+        questionId: this.getParams(ctx).id
+      };
+      const userId = this.getCurrentUserId(ctx);
+      const createdAnswer = await this.service.createAnswer(userId, info);
 
       ctx.created(createdAnswer);
     } catch (error) {
@@ -50,8 +44,15 @@ class QuestionsController extends AuditableController {
     }
   }
 
-  async deleteAllAnswers() {
+  async deleteAllAnswers(ctx) {
+    try {
+      const questionId = this.getParams(ctx).id;
+      await this.service.deleteAllAnswers(questionId);
 
+      ctx.noContent();
+    } catch (error) {
+      this.throwError(ctx, error);
+    }
   }
 }
 
@@ -60,7 +61,7 @@ export default createController(QuestionsController)
   .get('', 'getAll')
   .get('/:id', 'getById')
   .get('/:id/answers', 'getAnswers')
-  .post('', 'create', {
+  .post('', 'createByUser', {
     before: [jwtProtection]
   })
   .post('/:id/answers', 'createAnswer', {

@@ -4,32 +4,15 @@ import AuditableService from './auditableService';
 import ERRORS from '../../constants/errors';
 
 export default class QuestionService extends AuditableService {
-  constructor(errorsHelper, logger, mapper, questionRepository, answerRepository, userService) {
+  constructor(errorsHelper, logger, mapper, questionRepository, answerService, userService) {
     super({ errorsHelper, logger, mapper, repository: questionRepository });
-    this.answerRepository = answerRepository;
+    this.answerService = answerService;
     this.userService = userService;
   }
 
-  async create({ userId, questionInfo }) {
+  async createAnswer(userId, info) {
     try {
-      const model = questionInfo;
-      model.userId = userId;
-
-      const createdQuestion = await this.repository.create(model);
-
-      return this.resolve(createdQuestion);
-    } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
-    }
-  }
-
-  async createAnswer({ userId, questionId, answerInfo }) {
-    try {
-      const model = answerInfo;
-      model.userId = userId;
-      model.questionId = questionId;
-
-      const createdAnswer = await this.answerRepository.create(model);
+      const createdAnswer = await this.answerService.createByUser(userId, info);
 
       return this.resolve(createdAnswer);
     } catch (error) {
@@ -39,9 +22,19 @@ export default class QuestionService extends AuditableService {
 
   async getAnswers(questionId) {
     try {
-      const answers = await this.answerRepository.find({ questionId });
+      const answers = await this.answerService.find({ questionId });
 
       return this.resolve(answers);
+    } catch (error) {
+      return this.reject({ errorType: ERRORS.internalServer }, error);
+    }
+  }
+
+  async deleteAllAnswers(questionId) {
+    try {
+      const result = await this.answerService.delete({ questionId });
+
+      return this.resolve(result);
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }

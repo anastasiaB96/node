@@ -13,4 +13,15 @@ export default class AuditableService extends Service {
 
     return info.userId === userId;
   }
+
+  async createByUser(userId, info) {
+    try {
+      const model = { ...info, userId };
+      const result = await this.repository.create(model);
+
+      return this.resolve(result);
+    } catch (error) {
+      return this.reject({ errorType: ERRORS.internalServer }, error);
+    }
+  }
 }

@@ -34,7 +34,17 @@ export default class Service {
 
   async findById(id) {
     try {
-      const result = await this.repository.findById(id);
+      const result = await this.repository.find(id);
+
+      return this.resolve(result);
+    } catch (error) {
+      return this.reject({ errorType: ERRORS.internalServer }, error);
+    }
+  }
+
+  async find(condition) {
+    try {
+      const result = await this.repository.find(condition);
 
       return this.resolve(result);
     } catch (error) {

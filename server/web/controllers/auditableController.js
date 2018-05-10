@@ -5,7 +5,7 @@ import { adminProtection } from '../../middlewares/adminProtection';
 
 export default class AuditableController extends Controller {
   async isOwner(ctx) {
-    const userId = this.getLoggedUserId(ctx);
+    const userId = this.getCurrentUserId(ctx);
     const id = this.getParams(ctx).id;
 
     return await this.service.isOwner({ userId, id });
@@ -20,6 +20,18 @@ export default class AuditableController extends Controller {
 
   async isAdminOrOwnerPermissions(ctx) {
     return await this.isOwner(ctx) || this.isAdmin(ctx);
+  }
+
+  async createByUser(ctx) {
+    try {
+      const contextBody = this.getContextBody(ctx);
+      const userId = this.getCurrentUserId(ctx);
+      const createdResult = await this.service.createByUser(userId, contextBody);
+
+      ctx.created(createdResult);
+    } catch (error) {
+      this.throwError(ctx, error);
+    }
   }
 
   async updateById(ctx) {

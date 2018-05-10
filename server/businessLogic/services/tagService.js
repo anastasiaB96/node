@@ -1,8 +1,8 @@
 'use strict';
 
-import Service from './service';
+import AuditableService from './auditableService';
 
-export default class TagService extends Service {
+export default class TagService extends AuditableService {
   constructor(errorsHelper, logger, mapper, tagRepository) {
     super({ errorsHelper, logger, mapper, repository: tagRepository });
   }
