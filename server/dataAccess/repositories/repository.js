@@ -22,7 +22,7 @@ export default class Repository {
     return this.Model.create(data);
   }
 
-  async updateById(data, id) {
+  async updateById(id, data) {
     return this.Model.update(data, { where: { id } });
   }
 

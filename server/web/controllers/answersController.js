@@ -17,9 +17,9 @@ export default createController(AnswersController)
   .patch('/:id', 'updateById', {
     before: [jwtProtection]
   })
-  .delete('', 'deleteAll', {
-    before: [jwtProtection, adminProtection]
-  })
   .delete('/:id', 'deleteById', {
     before: [jwtProtection]
+  })
+  .delete('', 'deleteAll', {
+    before: [jwtProtection, adminProtection]
   })

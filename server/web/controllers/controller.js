@@ -62,7 +62,7 @@ export default class Controller {
     try {
       const id = this.getParams(ctx).id;
       const contextBody = this.getContextBody(ctx);
-      const updatedResult = await this.service.updateById(contextBody, id);
+      const updatedResult = await this.service.updateById(id, contextBody);
 
       ctx.ok(updatedResult);
     } catch (error) {

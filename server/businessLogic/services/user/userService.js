@@ -24,10 +24,22 @@ export default class UserService extends Service {
   }
 
   async findByEmail(email) {
-    return this.repository.findByEmail(email);
+    try {
+      const result = await this.repository.findByEmail(email);
+
+      return this.resolve(result);
+    } catch (error) {
+      return this.reject({ errorType: ERRORS.internalServer }, error);
+    }
   }
 
   async addRole(user, role) {
-    return this.repository.addRole(user, role);
+    try {
+      const result = await this.repository.addRole(user, role);
+
+      return this.resolve(result);
+    } catch (error) {
+      return this.reject({ errorType: ERRORS.internalServer }, error);
+    }
   }
 }

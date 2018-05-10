@@ -69,11 +69,11 @@ export default createController(QuestionsController)
   .patch('/:id', 'updateById', { // return strange data
     before: [jwtProtection]
   })
-  .delete('', 'deleteAll', {
-    before: [jwtProtection, adminProtection]
-  })
   .delete('/:id', 'deleteById', {
     before: [jwtProtection]
+  })
+  .delete('', 'deleteAll', {
+    before: [jwtProtection, adminProtection]
   })
   .delete('/:id/answers', 'deleteAllAnswers', {
     before: [jwtProtection, adminProtection]

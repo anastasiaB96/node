@@ -23,30 +23,72 @@ export default class Service {
   }
 
   async findAll() {
-    return this.repository.findAll();
+    try {
+      const result = await this.repository.findAll();
+
+      return this.resolve(result);
+    } catch (error) {
+      return this.reject({ errorType: ERRORS.internalServer }, error);
+    }
   }
 
   async findById(id) {
-    return this.repository.findById(id);
+    try {
+      const result = await this.repository.findById(id);
+
+      return this.resolve(result);
+    } catch (error) {
+      return this.reject({ errorType: ERRORS.internalServer }, error);
+    }
   }
 
   async create(info) {
-    return this.repository.create(info);
+    try {
+      const result = await this.repository.create(info);
+
+      return this.resolve(result);
+    } catch (error) {
+      return this.reject({ errorType: ERRORS.internalServer }, error);
+    }
   }
 
   async updateById(data, id) {
-    return this.repository.updateById(data, id);
+    try {
+      const result = await this.repository.updateById(data, id);
+
+      return this.resolve(result);
+    } catch (error) {
+      return this.reject({ errorType: ERRORS.internalServer }, error);
+    }
   }
 
   async deleteAll() {
-    return this.repository.deleteAll();
+    try {
+      const result = await this.repository.deleteAll();
+
+      return this.resolve(result);
+    } catch (error) {
+      return this.reject({ errorType: ERRORS.internalServer }, error);
+    }
   }
 
   async deleteById(id) {
-    return this.repository.deleteById(id);
+    try {
+      const result = await this.repository.deleteById(id);
+
+      return this.resolve(result);
+    } catch (error) {
+      return this.reject({ errorType: ERRORS.internalServer }, error);
+    }
   }
 
   async delete(condition) {
-    return this.repository.delete(condition);
+    try {
+      const result = await this.repository.delete(condition);
+
+      return this.resolve(result);
+    } catch (error) {
+      return this.reject({ errorType: ERRORS.internalServer }, error);
+    }
   }
 }

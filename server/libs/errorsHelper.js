@@ -39,7 +39,7 @@ class ErrorsHelper {
     if (!this._defaultHttpErrors[errorName]) {
       return {
         code: 500,
-        userMessage: userMessage || 'Something goes wrong, please try again :('
+        userMessage: userMessage || 'Unknown error :('
       };
     }
 

@@ -49,7 +49,7 @@ export default class AuthService extends Service {
       const isValid = await user.validPassword(password);
 
       if (!isValid) {
-        return this.reject({ errorType: ERRORS.forbidden });
+        return this.reject({ errorType: ERRORS.forbidden, errorMessage: 'Invalid credentials.' });
       }
 
       const token = AuthService._generateJWTToken(this.mapper.mapObject(user, userDALtoDTO));
