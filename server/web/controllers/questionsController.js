@@ -14,8 +14,12 @@ class QuestionsController extends VotedItemsController {
 
   }
 
-  async filterByTags(ctx) {
+  async removeTag(ctx) {
 
+  }
+
+  async filterByTags(ctx) {
+    const tags = this.getQueryParams(ctx).tags;
   }
 
   async getAnswers(ctx) {
@@ -61,6 +65,7 @@ export default createController(QuestionsController)
   .get('', 'getAll')
   .get('/:id', 'getById')
   .get('/:id/answers', 'getAnswers')
+  .get('/:tags', 'filterByTags')
   .post('', 'createByUser', {
     before: [jwtProtection]
   })
@@ -70,7 +75,10 @@ export default createController(QuestionsController)
   .patch('/:id', 'updateById', { // return strange data
     before: [jwtProtection]
   })
-  .patch('/:id/vote', 'addVote', {
+  .patch('/:id/votes', 'addVote', {
+    before: [jwtProtection]
+  })
+  .patch('/:id/tags', 'addTag', {
     before: [jwtProtection]
   })
   .delete('/:id', 'deleteById', {
@@ -82,6 +90,9 @@ export default createController(QuestionsController)
   .delete('/:id/answers', 'deleteAllAnswers', {
     before: [jwtProtection, adminProtection]
   })
-  .delete('/:id/vote', 'removeVote', {
+  .delete('/:id/votes', 'removeVote', {
+    before: [jwtProtection]
+  })
+  .delete('/:id/tags', 'removeTag', {
     before: [jwtProtection]
   })

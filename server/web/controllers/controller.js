@@ -20,6 +20,10 @@ export default class Controller {
     return ctx.params;
   }
 
+  getQueryParams(ctx) {
+    return ctx.query;
+  }
+
   throwError(ctx, { errorType, errorMessage }) {
     const error = this.errorsHelper.getHttpErrorInfo(errorType, errorMessage);
 
