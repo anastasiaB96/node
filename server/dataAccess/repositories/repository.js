@@ -3,6 +3,7 @@
 export default class Repository {
   constructor({ logger, dbContext, modelName }) {
     this.logger = logger;
+    this.dbContext = dbContext;
     this.Model = dbContext.models[modelName];
   }
 

@@ -11,15 +11,38 @@ class QuestionsController extends VotedItemsController {
   }
 
   async addTag(ctx) {
+    try {
+      const tagId = this.getContextBody(ctx).id;
+      const questionId = this.getParams().id;
+      await this.service.addTagToQuestion(questionId, tagId);
 
+      ctx.noContent();
+    } catch (error) {
+      this.throwError(ctx, error);
+    }
   }
 
   async removeTag(ctx) {
+    try {
+      const tagId = this.getContextBody(ctx).id;
+      const questionId = this.getParams().id;
+      await this.service.removeTagFromQuestion(questionId, tagId);
 
+      ctx.noContent();
+    } catch (error) {
+      this.throwError(ctx, error);
+    }
   }
 
   async filterByTags(ctx) {
-    const tags = this.getQueryParams(ctx).tags;
+    try {
+      const searchInfo = this.getQueryParams(ctx).tags;
+      const filteredResult = await this.service.filterByTags(searchInfo);
+
+      ctx.ok(filteredResult);
+    } catch (error) {
+      this.throwError(ctx, error);
+    }
   }
 
   async getAnswers(ctx) {
