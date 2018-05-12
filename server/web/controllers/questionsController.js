@@ -3,9 +3,9 @@
 import { createController } from 'awilix-koa';
 import { jwtProtection } from '../../middlewares/jwtProtection';
 import { adminProtection } from '../../middlewares/adminProtection';
-import AuditableController from './auditableController';
+import VotedItemsController from './votedItemsController';
 
-class QuestionsController extends AuditableController {
+class QuestionsController extends VotedItemsController {
   constructor(errorsHelper, questionService) {
     super({ errorsHelper, service: questionService });
   }
@@ -48,30 +48,6 @@ class QuestionsController extends AuditableController {
     try {
       const questionId = this.getParams(ctx).id;
       await this.service.deleteAllAnswers(questionId);
-
-      ctx.noContent();
-    } catch (error) {
-      this.throwError(ctx, error);
-    }
-  }
-
-  async addVote(ctx) {
-    try {
-      const questionId = this.getParams(ctx).id;
-      const userId = this.getCurrentUserId(ctx);
-      await this.service.addVote(userId, questionId);
-
-      ctx.noContent();
-    } catch (error) {
-      this.throwError(ctx, error);
-    }
-  }
-
-  async removeVote(ctx) {
-    try {
-      const questionId = this.getParams(ctx).id;
-      const userId = this.getCurrentUserId(ctx);
-      await this.service.removeVote(userId, questionId);
 
       ctx.noContent();
     } catch (error) {
