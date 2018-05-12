@@ -55,11 +55,11 @@ class QuestionsController extends AuditableController {
     }
   }
 
-  async addRating(ctx) {
+  async addVote(ctx) {
     try {
       const questionId = this.getParams(ctx).id;
       const userId = this.getCurrentUserId(ctx);
-      await this.service.addRating(userId, questionId);
+      await this.service.addVote(userId, questionId);
 
       ctx.noContent();
     } catch (error) {
@@ -67,11 +67,11 @@ class QuestionsController extends AuditableController {
     }
   }
 
-  async removeRating(ctx) {
+  async removeVote(ctx) {
     try {
       const questionId = this.getParams(ctx).id;
       const userId = this.getCurrentUserId(ctx);
-      await this.service.removeRating(userId, questionId);
+      await this.service.removeVote(userId, questionId);
 
       ctx.noContent();
     } catch (error) {
@@ -94,7 +94,7 @@ export default createController(QuestionsController)
   .patch('/:id', 'updateById', { // return strange data
     before: [jwtProtection]
   })
-  .patch('/:id/rating', 'addRating', {
+  .patch('/:id/vote', 'addVote', {
     before: [jwtProtection]
   })
   .delete('/:id', 'deleteById', {
@@ -106,6 +106,6 @@ export default createController(QuestionsController)
   .delete('/:id/answers', 'deleteAllAnswers', {
     before: [jwtProtection, adminProtection]
   })
-  .delete('/:id/rating', 'removeRating', {
+  .delete('/:id/vote', 'removeVote', {
     before: [jwtProtection]
   })

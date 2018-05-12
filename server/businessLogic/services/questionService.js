@@ -4,12 +4,12 @@ import AuditableService from './auditableService';
 import ERRORS from '../../constants/errors';
 
 export default class QuestionService extends AuditableService {
-  constructor(errorsHelper, logger, mapper, questionRepository, answerService, userService, questionRatingService) {
+  constructor(errorsHelper, logger, mapper, questionRepository, answerService, userService, questionVoteService) {
     super({ errorsHelper, logger, mapper, repository: questionRepository });
 
     this.answerService = answerService;
     this.userService = userService;
-    this.questionRatingService = questionRatingService;
+    this.questionVoteService = questionVoteService;
   }
 
   async createAnswer(userId, info) {
@@ -42,11 +42,15 @@ export default class QuestionService extends AuditableService {
     }
   }
 
-  async addRating(userId, questionId) {
-    return this.questionRatingService.create(userId, questionId);
+  async addVote(userId, questionId) {
+    const info = { userId, questionId };
+
+    return this.questionVoteService.create(info);
   }
 
-  async removeRating(userId, questionId) {
-    return this.questionRatingService.delete(userId, questionId);
+  async removeVote(userId, questionId) {
+    const info = { userId, questionId };
+
+    return this.questionVoteService.delete(info);
   }
 }

@@ -3,7 +3,7 @@
 import { Sequelize } from 'sequelize';
 import Base from './base';
 
-export default class QuestionRating extends Base {
+export default class QuestionVote extends Base {
   static get schema() {
     return {
       userId: {

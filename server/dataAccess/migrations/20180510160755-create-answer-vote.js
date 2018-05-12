@@ -1,15 +1,15 @@
 'use strict';
 
-class QuestionRatings {
+class AnswerVotes {
   up(queryInterface, Sequelize) {
-    return queryInterface.createTable('QuestionRatings', {
+    return queryInterface.createTable('AnswerVotes', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      questionId: {
+      answerId: {
         type: Sequelize.INTEGER,
         allowNull: false
       },
@@ -29,8 +29,8 @@ class QuestionRatings {
   }
 
   down(queryInterface, Sequelize) {
-    return queryInterface.dropTable('QuestionRatings');
+    return queryInterface.dropTable('AnswerVotes');
   }
 }
 
-export default new QuestionRatings();
+export default new AnswerVotes();
