@@ -3,8 +3,7 @@
 import ERRORS from '../constants/errors';
 
 class ErrorsHelper {
-  constructor(logger) {
-    this.logger = logger;
+  constructor() {
     this._errors = ERRORS;
 
     this._defaultHttpErrors = {
