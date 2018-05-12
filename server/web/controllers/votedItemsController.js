@@ -9,9 +9,9 @@ export default class VotedItemsController extends AuditableController {
 
   async addVote(ctx) {
     try {
-      const itemId = this.getParams(ctx).id;
+      const votedItemId = this.getParams(ctx).id;
       const userId = this.getCurrentUserId(ctx);
-      await this.service.addVote(userId, itemId);
+      await this.service.addVote(userId, votedItemId);
 
       ctx.noContent();
     } catch (error) {
@@ -21,9 +21,9 @@ export default class VotedItemsController extends AuditableController {
 
   async removeVote(ctx) {
     try {
-      const itemId = this.getParams(ctx).id;
+      const votedItemId = this.getParams(ctx).id;
       const userId = this.getCurrentUserId(ctx);
-      await this.service.removeVote(userId, itemId);
+      await this.service.removeVote(userId, votedItemId);
 
       ctx.noContent();
     } catch (error) {
