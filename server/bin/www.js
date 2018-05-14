@@ -1,8 +1,8 @@
 'use strict';
 
 import config from 'config';
-import { createServer } from '../libs/server';
-import logger from '../libs/logger';
+import { createServer } from '../helpers/server';
+import logger from '../helpers/logger';
 
 const port = config.get('server.port');
 

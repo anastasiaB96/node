@@ -1,6 +1,6 @@
 'use strict';
 
-import logger from '../libs/logger';
+import logger from '../helpers/logger';
 
 export async function errorHandler(ctx, next) {
   try {

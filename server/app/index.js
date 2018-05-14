@@ -6,7 +6,7 @@ import compress from 'koa-compress';
 import bodyParser from 'koa-bodyparser';
 import respond from 'koa-respond';
 
-import iocContainer from '../libs/iocContainer';
+import iocContainer from '../helpers/iocContainer';
 import { errorHandler } from '../middlewares/errorHandler';
 import { notFoundHandler } from '../middlewares/notFound';
 

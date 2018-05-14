@@ -4,6 +4,7 @@ import { createController } from 'awilix-koa';
 import { jwtProtection } from '../../middlewares/jwtProtection';
 import { adminProtection } from '../../middlewares/adminProtection';
 import AuditableController from './auditableController';
+import { createTagValidator, updateTagValidator } from '../routerValidators/tags';
 
 class TagsController extends AuditableController {
   constructor(errorsHelper, tagService) {
@@ -16,10 +17,10 @@ export default createController(TagsController)
   .get('', 'getAll')
   .get('/:id', 'getById')
   .post('', 'createByUser', {
-    before: [jwtProtection, adminProtection]
+    before: [createTagValidator, jwtProtection, adminProtection]
   })
   .patch('/:id', 'updateById', {
-    before: [jwtProtection, adminProtection]
+    before: [updateTagValidator, jwtProtection, adminProtection]
   })
   .delete('/:id', 'deleteById', {
     before: [jwtProtection, adminProtection]

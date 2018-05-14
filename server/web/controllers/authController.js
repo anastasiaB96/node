@@ -4,6 +4,7 @@ import { createController } from 'awilix-koa';
 import { jwtProtection } from '../../middlewares/jwtProtection';
 import { adminProtection } from '../../middlewares/adminProtection';
 import Controller from './controller';
+import { userRegisterValidator, userLoginValidator, permitAdminValidator } from '../routerValidators/auth';
 
 class AuthController extends Controller {
   constructor(errorsHelper, authService) {
@@ -46,8 +47,12 @@ class AuthController extends Controller {
 
 export default createController(AuthController)
   .prefix('/auth')
-  .post('/register', 'register')
-  .post('/login', 'login')
+  .post('/register', 'register', {
+    before: [userRegisterValidator]
+  })
+  .post('/login', 'login', {
+    before: [userLoginValidator]
+  })
   .post('/admin', 'permitAdmin', {
-    before: [jwtProtection, adminProtection]
+    before: [permitAdminValidator, jwtProtection, adminProtection]
   })

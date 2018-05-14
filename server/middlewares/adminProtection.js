@@ -3,7 +3,7 @@
 import { get } from 'lodash';
 import ROLES from '../constants/roles';
 
-export const adminProtection = (ctx, next) => {
+export function adminProtection(ctx, next) {
   const userInfo = get(ctx.state, 'jwtData');
   const isAdmin = userInfo.roles ? userInfo.roles.includes(ROLES.admin) : false;
 
@@ -12,4 +12,4 @@ export const adminProtection = (ctx, next) => {
   }
 
   return next();
-};
+}

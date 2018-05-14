@@ -4,6 +4,8 @@ import { createController } from 'awilix-koa';
 import { jwtProtection } from '../../middlewares/jwtProtection';
 import { adminProtection } from '../../middlewares/adminProtection';
 import VotedItemsController from './votedItemsController';
+import { filterByTagsValidator, createQuestionValidator, updateQuestionValidator, questionTagValidator } from '../routerValidators/questions';
+import { createAnswerValidator } from '../routerValidators/answers';
 
 class QuestionsController extends VotedItemsController {
   constructor(errorsHelper, questionService) {
@@ -12,7 +14,7 @@ class QuestionsController extends VotedItemsController {
 
   async addTag(ctx) {
     try {
-      const tagId = this.getContextBody(ctx).id;
+      const tagId = this.getContextBody(ctx).tagId;
       const questionId = this.getParams().id;
       await this.service.addTagToQuestion(questionId, tagId);
 
@@ -24,7 +26,7 @@ class QuestionsController extends VotedItemsController {
 
   async removeTag(ctx) {
     try {
-      const tagId = this.getContextBody(ctx).id;
+      const tagId = this.getContextBody(ctx).tagId;
       const questionId = this.getParams().id;
       await this.service.removeTagFromQuestion(questionId, tagId);
 
@@ -88,21 +90,23 @@ export default createController(QuestionsController)
   .get('', 'getAll')
   .get('/:id', 'getById')
   .get('/:id/answers', 'getAnswers')
-  .get('/:tags', 'filterByTags')
+  .get('/:tags', 'filterByTags', {
+    before: [filterByTagsValidator]
+  })
   .post('', 'createByUser', {
-    before: [jwtProtection]
+    before: [createQuestionValidator, jwtProtection]
   })
   .post('/:id/answers', 'createAnswer', {
-    before: [jwtProtection]
+    before: [createAnswerValidator, jwtProtection]
   })
-  .patch('/:id', 'updateById', { // return strange data
-    before: [jwtProtection]
+  .patch('/:id', 'updateById', {
+    before: [updateQuestionValidator, jwtProtection]
   })
   .patch('/:id/votes', 'addVote', {
     before: [jwtProtection]
   })
   .patch('/:id/tags', 'addTag', {
-    before: [jwtProtection]
+    before: [questionTagValidator, jwtProtection]
   })
   .delete('/:id', 'deleteById', {
     before: [jwtProtection]
@@ -117,5 +121,5 @@ export default createController(QuestionsController)
     before: [jwtProtection]
   })
   .delete('/:id/tags', 'removeTag', {
-    before: [jwtProtection]
+    before: [questionTagValidator, jwtProtection]
   })
