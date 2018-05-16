@@ -26,9 +26,7 @@ export default class QuestionService extends AuditableService {
         return this.reject({ errorType: ERRORS.notFound, errorMessage: 'Unknown question id.' });
       }
 
-      await this.repository.addTagToQuestion(question, tag);
-
-      return this.resolve();
+      return this.repository.addTagToQuestion(question, tag);
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }
@@ -47,9 +45,7 @@ export default class QuestionService extends AuditableService {
         return this.reject({ errorType: ERRORS.notFound, errorMessage: 'Unknown question id.' });
       }
 
-      await this.repository.removeTagFromQuestion(question, tag);
-
-      return this.resolve();
+      return this.repository.removeTagFromQuestion(question, tag);
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }

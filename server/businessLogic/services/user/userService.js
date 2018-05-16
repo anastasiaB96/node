@@ -3,6 +3,7 @@
 import Service from '../service';
 import ROLES from '../../../constants/roles';
 import ERRORS from '../../../constants/errors';
+import * as userDALtoDTO from '../../models/user/userDALtoDTO.json';
 
 export default class UserService extends Service {
   constructor(errorsHelper, logger, mapper, userRepository, roleService) {
@@ -17,7 +18,7 @@ export default class UserService extends Service {
 
       await this.addRole(createdUser, defaultRole);
 
-      return this.resolve(createdUser);
+      return this.resolve(this.mapper.mapObject(createdUser, userDALtoDTO));
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }
@@ -27,7 +28,7 @@ export default class UserService extends Service {
     try {
       const result = await this.repository.findByEmail(email);
 
-      return this.resolve(result);
+      return this.resolve(this.mapper.mapObject(result, userDALtoDTO));
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }
@@ -35,9 +36,7 @@ export default class UserService extends Service {
 
   async addRole(user, role) {
     try {
-      const result = await this.repository.addRole(user, role);
-
-      return this.resolve(result);
+      return this.repository.addRole(user, role);
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }

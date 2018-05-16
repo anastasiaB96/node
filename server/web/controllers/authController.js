@@ -38,7 +38,7 @@ class AuthController extends Controller {
       const userInfo = this.getContextBody(ctx);
       await this.service.permitAdmin(userInfo);
 
-      ctx.ok();
+      ctx.noContent();
     } catch (error) {
       this.throwError(ctx, error);
     }

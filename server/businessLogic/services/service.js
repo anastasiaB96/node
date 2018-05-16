@@ -64,9 +64,9 @@ export default class Service {
 
   async updateById(data, id) {
     try {
-      await this.repository.updateById(data, id);
+      const result = await this.repository.updateById(data, id);
 
-      return this.resolve();
+      return this.resolve(result);
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }

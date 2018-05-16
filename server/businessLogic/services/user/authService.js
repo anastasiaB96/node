@@ -75,7 +75,7 @@ export default class AuthService extends Service {
         return this.reject({ errorType: ERRORS.badRequest, userMessage: 'Role doesn\'t exists.' });
       }
 
-      return await this.userService.addRole(user, adminRole);
+      return this.userService.addRole(user, adminRole);
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }
