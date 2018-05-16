@@ -17,9 +17,8 @@ export default class AuditableService extends Service {
   async createByUser(userId, info) {
     try {
       const model = { ...info, userId };
-      const result = await this.repository.create(model);
 
-      return this.resolve(result);
+      return this.repository.create(model);
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }

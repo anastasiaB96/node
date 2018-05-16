@@ -10,9 +10,7 @@ export default class VoteService extends Service {
 
   async create(info) {
     try {
-      await this.repository.create(info);
-
-      return this.resolve();
+      return this.repository.create(info);
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }
@@ -20,9 +18,7 @@ export default class VoteService extends Service {
 
   async delete(info) {
     try {
-      await this.repository.delete(info);
-
-      return this.resolve();
+      return this.repository.delete(info);
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }

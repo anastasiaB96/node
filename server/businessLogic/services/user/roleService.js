@@ -10,9 +10,7 @@ export default class RoleService extends Service {
 
   async findByName(name) {
     try {
-      const result = await this.repository.find({ name });
-
-      return this.resolve(result);
+      return this.repository.find({ name });
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }

@@ -24,9 +24,7 @@ export default class Service {
 
   async findAll() {
     try {
-      const result = await this.repository.findAll();
-
-      return this.resolve(result);
+      return this.repository.findAll();
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }
@@ -34,9 +32,7 @@ export default class Service {
 
   async findById(id) {
     try {
-      const result = await this.repository.findById(id);
-
-      return this.resolve(result);
+      return this.repository.findById(id);
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }
@@ -44,9 +40,7 @@ export default class Service {
 
   async find(condition) {
     try {
-      const result = await this.repository.find(condition);
-
-      return this.resolve(result);
+      return this.repository.find(condition);
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }
@@ -54,9 +48,7 @@ export default class Service {
 
   async create(info) {
     try {
-      const result = await this.repository.create(info);
-
-      return this.resolve(result);
+      return this.repository.create(info);
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }
@@ -64,9 +56,7 @@ export default class Service {
 
   async updateById(data, id) {
     try {
-      const result = await this.repository.updateById(data, id);
-
-      return this.resolve(result);
+      return this.repository.updateById(data, id);
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }
@@ -74,9 +64,7 @@ export default class Service {
 
   async deleteAll() {
     try {
-      const result = await this.repository.deleteAll();
-
-      return this.resolve(result);
+      return this.repository.deleteAll();
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }
@@ -84,9 +72,7 @@ export default class Service {
 
   async deleteById(id) {
     try {
-      const result = await this.repository.deleteById(id);
-
-      return this.resolve(result);
+      return this.repository.deleteById(id);
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }
@@ -94,9 +80,7 @@ export default class Service {
 
   async delete(condition) {
     try {
-      const result = await this.repository.delete(condition);
-
-      return this.resolve(result);
+      return this.repository.delete(condition);
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }

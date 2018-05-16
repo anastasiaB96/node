@@ -31,7 +31,7 @@ export default class AuthService extends Service {
 
       const createdUser = await this.userService.create(userInfo);
 
-      return this.resolve(this.mapper.mapObject(createdUser, userDALtoDTO));
+      return this.resolve({ id: createdUser.id });
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }

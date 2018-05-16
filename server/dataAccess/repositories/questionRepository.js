@@ -5,6 +5,7 @@ import Repository from './repository';
 export default class QuestionRepository extends Repository {
   constructor(logger, dbContext) {
     super({ logger, dbContext, modelName: 'Question' });
+    this.Tag = this.dbContext.models['Tag'];
   }
 
   async addTagToQuestion(question, tag) {
@@ -18,9 +19,9 @@ export default class QuestionRepository extends Repository {
   async filterByTags(searchInfo) {
     return this.Model.findAll({
       include: [{
-        model: this.dbContext.models['Tag'],
-        attributes: ['name'],
+        model: this.Tag,
         as: 'tag',
+        attributes: ['name'],
         where: { '$tag.id$': { $in: searchInfo} }
       }]
     })

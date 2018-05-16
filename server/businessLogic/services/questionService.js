@@ -53,9 +53,7 @@ export default class QuestionService extends AuditableService {
 
   async filterByTags(searchInfo) {
     try {
-      const filteredResult = await this.repository.filterByTags(searchInfo);
-
-      return this.resolve(filteredResult);
+      return this.repository.filterByTags(searchInfo);
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }
@@ -63,9 +61,7 @@ export default class QuestionService extends AuditableService {
 
   async createAnswer(userId, info) {
     try {
-      const createdAnswer = await this.answerService.createByUser(userId, info);
-
-      return this.resolve(createdAnswer);
+      return this.answerService.createByUser(userId, info);
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }
@@ -73,9 +69,7 @@ export default class QuestionService extends AuditableService {
 
   async getAnswers(questionId) {
     try {
-      const answers = await this.answerService.find({ questionId });
-
-      return this.resolve(answers);
+      return this.answerService.find({ questionId });
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }
@@ -83,9 +77,7 @@ export default class QuestionService extends AuditableService {
 
   async deleteAllAnswers(questionId) {
     try {
-      const result = await this.answerService.delete({ questionId });
-
-      return this.resolve(result);
+      return this.answerService.delete({ questionId });
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }
