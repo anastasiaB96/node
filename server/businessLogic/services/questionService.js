@@ -2,6 +2,7 @@
 
 import AuditableService from './auditableService';
 import ERRORS from '../../constants/errors';
+import * as questionWithTagsDALtoDTO from '../models/questionWithTagsDALtoDTO.json';
 
 export default class QuestionService extends AuditableService {
   constructor(errorsHelper, logger, mapper, questionRepository, answerService, userService, questionVoteService, tagService) {
@@ -53,7 +54,9 @@ export default class QuestionService extends AuditableService {
 
   async filterByTags(searchInfo) {
     try {
-      return this.repository.filterByTags(searchInfo);
+      const result = await this.repository.filterByTags(searchInfo);
+
+      return this.resolve(result.map(question => this.mapper.mapObject(question, questionWithTagsDALtoDTO)));
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }

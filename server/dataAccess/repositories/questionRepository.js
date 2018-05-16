@@ -9,7 +9,7 @@ export default class QuestionRepository extends Repository {
   }
 
   async addTagToQuestion(question, tag) {
-    return question.setTag(tag);
+    return question.addTag(tag);
   }
 
   async removeTagFromQuestion(question, tag) {
