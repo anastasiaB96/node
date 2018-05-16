@@ -9,6 +9,7 @@ import respond from 'koa-respond';
 import iocContainer from '../helpers/iocContainer';
 import { errorHandler } from '../middlewares/errorHandler';
 import { notFoundHandler } from '../middlewares/notFound';
+import { rateLimiter } from '../middlewares/rateLimiter';
 
 const app = new Koa();
 
@@ -19,6 +20,7 @@ app
   .use(compress())
   .use(respond())
   .use(bodyParser())
+  .use(rateLimiter)
   .use(scopePerRequest(appContainer))
   .use(loadControllers('web/controllers/**/*.js', { cwd: `${__dirname}/..` }))
   .use(notFoundHandler);
