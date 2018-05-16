@@ -3,8 +3,8 @@
 import validator, { object, array, string, number } from 'koa-context-validator';
 
 export const filterByTagsValidator = validator({
-  params: object().keys({
-    tags: array().required()
+  query: object().keys({
+    id: array().required()
   })
 });
 

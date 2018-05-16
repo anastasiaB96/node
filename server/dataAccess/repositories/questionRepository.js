@@ -19,7 +19,9 @@ export default class QuestionRepository extends Repository {
     return this.Model.findAll({
       include: [{
         model: this.dbContext.models['Tag'],
-        through: { where: { name: { $in: searchInfo} } }
+        attributes: ['name'],
+        as: 'tag',
+        where: { '$tag.id$': { $in: searchInfo} }
       }]
     })
   }

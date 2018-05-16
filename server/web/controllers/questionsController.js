@@ -15,7 +15,7 @@ class QuestionsController extends VotedItemsController {
   async addTag(ctx) {
     try {
       const tagId = this.getContextBody(ctx).tagId;
-      const questionId = this.getParams().id;
+      const questionId = this.getParams(ctx).id;
       await this.service.addTagToQuestion(questionId, tagId);
 
       ctx.noContent();
@@ -27,7 +27,7 @@ class QuestionsController extends VotedItemsController {
   async removeTag(ctx) {
     try {
       const tagId = this.getContextBody(ctx).tagId;
-      const questionId = this.getParams().id;
+      const questionId = this.getParams(ctx).id;
       await this.service.removeTagFromQuestion(questionId, tagId);
 
       ctx.noContent();
@@ -36,9 +36,9 @@ class QuestionsController extends VotedItemsController {
     }
   }
 
-  async filterByTags(ctx) {
+  async filterByTagIds(ctx) {
     try {
-      const searchInfo = this.getQueryParams(ctx).tags;
+      const searchInfo = this.getQueryParams(ctx).id;
       const filteredResult = await this.service.filterByTags(searchInfo);
 
       ctx.ok(filteredResult);
@@ -88,11 +88,11 @@ class QuestionsController extends VotedItemsController {
 export default createController(QuestionsController)
   .prefix('/questions')
   .get('', 'getAll')
-  .get('/:id', 'getById')
-  .get('/:id/answers', 'getAnswers')
-  .get('/:tags', 'filterByTags', {
+  .get('/tags', 'filterByTagIds', {
     before: [filterByTagsValidator]
   })
+  .get('/:id', 'getById')
+  .get('/:id/answers', 'getAnswers')
   .post('', 'createByUser', {
     before: [createQuestionValidator, jwtProtection]
   })
@@ -106,7 +106,7 @@ export default createController(QuestionsController)
     before: [jwtProtection]
   })
   .patch('/:id/tags', 'addTag', {
-    before: [questionTagValidator, jwtProtection]
+    before: [questionTagValidator, jwtProtection, adminProtection]
   })
   .delete('/:id', 'deleteById', {
     before: [jwtProtection]
@@ -121,5 +121,5 @@ export default createController(QuestionsController)
     before: [jwtProtection]
   })
   .delete('/:id/tags', 'removeTag', {
-    before: [questionTagValidator, jwtProtection]
+    before: [questionTagValidator, jwtProtection, adminProtection]
   })
