@@ -11,11 +11,9 @@ export default class UserRepository extends Repository {
   async findByEmail(email) {
     return this.Model.find({
       where: { email },
-      include: [{
-        model: this.Role,
-        as: 'role',
-        attributes: ['name']
-      }]
+      include: [
+        this.joinModel(this.Role, 'role', ['name'])
+      ]
     });
   }
 

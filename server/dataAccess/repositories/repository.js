@@ -33,10 +33,17 @@ export default class Repository {
 
   async deleteById(id) {
     return this.Model.destroy({ where: { id } });
-
   }
 
   async delete(condition) {
     return this.Model.destroy({ where: { condition } });
+  }
+
+  joinModel(model, alias, attributes) {
+    return {
+      model,
+      as: alias,
+      attributes
+    }
   }
 }

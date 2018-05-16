@@ -19,9 +19,7 @@ export default class QuestionRepository extends Repository {
   async filterByTags(searchInfo) {
     return this.Model.findAll({
       include: [{
-        model: this.Tag,
-        as: 'tag',
-        attributes: ['name'],
+        ...this.joinModel(this.Tag, 'tag', ['name']),
         where: { '$tag.id$': { $in: searchInfo} }
       }]
     })
