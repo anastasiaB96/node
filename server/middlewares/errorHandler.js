@@ -2,7 +2,7 @@
 
 import logger from '../helpers/logger';
 
-export async function errorHandler(ctx, next) {
+export const errorHandler = async (ctx, next) => {
   try {
     await next();
   } catch (err) {
@@ -11,4 +11,4 @@ export async function errorHandler(ctx, next) {
 
     logger.error(err);
   }
-}
+};
