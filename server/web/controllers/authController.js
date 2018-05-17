@@ -16,9 +16,9 @@ class AuthController extends Controller {
       const userInfo = this.getContextBody(ctx);
       const registeredUser = await this.service.register(userInfo);
 
-      ctx.created(registeredUser);
+      return ctx.created(registeredUser);
     } catch (error) {
-      this.throwError(ctx, error);
+      return this.throwError(ctx, error);
     }
   }
 
@@ -27,9 +27,9 @@ class AuthController extends Controller {
       const userData = this.getContextBody(ctx);
       const loggedUser = await this.service.login(userData);
 
-      ctx.ok(loggedUser);
+      return ctx.ok(loggedUser);
     } catch (error) {
-      this.throwError(ctx, error);
+      return this.throwError(ctx, error);
     }
   }
 
@@ -38,9 +38,9 @@ class AuthController extends Controller {
       const userInfo = this.getContextBody(ctx);
       await this.service.permitAdmin(userInfo);
 
-      ctx.noContent();
+      return ctx.noContent();
     } catch (error) {
-      this.throwError(ctx, error);
+      return this.throwError(ctx, error);
     }
   }
 }

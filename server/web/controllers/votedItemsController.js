@@ -13,9 +13,9 @@ export default class VotedItemsController extends AuditableController {
       const userId = this.getCurrentUserId(ctx);
       await this.service.addVote(userId, votedItemId);
 
-      ctx.noContent();
+      return ctx.noContent();
     } catch (error) {
-      this.throwError(ctx, error);
+      return this.throwError(ctx, error);
     }
   }
 
@@ -25,9 +25,9 @@ export default class VotedItemsController extends AuditableController {
       const userId = this.getCurrentUserId(ctx);
       await this.service.removeVote(userId, votedItemId);
 
-      ctx.noContent();
+      return ctx.noContent();
     } catch (error) {
-      this.throwError(ctx, error);
+      return this.throwError(ctx, error);
     }
   }
 }

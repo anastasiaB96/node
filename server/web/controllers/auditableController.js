@@ -28,25 +28,25 @@ export default class AuditableController extends Controller {
       const userId = this.getCurrentUserId(ctx);
       const createdResult = await this.service.createByUser(userId, contextBody);
 
-      ctx.created(createdResult);
+      return ctx.created(createdResult);
     } catch (error) {
-      this.throwError(ctx, error);
+      return this.throwError(ctx, error);
     }
   }
 
   async updateById(ctx) {
     if (!await this.isAdminOrOwnerPermissions(ctx)) {
-      ctx.forbidden('Sorry, you don\'t have requested permissions!');
+      return ctx.forbidden('Sorry, you don\'t have requested permissions!');
     }
 
-    await super.updateById(ctx);
+    return super.updateById(ctx);
   }
 
   async deleteById(ctx) {
     if (!await this.isAdminOrOwnerPermissions(ctx)) {
-      ctx.forbidden('Sorry, you don\'t have requested permissions!');
+      return ctx.forbidden('Sorry, you don\'t have requested permissions!');
     }
 
-    await super.deleteById(ctx);
+    return super.deleteById(ctx);
   }
 }

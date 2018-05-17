@@ -18,9 +18,9 @@ class QuestionsController extends VotedItemsController {
       const questionId = this.getParams(ctx).id;
       await this.service.addTagToQuestion(questionId, tagId);
 
-      ctx.noContent();
+      return ctx.noContent();
     } catch (error) {
-      this.throwError(ctx, error);
+      return this.throwError(ctx, error);
     }
   }
 
@@ -30,9 +30,9 @@ class QuestionsController extends VotedItemsController {
       const questionId = this.getParams(ctx).id;
       await this.service.removeTagFromQuestion(questionId, tagId);
 
-      ctx.noContent();
+      return ctx.noContent();
     } catch (error) {
-      this.throwError(ctx, error);
+      return this.throwError(ctx, error);
     }
   }
 
@@ -41,9 +41,9 @@ class QuestionsController extends VotedItemsController {
       const searchInfo = this.getQueryParams(ctx).id;
       const filteredResult = await this.service.filterByTags(searchInfo);
 
-      ctx.ok(filteredResult);
+      return ctx.ok(filteredResult);
     } catch (error) {
-      this.throwError(ctx, error);
+      return this.throwError(ctx, error);
     }
   }
 
@@ -52,9 +52,9 @@ class QuestionsController extends VotedItemsController {
       const questionId = this.getParams(ctx).id;
       const answers = await this.service.getAnswers(questionId);
 
-      ctx.ok(answers);
+      return ctx.ok(answers);
     } catch (error) {
-      this.throwError(ctx, error);
+      return this.throwError(ctx, error);
     }
   }
 
@@ -67,9 +67,9 @@ class QuestionsController extends VotedItemsController {
       const userId = this.getCurrentUserId(ctx);
       const createdAnswer = await this.service.createAnswer(userId, info);
 
-      ctx.created(createdAnswer);
+      return ctx.created(createdAnswer);
     } catch (error) {
-      this.throwError(ctx, error);
+      return this.throwError(ctx, error);
     }
   }
 
@@ -78,9 +78,9 @@ class QuestionsController extends VotedItemsController {
       const questionId = this.getParams(ctx).id;
       await this.service.deleteAllAnswers(questionId);
 
-      ctx.noContent();
+      return ctx.noContent();
     } catch (error) {
-      this.throwError(ctx, error);
+      return this.throwError(ctx, error);
     }
   }
 }
@@ -108,7 +108,7 @@ export default createController(QuestionsController)
   .patch('/:id/tags', 'addTag', {
     before: [questionTagValidator, jwtProtection, adminProtection]
   })
-  .delete('/:id', 'm ', {
+  .delete('/:id', 'deleteById', {
     before: [jwtProtection]
   })
   .delete('', 'deleteAll', {

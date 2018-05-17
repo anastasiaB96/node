@@ -27,16 +27,16 @@ export default class Controller {
   throwError(ctx, { errorType, errorMessage }) {
     const error = this.errorsHelper.getHttpErrorInfo(errorType, errorMessage);
 
-    ctx.send(error.code, error.userMessage);
+    return ctx.send(error.code, error.userMessage);
   }
 
   async getAll(ctx) {
     try {
       const result = await this.service.findAll();
 
-      ctx.ok(result);
+      return ctx.ok(result);
     } catch (error) {
-      this.throwError(ctx, error);
+      return this.throwError(ctx, error);
     }
   }
 
@@ -45,7 +45,7 @@ export default class Controller {
       const id = this.getParams(ctx).id;
       const result = await this.service.findById(id);
 
-      ctx.ok(result);
+      return ctx.ok(result);
     } catch (error) {
       this.throwError(ctx, error);
     }
@@ -56,9 +56,9 @@ export default class Controller {
       const contextBody = this.getContextBody(ctx);
       const createdResult = await this.service.create(contextBody);
 
-      ctx.created(createdResult);
+      return ctx.created(createdResult);
     } catch (error) {
-      this.throwError(ctx, error);
+      return this.throwError(ctx, error);
     }
   }
 
@@ -68,9 +68,9 @@ export default class Controller {
       const contextBody = this.getContextBody(ctx);
       await this.service.updateById(id, contextBody);
 
-      ctx.noContent();
+      return ctx.noContent();
     } catch (error) {
-      this.throwError(ctx, error);
+      return this.throwError(ctx, error);
     }
   }
 
@@ -78,9 +78,9 @@ export default class Controller {
     try {
       const result = await this.service.deleteAll();
 
-      ctx.ok(result);
+      return ctx.ok(result);
     } catch (error) {
-      this.throwError(ctx, error);
+      return this.throwError(ctx, error);
     }
   }
 
@@ -89,9 +89,9 @@ export default class Controller {
       const id = this.getParams(ctx).id;
       const result = await this.service.deleteById(id);
 
-      ctx.ok(result);
+      return ctx.ok(result);
     } catch (error) {
-      this.throwError(ctx, error);
+      return this.throwError(ctx, error);
     }
   }
 }

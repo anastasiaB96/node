@@ -17,20 +17,23 @@ export default class QuestionService extends AuditableService {
 
   async findAll() {
     const result = await super.findAll();
+    const mappedResult = result.length ? result.map(question => this.mapper.mapObject(question, questionDALtoDTO)) : null;
 
-    return this.resolve(result.map(question => this.mapper.mapObject(question, questionDALtoDTO)));
+    return this.resolve(mappedResult);
   }
 
   async findById(id) {
     const result = await super.findById(id);
+    const mappedResult = result ? this.mapper.mapObject(result, questionDALtoDTO) : null;
 
-    return this.resolve(this.mapper.mapObject(result, questionDALtoDTO));
+    return this.resolve(mappedResult);
   }
 
   async find(condition) {
     const result = await super.find(condition);
+    const mappedResult = result.length ? result.map(question => this.mapper.mapObject(question, questionDALtoDTO)) : null;
 
-    return this.resolve(result.map(question => this.mapper.mapObject(question, questionDALtoDTO)));
+    return this.resolve(mappedResult);
   }
 
   async createByUser(userId, info) {
