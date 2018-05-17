@@ -22,11 +22,7 @@ export default class Tag extends Base {
   };
 
   static associate({ User, Question }) {
-    this.belongsTo(User, {
-      as: 'user',
-      onUpdate: 'CASCADE',
-      onDelete: null
-    });
+    this.belongsTo(User, { as: 'user' });
 
     this.belongsToMany(Question, {
       as: 'question',

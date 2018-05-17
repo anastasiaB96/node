@@ -21,16 +21,8 @@ export default class Answer extends Base {
   };
 
   static associate({ User, Question }) {
-    this.belongsTo(User, {
-      as: 'user',
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE'
-    });
+    this.belongsTo(User, { as: 'user' });
 
-    this.belongsTo(Question, {
-      as: 'question',
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE'
-    });
+    this.belongsTo(Question, { as: 'question' });
   }
 };

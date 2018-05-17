@@ -27,14 +27,12 @@ export default class Question extends Base {
   static associate({ Answer, User, Tag }) {
     this.hasMany(Answer, {
       as: 'answer',
-      foreignKey: 'questionId'
-    });
-
-    this.belongsTo(User, {
-      as: 'user',
+      foreignKey: 'questionId',
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
     });
+
+    this.belongsTo(User, { as: 'user' });
 
     this.belongsToMany(Tag, {
       as: 'tag',

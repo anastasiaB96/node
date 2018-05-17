@@ -45,15 +45,26 @@ export default class User extends Base {
     return super.init(User.schema, { sequelize, hooks: User.hooks });
   };
 
-  static associate({ Question, Answer, Role }) {
+  static associate({ Question, Answer, Role, Tag }) {
     this.hasMany(Question, {
       as: 'question',
-      foreignKey: 'userId'
+      foreignKey: 'userId',
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE'
     });
 
     this.hasMany(Answer, {
       as: 'answer',
-      foreignKey: 'userId'
+      foreignKey: 'userId',
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE'
+    });
+
+    this.hasMany(Tag, {
+      as: 'tag',
+      foreignKey: 'userId',
+      onUpdate: 'CASCADE',
+      onDelete: null
     });
 
     this.belongsToMany(Role, {
