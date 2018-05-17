@@ -30,4 +30,6 @@ class IocContainerHelper {
   }
 }
 
-export default new IocContainerHelper();
+const iocContainerHelper = new IocContainerHelper();
+
+export default iocContainerHelper;

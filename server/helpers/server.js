@@ -1,7 +1,7 @@
 'use strict';
 
 import * as http from 'http';
-import app from '../app';
+import app from '../application';
 import logger from './logger';
 
 export async function createServer() {
