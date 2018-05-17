@@ -3,7 +3,5 @@
   "dataValues.title": "title",
   "dataValues.body": "body",
   "dataValues.rating": "rating",
-  "dataValues.createdAt": "createdAt",
-  "dataValues.updatedAt": "updatedAt",
   "dataValues.tag.name": "tags"
 }

@@ -1,7 +1,7 @@
 'use strict';
 
 import AuditableService from './auditableService';
-import * as answerDALtoDTO from '../models/answerDALtoDTO.json';
+import * as answerDALtoDTO from '../models/answer/answerDALtoDTO.json';
 
 export default class AnswerService extends AuditableService {
   constructor(errorsHelper, logger, mapper, answerRepository, answerVoteService) {
@@ -25,7 +25,13 @@ export default class AnswerService extends AuditableService {
   async find(condition) {
     const result = await super.find(condition);
 
-    this.resolve(this.mapper.mapObject(result, answerDALtoDTO));
+    return this.resolve(result.map(answer => this.mapper.mapObject(answer, answerDALtoDTO)));
+  }
+
+  async createByUser(userId, info) {
+    const createdAnswer = await super.createByUser(userId, info);
+
+    return this.resolve({ id: createdAnswer.id });
   }
 
   async addVote(userId, questionId) {

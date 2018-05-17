@@ -16,7 +16,7 @@ export default class Repository {
   }
 
   async find(condition) {
-    return this.Model.find({ where: condition });
+    return this.Model.findAll({ where: condition });
   }
 
   async create(data) {
@@ -36,7 +36,7 @@ export default class Repository {
   }
 
   async delete(condition) {
-    return this.Model.destroy({ where: { condition } });
+    return this.Model.destroy({ where: condition });
   }
 
   joinModel(model, alias, attributes) {

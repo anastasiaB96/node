@@ -108,7 +108,7 @@ export default createController(QuestionsController)
   .patch('/:id/tags', 'addTag', {
     before: [questionTagValidator, jwtProtection, adminProtection]
   })
-  .delete('/:id', 'deleteById', {
+  .delete('/:id', 'm ', {
     before: [jwtProtection]
   })
   .delete('', 'deleteAll', {

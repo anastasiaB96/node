@@ -2,7 +2,8 @@
 
 import AuditableService from './auditableService';
 import ERRORS from '../../constants/errors';
-import * as questionWithTagsDALtoDTO from '../models/questionWithTagsDALtoDTO.json';
+import * as questionWithTagsDALtoDTO from '../models/question/questionWithTagsDALtoDTO.json';
+import * as questionDALtoDTO from '../models/question/questionDALtoDTO.json';
 
 export default class QuestionService extends AuditableService {
   constructor(errorsHelper, logger, mapper, questionRepository, answerService, userService, questionVoteService, tagService) {
@@ -12,6 +13,30 @@ export default class QuestionService extends AuditableService {
     this.userService = userService;
     this.questionVoteService = questionVoteService;
     this.tagService = tagService;
+  }
+
+  async findAll() {
+    const result = await super.findAll();
+
+    return this.resolve(result.map(question => this.mapper.mapObject(question, questionDALtoDTO)));
+  }
+
+  async findById(id) {
+    const result = await super.findById(id);
+
+    return this.resolve(this.mapper.mapObject(result, questionDALtoDTO));
+  }
+
+  async find(condition) {
+    const result = await super.find(condition);
+
+    return this.resolve(result.map(question => this.mapper.mapObject(question, questionDALtoDTO)));
+  }
+
+  async createByUser(userId, info) {
+    const createdQuestion = await super.createByUser(userId, info);
+
+    return this.resolve({ id: createdQuestion.id });
   }
 
   async addTagToQuestion(questionId, tagId) {
