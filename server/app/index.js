@@ -6,14 +6,14 @@ import compress from 'koa-compress';
 import bodyParser from 'koa-bodyparser';
 import respond from 'koa-respond';
 
-import iocContainer from '../helpers/iocContainer';
+import iocContainerHelper from '../helpers/iocContainerHelper';
 import { errorHandler } from '../middlewares/errorHandler';
 import { notFoundHandler } from '../middlewares/notFound';
 import { rateLimiter } from '../middlewares/rateLimiter';
 
 const app = new Koa();
 
-const appContainer = (app.container = iocContainer.getRegisteredContainer());
+const appContainer = (app.container = iocContainerHelper.getRegisteredContainer());
 
 app
   .use(errorHandler)

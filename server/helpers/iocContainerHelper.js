@@ -3,13 +3,13 @@
 import { createContainer, Lifetime, InjectionMode, asValue } from 'awilix';
 import logger from './logger';
 import errorsHelper from './errorsHelper';
-import { IocContainerHelper } from '../businessLogic/helpers/iocContainerHelper';
+import { IocContainerHelper as IocContainerBusinessLayerHelper } from '../businessLogic/helpers/iocContainerHelper';
 
-class IocContainer {
+class IocContainerHelper {
   constructor() {
     this._container = createContainer({ injectionMode: InjectionMode.CLASSIC });
     this._registerLibs(this._container);
-    this._registerServices(this._container);
+    this._registerBusinessLayer(this._container);
   }
 
   _registerLibs(container) {
@@ -21,8 +21,8 @@ class IocContainer {
     });
   }
 
-  _registerServices(container) {
-    IocContainerHelper.registerServices(container);
+  _registerBusinessLayer(container) {
+    IocContainerBusinessLayerHelper.registerServices(container);
   }
 
   getRegisteredContainer() {
@@ -30,4 +30,4 @@ class IocContainer {
   }
 }
 
-export default new IocContainer();
+export default new IocContainerHelper();
