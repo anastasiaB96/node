@@ -32,31 +32,42 @@ export default class AnswerService extends AuditableService {
     return this.resolve(mappedResult);
   }
 
-  async createByUser(userId, info) {
-    const createdAnswer = await super.createByUser(userId, info);
-
-    return this.resolve({ id: createdAnswer.id });
-  }
-
-  async addVote(userId, questionId) {
-    const info = { userId, questionId };
-
-    return this.answerVoteService.create(info);
-  }
-
-  async removeVote(userId, questionId) {
-    const info = { userId, questionId };
-
-    return this.answerVoteService.delete(info);
-  }
-
   async create(userId, answerInfo) {
     try {
       const model = { ...answerInfo, userId };
+      const createdAnswer = await this.repository.create(model);
 
-      return this.repository.create(model);
+      return this.resolve({ id: createdAnswer.id });
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }
+  }
+
+  async calculateRating(answerId) {
+    try {
+      const rating = await this.answerVoteService.getRating(answerId);
+
+      return this.repository.setRating(answerId, rating);
+    } catch (error) {
+      return this.reject({ errorType: ERRORS.internalServer }, error);
+    }
+  }
+
+  async addVote(userId, answerId) {
+    const info = { userId, answerId };
+
+    return Promise.all([
+      this.answerVoteService.create(info),
+      this.calculateRating(answerId)
+    ]);
+  }
+
+  async removeVote(userId, answerId) {
+    const info = { userId, answerId };
+
+    return Promise.all([
+      this.answerVoteService.delete(info),
+      this.calculateRating(answerId)
+    ]);
   }
 }

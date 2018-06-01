@@ -9,9 +9,13 @@ export default class QuestionVoteService extends Service {
   }
 
   async getRating(questionId) {
-    const result = await this.find({ questionId });
+    try {
+      const result = await this.find({ questionId });
 
-    return result ? result.length : 0;
+      return this.resolve(result ? result.length : 0);
+    } catch (error) {
+      return this.reject({ errorType: ERRORS.internalServer }, error);
+    }
   }
 
   async create(info) {

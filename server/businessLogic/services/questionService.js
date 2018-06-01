@@ -138,8 +138,10 @@ export default class QuestionService extends AuditableService {
     try {
       const info = { userId, questionId };
 
-      await this.questionVoteService.create(info);
-      await this.calculateRating(questionId);
+      return Promise.all([
+        this.questionVoteService.create(info),
+        this.calculateRating(questionId)
+      ]);
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }
@@ -149,8 +151,10 @@ export default class QuestionService extends AuditableService {
     try {
       const info = { userId, questionId };
 
-      await this.questionVoteService.delete(info);
-      await this.calculateRating(questionId);
+      return Promise.all([
+        this.questionVoteService.delete(info),
+        this.calculateRating(questionId)
+      ]);
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }
