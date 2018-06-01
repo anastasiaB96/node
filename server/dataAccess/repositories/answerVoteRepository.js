@@ -4,6 +4,6 @@ import VoteRepository from './voteRepository';
 
 export default class AnswerVoteRepository extends VoteRepository {
   constructor(logger, dbContext) {
-    super({ logger, dbContext, modelName: 'AnswerVotes' });
+    super({ logger, dbContext, modelName: 'AnswerVote' });
   }
 }

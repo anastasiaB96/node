@@ -8,6 +8,10 @@ export default class QuestionRepository extends Repository {
     this.Tag = this.dbContext.models['Tag'];
   }
 
+  async setRating(questionId, rating) {
+    return super.updateById(questionId, { rating });
+  }
+
   async addTagToQuestion(question, tag) {
     return question.addTag(tag);
   }

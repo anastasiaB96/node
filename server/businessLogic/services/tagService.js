@@ -1,6 +1,7 @@
 'use strict';
 
 import AuditableService from './auditableService';
+import ERRORS from '../../constants/errors';
 import * as tagDALtoDTO from '../models/tag/tagDALtoDTO.json';
 
 export default class TagService extends AuditableService {
@@ -22,9 +23,14 @@ export default class TagService extends AuditableService {
     return this.resolve(mappedResult);
   }
 
-  async createByUser(userId, info) {
-    const createdTag = await super.createByUser(userId, info);
+  async create(userId, tagInfo) {
+    try {
+      const model = { ...tagInfo, userId };
+      const createdTag = await this.repository.create(model);
 
-    return this.resolve({ id: createdTag.id });
+      return this.resolve({ id: createdTag.id });
+    } catch (error) {
+      return this.reject({ errorType: ERRORS.internalServer }, error);
+    }
   }
 }

@@ -90,9 +90,19 @@ export default class QuestionService extends AuditableService {
     }
   }
 
+  async create(userId, questionInfo) {
+    try {
+      const model = { ...questionInfo, userId };
+
+      return this.repository.create(model);
+    } catch (error) {
+      return this.reject({ errorType: ERRORS.internalServer }, error);
+    }
+  }
+
   async createAnswer(userId, info) {
     try {
-      return this.answerService.createByUser(userId, info);
+      return this.answerService.create(userId, info);
     } catch (error) {
       return this.reject({ errorType: ERRORS.internalServer }, error);
     }
@@ -114,15 +124,35 @@ export default class QuestionService extends AuditableService {
     }
   }
 
-  async addVote(userId, questionId) {
-    const info = { userId, questionId };
+  async calculateRating(questionId) {
+    try {
+      const rating = await this.questionVoteService.getRating(questionId);
 
-    return this.questionVoteService.create(info);
+      return this.repository.setRating(questionId, rating);
+    } catch (error) {
+      return this.reject({ errorType: ERRORS.internalServer }, error);
+    }
+  }
+
+  async addVote(userId, questionId) {
+    try {
+      const info = { userId, questionId };
+
+      await this.questionVoteService.create(info);
+      await this.calculateRating(questionId);
+    } catch (error) {
+      return this.reject({ errorType: ERRORS.internalServer }, error);
+    }
   }
 
   async removeVote(userId, questionId) {
-    const info = { userId, questionId };
+    try {
+      const info = { userId, questionId };
 
-    return this.questionVoteService.delete(info);
+      await this.questionVoteService.delete(info);
+      await this.calculateRating(questionId);
+    } catch (error) {
+      return this.reject({ errorType: ERRORS.internalServer }, error);
+    }
   }
 }

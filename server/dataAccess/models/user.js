@@ -29,10 +29,14 @@ export default class User extends Base {
     };
   }
 
-  static beforeCreate(user) {
-    return User.generateHash(user.password).then(hashedPassword => {
-      user.password = hashedPassword;
-    });
+  static async generateHash(password) {
+    return bcrypt.hash(password, bcrypt.genSaltSync(8));
+  }
+
+  static async beforeCreate(user) {
+    user.password = await User.generateHash(user.password);
+
+    return user;
   }
 
   static get hooks() {
@@ -75,10 +79,6 @@ export default class User extends Base {
         unique: false
       }
     });
-  }
-
-  static generateHash(password) {
-    return bcrypt.hash(password, bcrypt.genSaltSync(8));
   }
 
   validPassword(password) {

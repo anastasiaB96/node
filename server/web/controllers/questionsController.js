@@ -3,19 +3,19 @@
 import { createController } from 'awilix-koa';
 import { jwtProtection } from '../../middlewares/jwtProtection';
 import { adminProtection } from '../../middlewares/adminProtection';
-import VotedItemsController from './votedItemsController';
+import AuditableController from './auditableController';
 import { filterByTagsValidator, createQuestionValidator, updateQuestionValidator, questionTagValidator } from '../routerValidators/questions';
 import { createAnswerValidator } from '../routerValidators/answers';
 
-class QuestionsController extends VotedItemsController {
+class QuestionsController extends AuditableController {
   constructor(errorsHelper, questionService) {
     super({ errorsHelper, service: questionService });
   }
 
   async addTag(ctx) {
     try {
-      const tagId = this.getContextBody(ctx).tagId;
       const questionId = this.getParams(ctx).id;
+      const tagId = this.getContextBody(ctx).tagId;
       await this.service.addTagToQuestion(questionId, tagId);
 
       return ctx.noContent();
@@ -26,8 +26,8 @@ class QuestionsController extends VotedItemsController {
 
   async removeTag(ctx) {
     try {
-      const tagId = this.getContextBody(ctx).tagId;
       const questionId = this.getParams(ctx).id;
+      const tagId = this.getContextBody(ctx).tagId;
       await this.service.removeTagFromQuestion(questionId, tagId);
 
       return ctx.noContent();
@@ -58,6 +58,18 @@ class QuestionsController extends VotedItemsController {
     }
   }
 
+  async create(ctx) {
+    try {
+      const info = this.getContextBody(ctx);
+      const userId = this.getCurrentUserId(ctx);
+      const createdResult = await this.service.create(userId, info);
+
+      return ctx.created(createdResult);
+    } catch (error) {
+      return this.throwError(ctx, error);
+    }
+  }
+
   async createAnswer(ctx) {
     try {
       const info = {
@@ -83,6 +95,46 @@ class QuestionsController extends VotedItemsController {
       return this.throwError(ctx, error);
     }
   }
+
+  async addVote(ctx) {
+    try {
+      const userId = this.getCurrentUserId(ctx);
+      const questionId = this.getParams(ctx).id;
+      await this.service.addVote(userId, questionId);
+
+      return ctx.noContent();
+    } catch (error) {
+      return this.throwError(ctx, error);
+    }
+  }
+
+  async removeVote(ctx) {
+    try {
+      const userId = this.getCurrentUserId(ctx);
+      const questionId = this.getParams(ctx).id;
+      await this.service.removeVote(userId, questionId);
+
+      return ctx.noContent();
+    } catch (error) {
+      return this.throwError(ctx, error);
+    }
+  }
+
+  async updateById(ctx) {
+    if (!await this.isPermissions(ctx)) {
+      return ctx.forbidden('Sorry, you don\'t have requested permissions!');
+    }
+
+    return super.updateById(ctx);
+  }
+
+  async deleteById(ctx) {
+    if (!await this.isPermissions(ctx)) {
+      return ctx.forbidden('Sorry, you don\'t have requested permissions!');
+    }
+
+    return super.deleteById(ctx);
+  }
 }
 
 export default createController(QuestionsController)
@@ -93,7 +145,7 @@ export default createController(QuestionsController)
   })
   .get('/:id', 'getById')
   .get('/:id/answers', 'getAnswers')
-  .post('', 'createByUser', {
+  .post('', 'create', {
     before: [createQuestionValidator, jwtProtection]
   })
   .post('/:id/answers', 'createAnswer', {

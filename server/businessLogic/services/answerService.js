@@ -1,6 +1,7 @@
 'use strict';
 
 import AuditableService from './auditableService';
+import ERRORS from '../../constants/errors';
 import * as answerDALtoDTO from '../models/answer/answerDALtoDTO.json';
 
 export default class AnswerService extends AuditableService {
@@ -47,5 +48,15 @@ export default class AnswerService extends AuditableService {
     const info = { userId, questionId };
 
     return this.answerVoteService.delete(info);
+  }
+
+  async create(userId, answerInfo) {
+    try {
+      const model = { ...answerInfo, userId };
+
+      return this.repository.create(model);
+    } catch (error) {
+      return this.reject({ errorType: ERRORS.internalServer }, error);
+    }
   }
 }
