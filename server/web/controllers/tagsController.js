@@ -4,7 +4,7 @@ import { createController } from 'awilix-koa';
 import { jwtProtection } from '../../middlewares/jwtProtection';
 import { adminProtection } from '../../middlewares/adminProtection';
 import AuditableController from './auditableController';
-import { createTagValidator, updateTagValidator } from '../routerValidators/tags';
+import { createTagValidator, updateTagValidator } from '../contextValidators/tags';
 
 class TagsController extends AuditableController {
   constructor(errorsHelper, tagService) {

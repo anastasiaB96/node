@@ -4,7 +4,7 @@ import { createController } from 'awilix-koa';
 import { jwtProtection } from '../../middlewares/jwtProtection';
 import { adminProtection } from '../../middlewares/adminProtection';
 import Controller from './controller';
-import { userRegisterValidator, userLoginValidator, permitAdminValidator } from '../routerValidators/auth';
+import { userRegisterValidator, userLoginValidator, permitAdminValidator } from '../contextValidators/auth';
 
 class AuthController extends Controller {
   constructor(errorsHelper, authService) {

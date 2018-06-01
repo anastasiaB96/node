@@ -1,7 +1,8 @@
 'use strict';
 
 import Controller from './controller';
-import { adminProtection } from '../../middlewares/adminProtection';
+import ROLES from '../../constants/roles';
+import { get } from 'lodash';
 
 export default class AuditableController extends Controller {
   async isOwner(ctx) {
@@ -12,10 +13,10 @@ export default class AuditableController extends Controller {
   }
 
   isAdmin(ctx) {
-    let isAdmin = false;
-    adminProtection(ctx, () => { isAdmin = true; });
+    const userInfo = get(ctx.state, 'jwtData');
+    const userRoles = get(userInfo, 'roles');
 
-    return isAdmin;
+    return userRoles ? userRoles.includes(ROLES.admin) : false;
   }
 
   async isPermissions(ctx) {

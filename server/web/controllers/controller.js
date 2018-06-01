@@ -66,6 +66,7 @@ export default class Controller {
     try {
       const id = this.getParams(ctx).id;
       const contextBody = this.getContextBody(ctx);
+
       await this.service.updateById(id, contextBody);
 
       return ctx.noContent();

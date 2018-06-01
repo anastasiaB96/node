@@ -4,36 +4,12 @@ import { createController } from 'awilix-koa';
 import { jwtProtection } from '../../middlewares/jwtProtection';
 import { adminProtection } from '../../middlewares/adminProtection';
 import AuditableController from './auditableController';
-import { filterByTagsValidator, createQuestionValidator, updateQuestionValidator, questionTagValidator } from '../routerValidators/questions';
-import { createAnswerValidator } from '../routerValidators/answers';
+import { filterByTagsValidator, createQuestionValidator, updateQuestionValidator, questionTagValidator } from '../contextValidators/questions';
+import { createAnswerValidator } from '../contextValidators/answers';
 
 class QuestionsController extends AuditableController {
   constructor(errorsHelper, questionService) {
     super({ errorsHelper, service: questionService });
-  }
-
-  async addTag(ctx) {
-    try {
-      const questionId = this.getParams(ctx).id;
-      const tagId = this.getContextBody(ctx).tagId;
-      await this.service.addTagToQuestion(questionId, tagId);
-
-      return ctx.noContent();
-    } catch (error) {
-      return this.throwError(ctx, error);
-    }
-  }
-
-  async removeTag(ctx) {
-    try {
-      const questionId = this.getParams(ctx).id;
-      const tagId = this.getContextBody(ctx).tagId;
-      await this.service.removeTagFromQuestion(questionId, tagId);
-
-      return ctx.noContent();
-    } catch (error) {
-      return this.throwError(ctx, error);
-    }
   }
 
   async filterByTagIds(ctx) {
@@ -85,10 +61,20 @@ class QuestionsController extends AuditableController {
     }
   }
 
-  async deleteAllAnswers(ctx) {
+  async updateById(ctx) {
+    if (!await this.isPermissions(ctx)) {
+      return ctx.forbidden('Sorry, you don\'t have requested permissions!');
+    }
+
+    return super.updateById(ctx);
+  }
+
+  async addVote(ctx) {
     try {
+      const userId = this.getCurrentUserId(ctx);
       const questionId = this.getParams(ctx).id;
-      await this.service.deleteAllAnswers(questionId);
+
+      await this.service.addVote(userId, questionId);
 
       return ctx.noContent();
     } catch (error) {
@@ -96,11 +82,31 @@ class QuestionsController extends AuditableController {
     }
   }
 
-  async addVote(ctx) {
+  async addTag(ctx) {
     try {
-      const userId = this.getCurrentUserId(ctx);
       const questionId = this.getParams(ctx).id;
-      await this.service.addVote(userId, questionId);
+      const tagId = this.getContextBody(ctx).tagId;
+      await this.service.addTagToQuestion(questionId, tagId);
+
+      return ctx.noContent();
+    } catch (error) {
+      return this.throwError(ctx, error);
+    }
+  }
+
+  async deleteById(ctx) {
+    if (!await this.isPermissions(ctx)) {
+      return ctx.forbidden('Sorry, you don\'t have requested permissions!');
+    }
+
+    return super.deleteById(ctx);
+  }
+
+  async deleteAllAnswers(ctx) {
+    try {
+      const questionId = this.getParams(ctx).id;
+
+      await this.service.deleteAllAnswers(questionId);
 
       return ctx.noContent();
     } catch (error) {
@@ -112,6 +118,7 @@ class QuestionsController extends AuditableController {
     try {
       const userId = this.getCurrentUserId(ctx);
       const questionId = this.getParams(ctx).id;
+
       await this.service.removeVote(userId, questionId);
 
       return ctx.noContent();
@@ -120,20 +127,16 @@ class QuestionsController extends AuditableController {
     }
   }
 
-  async updateById(ctx) {
-    if (!await this.isPermissions(ctx)) {
-      return ctx.forbidden('Sorry, you don\'t have requested permissions!');
+  async removeTag(ctx) {
+    try {
+      const questionId = this.getParams(ctx).id;
+      const tagId = this.getContextBody(ctx).tagId;
+      await this.service.removeTagFromQuestion(questionId, tagId);
+
+      return ctx.noContent();
+    } catch (error) {
+      return this.throwError(ctx, error);
     }
-
-    return super.updateById(ctx);
-  }
-
-  async deleteById(ctx) {
-    if (!await this.isPermissions(ctx)) {
-      return ctx.forbidden('Sorry, you don\'t have requested permissions!');
-    }
-
-    return super.deleteById(ctx);
   }
 }
 
