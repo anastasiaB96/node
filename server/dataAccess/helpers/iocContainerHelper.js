@@ -1,7 +1,7 @@
 'use strict';
 
 import { Lifetime, asClass } from 'awilix';
-import DatabaseContext from '../models';
+import DatabaseContext from '../databaseContext';
 
 export class IocContainerHelper {
   static registerDbContext(container) {
@@ -14,7 +14,7 @@ export class IocContainerHelper {
 
   static registerRepositories(container) {
     container.loadModules(
-      ['repositories/**/*.js'],
+      ['**/*Repository.js'],
       {
         cwd: `${__dirname}/..`,
         formatName: 'camelCase',

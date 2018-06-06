@@ -2,7 +2,7 @@
 
 import objectMapper from 'object-mapper';
 
-export default class Mapper {
+class Mapper {
   constructor() {
     this._mapper = objectMapper;
   }
@@ -11,3 +11,5 @@ export default class Mapper {
     return this._mapper(object, model);
   }
 }
+
+export default new Mapper();

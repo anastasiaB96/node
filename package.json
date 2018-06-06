@@ -13,6 +13,7 @@
     "awilix-koa": "^1.0.2",
     "bcrypt": "^1.0.3",
     "config": "^1.28.1",
+    "glob-fs": "^0.1.7",
     "jsonwebtoken": "^7.3.0",
     "koa": "^2.4.1",
     "koa-bodyparser": "^4.2.0",

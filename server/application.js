@@ -23,11 +23,9 @@ class Application extends Koa {
       .use(bodyParser())
       .use(rateLimiter)
       .use(scopePerRequest(appContainer))
-      .use(loadControllers('web/controllers/**/*.js', { cwd: `${__dirname}` }))
+      .use(loadControllers('web/**/*Controller.js', { cwd: `${__dirname}` }))
       .use(notFoundHandler);
   }
 }
 
-const app = new Application();
-
-export default app;
+export default new Application();
