@@ -49,6 +49,4 @@ class ErrorsHelper {
   }
 }
 
-const errorHelper = new ErrorsHelper();
-
-export default errorHelper;
+export default new ErrorsHelper();

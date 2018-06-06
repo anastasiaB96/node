@@ -3,8 +3,8 @@
 import objectMapper from 'object-mapper';
 
 class Mapper {
-  constructor() {
-    this._mapper = objectMapper;
+  constructor(mapper) {
+    this._mapper = mapper;
   }
 
   mapObject(object, model) {
@@ -12,4 +12,4 @@ class Mapper {
   }
 }
 
-export default new Mapper();
+export default new Mapper(objectMapper);

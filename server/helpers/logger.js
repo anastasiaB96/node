@@ -3,11 +3,11 @@
 import winston from 'winston';
 
 class Logger {
-  constructor() {
-    this._init();
+  constructor(winston) {
+    this._init(winston);
   }
 
-  _init() {
+  _init(winston) {
     this._logger = new winston.Logger({
       transports: [
         new winston.transports.Console({
@@ -26,6 +26,4 @@ class Logger {
   }
 }
 
-const logger = new Logger();
-
-export default logger;
+export default new Logger(winston);
