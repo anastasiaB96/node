@@ -4,11 +4,13 @@ import { Lifetime, asValue } from 'awilix';
 
 import { IocContainerHelper as IocContainerDataAccessHelper } from '../../dataAccess/helpers/iocContainerHelper';
 import mapper from './mapper';
+import modelsValidator from './modelsValidator';
 
 export class IocContainerHelper {
-  static _registerMapper(container) {
+  static _registerHelpers(container) {
     container.register({
-      mapper: asValue(mapper)
+      mapper: asValue(mapper),
+      modelsValidator: asValue(modelsValidator)
     }, {
       lifetime: Lifetime.SINGLETON
     });
@@ -26,7 +28,7 @@ export class IocContainerHelper {
       }
     );
 
-    IocContainerHelper._registerMapper(container);
+    IocContainerHelper._registerHelpers(container);
     IocContainerDataAccessHelper.registerRepositories(container);
   }
 }

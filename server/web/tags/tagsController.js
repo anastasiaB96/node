@@ -7,8 +7,8 @@ import AuditableController from '../helpers/auditableController';
 import { createTagValidator, updateTagValidator } from './tagsValidator';
 
 class TagsController extends AuditableController {
-  constructor(errorsHelper, tagService) {
-    super({ errorsHelper, service: tagService });
+  constructor(tagService) {
+    super(tagService);
   }
 
   async create(ctx) {

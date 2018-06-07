@@ -1,35 +1,47 @@
 'use strict';
 
 import BaseAuditableService from '../helpers/baseAuditableService';
-import ERRORS from '../../constants/errors';
+import InternalError from '../helpers/errors/internalError';
 import * as answerDALtoDTO from './models/answerDALtoDTO.json';
 
 export default class AnswerService extends BaseAuditableService {
-  constructor(errorsHelper, logger, mapper, answerRepository, answerVoteService) {
-    super({ errorsHelper, logger, mapper, repository: answerRepository });
+  constructor(logger, mapper, answerRepository, answerVoteService) {
+    super({ logger, mapper, repository: answerRepository });
 
     this.answerVoteService = answerVoteService;
   }
 
   async findAll() {
-    const result = await super.findAll();
-    const mappedResult = result.length ? result.map(answer => this.mapper.mapObject(answer, answerDALtoDTO)) : null;
+    try {
+      const result = await super.findAll();
+      const mappedResult = result.length ? result.map(answer => this.mapper.mapObject(answer, answerDALtoDTO)) : null;
 
-    return this.resolve(mappedResult);
+      return this.resolve(mappedResult);
+    } catch (error) {
+      return this.reject(new InternalError(error));
+    }
   }
 
   async findById(id) {
-    const result = await super.findById(id);
-    const mappedResult = result ? this.mapper.mapObject(result, answerDALtoDTO) : null;
+    try {
+      const result = await super.findById(id);
+      const mappedResult = result ? this.mapper.mapObject(result, answerDALtoDTO) : null;
 
-    return this.resolve(mappedResult);
+      return this.resolve(mappedResult);
+    } catch (error) {
+      return this.reject(new InternalError(error));
+    }
   }
 
   async find(condition) {
-    const result = await super.find(condition);
-    const mappedResult = result.length ? result.map(answer => this.mapper.mapObject(answer, answerDALtoDTO)) : null;
+    try {
+      const result = await super.find(condition);
+      const mappedResult = result.length ? result.map(answer => this.mapper.mapObject(answer, answerDALtoDTO)) : null;
 
-    return this.resolve(mappedResult);
+      return this.resolve(mappedResult);
+    } catch (error) {
+      return this.reject(new InternalError(error));
+    }
   }
 
   async create(userId, answerInfo) {
@@ -39,7 +51,7 @@ export default class AnswerService extends BaseAuditableService {
 
       return this.resolve({ id: createdAnswer.id });
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 
@@ -49,7 +61,7 @@ export default class AnswerService extends BaseAuditableService {
 
       return this.repository.setRating(answerId, rating);
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 

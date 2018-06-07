@@ -9,8 +9,8 @@ import {
 } from './questionsValidator';
 
 class QuestionsController extends AuditableController {
-  constructor(errorsHelper, questionService) {
-    super({ errorsHelper, service: questionService });
+  constructor(questionService) {
+    super(questionService);
   }
 
   async filterByTagIds(ctx) {

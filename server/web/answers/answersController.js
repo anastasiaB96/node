@@ -7,8 +7,8 @@ import AuditableController from '../helpers/auditableController';
 import { updateAnswerValidator } from './answersValidator';
 
 class AnswersController extends AuditableController {
-  constructor(errorsHelper, answerService) {
-    super({ errorsHelper, service: answerService });
+  constructor(answerService) {
+    super(answerService);
   }
 
   async updateById(ctx) {

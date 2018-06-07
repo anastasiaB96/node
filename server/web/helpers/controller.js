@@ -1,11 +1,11 @@
 'use strict';
 
 import { get } from 'lodash';
+import HttpError from './httpError';
 
 export default class Controller {
-  constructor({ errorsHelper, service }) {
+  constructor(service) {
     this.service = service;
-    this.errorsHelper = errorsHelper;
   }
 
   getContextBody(ctx) {
@@ -24,10 +24,10 @@ export default class Controller {
     return ctx.query;
   }
 
-  throwError(ctx, { errorType, errorMessage }) {
-    const error = this.errorsHelper.getHttpErrorInfo(errorType, errorMessage);
+  throwError(ctx, error) {
+    const httpError = new HttpError(error);
 
-    return ctx.send(error.code, error.userMessage);
+    return ctx.send(httpError.code, httpError.userMessage);
   }
 
   async getAll(ctx) {

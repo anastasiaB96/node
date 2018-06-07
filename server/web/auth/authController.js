@@ -7,8 +7,8 @@ import Controller from '../helpers/controller';
 import { userRegisterValidator, userLoginValidator, permitAdminValidator } from './authValidator';
 
 class AuthController extends Controller {
-  constructor(errorsHelper, authService) {
-    super({ errorsHelper, service: authService });
+  constructor(authService) {
+    super(authService);
   }
 
   async register(ctx) {

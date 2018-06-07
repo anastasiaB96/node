@@ -1,26 +1,34 @@
 'use strict';
 
 import BaseAuditableService from '../helpers/baseAuditableService';
-import ERRORS from '../../constants/errors';
+import InternalError from '../helpers/errors/internalError';
 import * as tagDALtoDTO from './models/tagDALtoDTO.json';
 
 export default class TagService extends BaseAuditableService {
-  constructor(errorsHelper, logger, mapper, tagRepository) {
-    super({ errorsHelper, logger, mapper, repository: tagRepository });
+  constructor(logger, mapper, tagRepository) {
+    super({ logger, mapper, repository: tagRepository });
   }
 
   async findAll() {
-    const result = await super.findAll();
-    const mappedResult = result.length ? result.map(question => this.mapper.mapObject(question, tagDALtoDTO)) : null;
+    try {
+      const result = await super.findAll();
+      const mappedResult = result.length ? result.map(question => this.mapper.mapObject(question, tagDALtoDTO)) : null;
 
-    return this.resolve(mappedResult);
+      return this.resolve(mappedResult);
+    } catch (error) {
+      return this.reject(new InternalError(error));
+    }
   }
 
   async findById(id) {
-    const result = await super.findById(id);
-    const mappedResult = result ? this.mapper.mapObject(result, tagDALtoDTO) : null;
+    try {
+      const result = await super.findById(id);
+      const mappedResult = result ? this.mapper.mapObject(result, tagDALtoDTO) : null;
 
-    return this.resolve(mappedResult);
+      return this.resolve(mappedResult);
+    } catch (error) {
+      return this.reject(new InternalError(error));
+    }
   }
 
   async create(userId, tagInfo) {
@@ -30,7 +38,7 @@ export default class TagService extends BaseAuditableService {
 
       return this.resolve({ id: createdTag.id });
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 }

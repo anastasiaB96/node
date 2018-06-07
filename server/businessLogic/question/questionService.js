@@ -1,13 +1,14 @@
 'use strict';
 
 import BaseAuditableService from '../helpers/baseAuditableService';
-import ERRORS from '../../constants/errors';
+import InternalError from '../helpers/errors/internalError';
+import BadRequestError from '../helpers/errors/badRequestError';
 import * as questionWithTagsDALtoDTO from './models/questionWithTagsDALtoDTO.json';
 import * as questionDALtoDTO from './models/questionDALtoDTO.json';
 
 export default class QuestionService extends BaseAuditableService {
-  constructor(errorsHelper, logger, mapper, questionRepository, answerService, userService, questionVoteService, tagService) {
-    super({ errorsHelper, logger, mapper, repository: questionRepository });
+  constructor(logger, mapper, questionRepository, answerService, userService, questionVoteService, tagService) {
+    super({ logger, mapper, repository: questionRepository });
 
     this.answerService = answerService;
     this.userService = userService;
@@ -16,30 +17,46 @@ export default class QuestionService extends BaseAuditableService {
   }
 
   async findAll() {
-    const result = await super.findAll();
-    const mappedResult = result.length ? result.map(question => this.mapper.mapObject(question, questionDALtoDTO)) : null;
+    try {
+      const result = await super.findAll();
+      const mappedResult = result.length ? result.map(question => this.mapper.mapObject(question, questionDALtoDTO)) : null;
 
-    return this.resolve(mappedResult);
+      return this.resolve(mappedResult);
+    } catch (error) {
+      return this.reject(new InternalError(error));
+    }
   }
 
   async findById(id) {
-    const result = await super.findById(id);
-    const mappedResult = result ? this.mapper.mapObject(result, questionDALtoDTO) : null;
+    try {
+      const result = await super.findById(id);
+      const mappedResult = result ? this.mapper.mapObject(result, questionDALtoDTO) : null;
 
-    return this.resolve(mappedResult);
+      return this.resolve(mappedResult);
+    } catch (error) {
+      return this.reject(new InternalError(error));
+    }
   }
 
   async find(condition) {
-    const result = await super.find(condition);
-    const mappedResult = result.length ? result.map(question => this.mapper.mapObject(question, questionDALtoDTO)) : null;
+    try {
+      const result = await super.find(condition);
+      const mappedResult = result.length ? result.map(question => this.mapper.mapObject(question, questionDALtoDTO)) : null;
 
-    return this.resolve(mappedResult);
+      return this.resolve(mappedResult);
+    } catch (error) {
+      return this.reject(new InternalError(error));
+    }
   }
 
   async createByUser(userId, info) {
-    const createdQuestion = await super.createByUser(userId, info);
+    try {
+      const createdQuestion = await super.createByUser(userId, info);
 
-    return this.resolve({ id: createdQuestion.id });
+      return this.resolve({ id: createdQuestion.id });
+    } catch (error) {
+      return this.reject(new InternalError(error));
+    }
   }
 
   async addTagToQuestion(questionId, tagId) {
@@ -48,16 +65,16 @@ export default class QuestionService extends BaseAuditableService {
       const question = await this.repository.findById(questionId);
 
       if (!tag) {
-        return this.reject({ errorType: ERRORS.notFound, errorMessage: 'Unknown tag id.' });
+        return this.reject(new BadRequestError('Unknown tag id.'));
       }
 
       if (!question) {
-        return this.reject({ errorType: ERRORS.notFound, errorMessage: 'Unknown question id.' });
+        return this.reject(new BadRequestError('Unknown question id.'));
       }
 
       return this.repository.addTagToQuestion(question, tag);
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 
@@ -67,16 +84,16 @@ export default class QuestionService extends BaseAuditableService {
       const question = await this.repository.findById(questionId);
 
       if (!tag) {
-        return this.reject({ errorType: ERRORS.notFound, errorMessage: 'Unknown tag id.' });
+        return this.reject(new BadRequestError('Unknown tag id.'));
       }
 
       if (!question) {
-        return this.reject({ errorType: ERRORS.notFound, errorMessage: 'Unknown question id.' });
+        return this.reject(new BadRequestError('Unknown question id.'));
       }
 
       return this.repository.removeTagFromQuestion(question, tag);
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 
@@ -86,7 +103,7 @@ export default class QuestionService extends BaseAuditableService {
 
       return this.resolve(result.map(question => this.mapper.mapObject(question, questionWithTagsDALtoDTO)));
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 
@@ -96,7 +113,7 @@ export default class QuestionService extends BaseAuditableService {
 
       return this.repository.create(model);
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 
@@ -104,7 +121,7 @@ export default class QuestionService extends BaseAuditableService {
     try {
       return this.answerService.create(userId, info);
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 
@@ -112,7 +129,7 @@ export default class QuestionService extends BaseAuditableService {
     try {
       return this.answerService.find({ questionId });
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 
@@ -120,7 +137,7 @@ export default class QuestionService extends BaseAuditableService {
     try {
       return this.answerService.delete({ questionId });
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 
@@ -130,7 +147,7 @@ export default class QuestionService extends BaseAuditableService {
 
       return this.repository.setRating(questionId, rating);
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 
@@ -143,7 +160,7 @@ export default class QuestionService extends BaseAuditableService {
         this.calculateRating(questionId)
       ]);
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 
@@ -156,7 +173,7 @@ export default class QuestionService extends BaseAuditableService {
         this.calculateRating(questionId)
       ]);
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 }

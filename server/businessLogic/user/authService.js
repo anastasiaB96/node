@@ -4,12 +4,13 @@ import jwt from 'jsonwebtoken';
 import config from 'config';
 import BaseService from '../helpers/baseService';
 import ROLES from '../../constants/roles';
-import ERRORS from '../../constants/errors';
+import InternalError from '../helpers/errors/internalError';
+import BadRequestError from '../helpers/errors/badRequestError';
 import * as userDALtoDTO from './models/userDALtoDTO.json';
 
 export default class AuthService extends BaseService {
-  constructor(errorsHelper, logger, mapper, userService, roleService) {
-    super({ errorsHelper, logger, mapper });
+  constructor(logger, mapper, userService, roleService, modelsValidator) {
+    super({ logger, mapper, modelsValidator });
     this.userService = userService;
     this.roleService = roleService;
   }
@@ -26,14 +27,14 @@ export default class AuthService extends BaseService {
       const existingUser = await this.userService.findByEmail(email);
 
       if (existingUser) {
-        return this.reject({ errorType: ERRORS.forbidden, errorMessage: 'User already exists.' });
+        return this.reject(new BadRequestError('User already exists.'));
       }
 
       const createdUser = await this.userService.create(userInfo);
 
       return this.resolve({ id: createdUser.id });
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 
@@ -43,20 +44,20 @@ export default class AuthService extends BaseService {
       const user = await this.userService.findByEmail(email);
 
       if (!user) {
-        return this.reject({ errorType: ERRORS.notFound, errorMessage: 'User doesn\'t exists.' });
+        return this.reject(new BadRequestError('User doesn\'t exists.'));
       }
 
       const isValid = await user.validPassword(password);
 
       if (!isValid) {
-        return this.reject({ errorType: ERRORS.forbidden, errorMessage: 'Invalid credentials.' });
+        return this.reject(new BadRequestError('Invalid credentials.'));
       }
 
       const token = AuthService._generateJWTToken(this.mapper.mapObject(user, userDALtoDTO));
 
       return this.resolve({ name: user.firstName, token: 'Bearer ' + token });
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 
@@ -66,18 +67,18 @@ export default class AuthService extends BaseService {
       const user = await this.userService.findByEmail(email);
 
       if (!user) {
-        return this.reject({ errorType: ERRORS.notFound, errorMessage: 'User doesn\'t exists.' });
+        return this.reject(new BadRequestError('User doesn\'t exists.'));
       }
 
       const adminRole = await this.roleService.findByName(ROLES.admin);
 
       if (!adminRole) {
-        return this.reject({ errorType: ERRORS.badRequest, userMessage: 'Role doesn\'t exists.' });
+        return this.reject(new BadRequestError('Role doesn\'t exists.'));
       }
 
       return this.userService.addRole(user, adminRole);
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 }

@@ -2,12 +2,12 @@
 
 import BaseService from '../helpers/baseService';
 import ROLES from '../../constants/roles';
-import ERRORS from '../../constants/errors';
+import InternalError from '../helpers/errors/internalError';
 import * as userDALtoDTO from './models/userDALtoDTO.json';
 
 export default class UserService extends BaseService {
-  constructor(errorsHelper, logger, mapper, userRepository, roleService) {
-    super({ errorsHelper, logger, mapper, repository: userRepository });
+  constructor(logger, mapper, userRepository, roleService) {
+    super({ logger, mapper, repository: userRepository });
     this.roleService = roleService;
   }
 
@@ -20,7 +20,7 @@ export default class UserService extends BaseService {
 
       return this.resolve(this.mapper.mapObject(createdUser, userDALtoDTO));
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 
@@ -28,7 +28,7 @@ export default class UserService extends BaseService {
     try {
       return this.repository.findByEmail(email)
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 
@@ -36,7 +36,7 @@ export default class UserService extends BaseService {
     try {
       return this.repository.addRole(user, role);
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 }

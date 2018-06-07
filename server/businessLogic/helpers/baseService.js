@@ -1,32 +1,32 @@
 'use strict';
 
-import ERRORS from '../../constants/errors';
+import InternalError from './errors/internalError';
 
 export default class BaseService {
-  constructor({ errorsHelper, logger, mapper, repository }) {
+  constructor({ logger, mapper, repository, modelsValidator }) {
     this.logger = logger;
     this.mapper = mapper;
+    this.validator = modelsValidator;
     this.repository = repository;
-    this.errorsHelper = errorsHelper;
   }
 
   resolve(operationResult) {
     return Promise.resolve(operationResult)
   }
 
-  reject({ errorType, errorMessage }, error) {
-    if (errorType === ERRORS.internalServer) {
-      this.logger.error(error);
+  reject(error) {
+    if (error instanceof InternalError) {
+      this.logger.error(error.info);
     }
 
-    return Promise.reject({ errorType, errorMessage })
+    return Promise.reject(error)
   }
 
   async findAll() {
     try {
       return this.repository.findAll();
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 
@@ -34,7 +34,7 @@ export default class BaseService {
     try {
       return this.repository.findById(id);
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 
@@ -42,7 +42,7 @@ export default class BaseService {
     try {
       return this.repository.find(condition);
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 
@@ -50,7 +50,7 @@ export default class BaseService {
     try {
       return this.repository.create(info);
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 
@@ -58,7 +58,7 @@ export default class BaseService {
     try {
       return this.repository.updateById(data, id);
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 
@@ -66,7 +66,7 @@ export default class BaseService {
     try {
       return this.repository.deleteAll();
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 
@@ -74,7 +74,7 @@ export default class BaseService {
     try {
       return this.repository.deleteById(id);
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 
@@ -82,7 +82,7 @@ export default class BaseService {
     try {
       return this.repository.delete(condition);
     } catch (error) {
-      return this.reject({ errorType: ERRORS.internalServer }, error);
+      return this.reject(new InternalError(error));
     }
   }
 }
