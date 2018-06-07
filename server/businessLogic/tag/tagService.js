@@ -31,10 +31,9 @@ export default class TagService extends BaseAuditableService {
     }
   }
 
-  async create(userId, tagInfo) {
+  async create(info) {
     try {
-      const model = { ...tagInfo, userId };
-      const createdTag = await this.repository.create(model);
+      const createdTag = await this.repository.create(info);
 
       return this.resolve({ id: createdTag.id });
     } catch (error) {

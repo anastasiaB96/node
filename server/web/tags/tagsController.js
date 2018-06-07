@@ -13,9 +13,9 @@ class TagsController extends AuditableController {
 
   async create(ctx) {
     try {
-      const info = this.getContextBody(ctx);
+      const tagInfo = this.getContextBody(ctx);
       const userId = this.getCurrentUserId(ctx);
-      const createdResult = await this.service.create(userId, info);
+      const createdResult = await this.service.create({ userId, ...tagInfo });
 
       return ctx.created(createdResult);
     } catch (error) {

@@ -37,9 +37,9 @@ class QuestionsController extends AuditableController {
 
   async create(ctx) {
     try {
-      const info = this.getContextBody(ctx);
+      const questionInfo = this.getContextBody(ctx);
       const userId = this.getCurrentUserId(ctx);
-      const createdResult = await this.service.create(userId, info);
+      const createdResult = await this.service.create({ userId, ...questionInfo });
 
       return ctx.created(createdResult);
     } catch (error) {
@@ -51,10 +51,10 @@ class QuestionsController extends AuditableController {
     try {
       const info = {
         ...this.getContextBody(ctx),
-        questionId: this.getParams(ctx).id
+        questionId: this.getParams(ctx).id,
+        userId: this.getCurrentUserId(ctx)
       };
-      const userId = this.getCurrentUserId(ctx);
-      const createdAnswer = await this.service.createAnswer(userId, info);
+      const createdAnswer = await this.service.createAnswer(info);
 
       return ctx.created(createdAnswer);
     } catch (error) {
@@ -75,7 +75,7 @@ class QuestionsController extends AuditableController {
       const userId = this.getCurrentUserId(ctx);
       const questionId = this.getParams(ctx).id;
 
-      await this.service.addVote(userId, questionId);
+      await this.service.addVote({ userId, questionId });
 
       return ctx.noContent();
     } catch (error) {
@@ -87,7 +87,7 @@ class QuestionsController extends AuditableController {
     try {
       const questionId = this.getParams(ctx).id;
       const tagId = this.getContextBody(ctx).tagId;
-      await this.service.addTagToQuestion(questionId, tagId);
+      await this.service.addTagToQuestion({ questionId, tagId });
 
       return ctx.noContent();
     } catch (error) {
@@ -120,7 +120,7 @@ class QuestionsController extends AuditableController {
       const userId = this.getCurrentUserId(ctx);
       const questionId = this.getParams(ctx).id;
 
-      await this.service.removeVote(userId, questionId);
+      await this.service.removeVote({ userId, questionId });
 
       return ctx.noContent();
     } catch (error) {
@@ -132,7 +132,7 @@ class QuestionsController extends AuditableController {
     try {
       const questionId = this.getParams(ctx).id;
       const tagId = this.getContextBody(ctx).tagId;
-      await this.service.removeTagFromQuestion(questionId, tagId);
+      await this.service.removeTagFromQuestion({ questionId, tagId });
 
       return ctx.noContent();
     } catch (error) {

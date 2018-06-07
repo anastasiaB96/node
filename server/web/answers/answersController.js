@@ -24,7 +24,7 @@ class AnswersController extends AuditableController {
       const userId = this.getCurrentUserId(ctx);
       const answerId = this.getParams(ctx).id;
 
-      await this.service.addVote(userId, answerId);
+      await this.service.addVote({ userId, answerId });
 
       return ctx.noContent();
     } catch (error) {
@@ -45,7 +45,7 @@ class AnswersController extends AuditableController {
       const userId = this.getCurrentUserId(ctx);
       const answerId = this.getParams(ctx).id;
 
-      await this.service.removeVote(userId, answerId);
+      await this.service.removeVote({ userId, answerId });
 
       return ctx.noContent();
     } catch (error) {

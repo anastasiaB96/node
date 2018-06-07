@@ -49,20 +49,10 @@ export default class QuestionService extends BaseAuditableService {
     }
   }
 
-  async createByUser(userId, info) {
+  async addTagToQuestion(info) {
     try {
-      const createdQuestion = await super.createByUser(userId, info);
-
-      return this.resolve({ id: createdQuestion.id });
-    } catch (error) {
-      return this.reject(new InternalError(error));
-    }
-  }
-
-  async addTagToQuestion(questionId, tagId) {
-    try {
-      const tag = await this.tagService.findById(tagId);
-      const question = await this.repository.findById(questionId);
+      const tag = await this.tagService.findById(info.tagId);
+      const question = await this.repository.findById(info.questionId);
 
       if (!tag) {
         return this.reject(new BadRequestError('Unknown tag id.'));
@@ -78,10 +68,10 @@ export default class QuestionService extends BaseAuditableService {
     }
   }
 
-  async removeTagFromQuestion(questionId, tagId) {
+  async removeTagFromQuestion(info) {
     try {
-      const tag = await this.tagService.findById(tagId);
-      const question = await this.repository.findById(questionId);
+      const tag = await this.tagService.findById(info.tagId);
+      const question = await this.repository.findById(info.questionId);
 
       if (!tag) {
         return this.reject(new BadRequestError('Unknown tag id.'));
@@ -107,19 +97,17 @@ export default class QuestionService extends BaseAuditableService {
     }
   }
 
-  async create(userId, questionInfo) {
+  async create(info) {
     try {
-      const model = { ...questionInfo, userId };
-
-      return this.repository.create(model);
+      return this.repository.create(info);
     } catch (error) {
       return this.reject(new InternalError(error));
     }
   }
 
-  async createAnswer(userId, info) {
+  async createAnswer(info) {
     try {
-      return this.answerService.create(userId, info);
+      return this.answerService.create(info);
     } catch (error) {
       return this.reject(new InternalError(error));
     }
@@ -151,26 +139,22 @@ export default class QuestionService extends BaseAuditableService {
     }
   }
 
-  async addVote(userId, questionId) {
+  async addVote(info) {
     try {
-      const info = { userId, questionId };
-
       return Promise.all([
         this.questionVoteService.create(info),
-        this.calculateRating(questionId)
+        this.calculateRating(info.questionId)
       ]);
     } catch (error) {
       return this.reject(new InternalError(error));
     }
   }
 
-  async removeVote(userId, questionId) {
+  async removeVote(info) {
     try {
-      const info = { userId, questionId };
-
       return Promise.all([
         this.questionVoteService.delete(info),
-        this.calculateRating(questionId)
+        this.calculateRating(info.questionId)
       ]);
     } catch (error) {
       return this.reject(new InternalError(error));

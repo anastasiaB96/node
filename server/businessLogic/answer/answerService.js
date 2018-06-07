@@ -65,21 +65,17 @@ export default class AnswerService extends BaseAuditableService {
     }
   }
 
-  async addVote(userId, answerId) {
-    const info = { userId, answerId };
-
+  async addVote(info) {
     return Promise.all([
       this.answerVoteService.create(info),
-      this.calculateRating(answerId)
+      this.calculateRating(info.answerId)
     ]);
   }
 
-  async removeVote(userId, answerId) {
-    const info = { userId, answerId };
-
+  async removeVote(info) {
     return Promise.all([
       this.answerVoteService.delete(info),
-      this.calculateRating(answerId)
+      this.calculateRating(info.answerId)
     ]);
   }
 }
