@@ -1,10 +1,10 @@
 'use strict';
 
-import Controller from './controller';
+import BaseController from './baseController';
 import ROLES from '../../constants/roles';
 import { get } from 'lodash';
 
-export default class AuditableController extends Controller {
+export default class AuditableController extends BaseController {
   isAdmin(ctx) {
     const userInfo = get(ctx.state, 'jwtData');
     const userRoles = get(userInfo, 'roles');

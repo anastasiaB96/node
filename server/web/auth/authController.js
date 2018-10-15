@@ -3,10 +3,10 @@
 import { createController } from 'awilix-koa';
 import { jwtProtection } from '../../middlewares/jwtProtection';
 import { adminProtection } from '../../middlewares/adminProtection';
-import Controller from '../helpers/controller';
+import BaseController from '../helpers/baseController';
 import { userRegisterValidator, userLoginValidator, permitAdminValidator } from './authValidator';
 
-class AuthController extends Controller {
+class AuthController extends BaseController {
   constructor(authService) {
     super(authService);
   }

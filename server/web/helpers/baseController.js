@@ -3,7 +3,7 @@
 import { get } from 'lodash';
 import HttpError from "./httpError";
 
-export default class Controller {
+export default class BaseController {
   constructor(service) {
     this.service = service;
   }
