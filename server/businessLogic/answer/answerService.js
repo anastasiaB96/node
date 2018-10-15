@@ -13,27 +13,24 @@ export default class AnswerService extends AuditableService {
   async findAll() {
     return this.wrapError(async () => {
       const result = await super.findAll();
-      const mappedResult = result.length ? result.map(answer => this.mapper.mapObject(answer, answerDALtoDTO)) : null;
 
-      return this.resolve(mappedResult);
+      return result.length ? result.map(answer => this.mapper.mapObject(answer, answerDALtoDTO)) : null;
     });
   }
 
   async findById(id) {
     return this.wrapError(async () => {
       const result = await super.findById(id);
-      const mappedResult = result ? this.mapper.mapObject(result, answerDALtoDTO) : null;
 
-      return this.resolve(mappedResult);
+      return result ? this.mapper.mapObject(result, answerDALtoDTO) : null;
     });
   }
 
   async find(condition) {
     return this.wrapError(async () => {
       const result = await super.find(condition);
-      const mappedResult = result.length ? result.map(answer => this.mapper.mapObject(answer, answerDALtoDTO)) : null;
 
-      return this.resolve(mappedResult);
+      return result.length ? result.map(answer => this.mapper.mapObject(answer, answerDALtoDTO)) : null;
     });
   }
 
@@ -42,7 +39,7 @@ export default class AnswerService extends AuditableService {
       const model = { ...answerInfo, userId };
       const createdAnswer = await this.repository.create(model);
 
-      return this.resolve({ id: createdAnswer.id });
+      return { id: createdAnswer.id };
     });
   }
 
@@ -55,16 +52,20 @@ export default class AnswerService extends AuditableService {
   }
 
   async addVote(info) {
-    return Promise.all([
-      this.answerVoteService.create(info),
-      this.calculateRating(info.answerId)
-    ]);
+    return this.wrapError(async () => {
+      return Promise.all([
+        this.answerVoteService.create(info),
+        this.calculateRating(info.answerId)
+      ]);
+    });
   }
 
   async removeVote(info) {
-    return Promise.all([
-      this.answerVoteService.delete(info),
-      this.calculateRating(info.answerId)
-    ]);
+    return this.wrapError(async () => {
+      return Promise.all([
+        this.answerVoteService.delete(info),
+        this.calculateRating(info.answerId)
+      ]);
+    });
   }
 }

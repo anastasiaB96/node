@@ -26,12 +26,12 @@ export default class AuthService extends BaseService {
       const existingUser = await this.userService.findByEmail(email);
 
       if (existingUser) {
-        return this.reject(new BadRequestError('User already exists.'));
+        return Promise.reject(new BadRequestError('User already exists.'));
       }
 
       const createdUser = await this.userService.create(userInfo);
 
-      return this.resolve({ id: createdUser.id });
+      return { id: createdUser.id };
     });
   }
 
@@ -41,18 +41,18 @@ export default class AuthService extends BaseService {
       const user = await this.userService.findByEmail(email);
 
       if (!user) {
-        return this.reject(new BadRequestError('User doesn\'t exists.'));
+        return Promise.reject(new BadRequestError('User doesn\'t exists.'));
       }
 
       const isValid = await user.validPassword(password);
 
       if (!isValid) {
-        return this.reject(new BadRequestError('Invalid credentials.'));
+        return Promise.reject(new BadRequestError('Invalid credentials.'));
       }
 
       const token = AuthService._generateJWTToken(this.mapper.mapObject(user, userDALtoDTO));
 
-      return this.resolve({ name: user.firstName, token: 'Bearer ' + token });
+      return { name: user.firstName, token: 'Bearer ' + token };
     });
   }
 
@@ -62,13 +62,13 @@ export default class AuthService extends BaseService {
       const user = await this.userService.findByEmail(email);
 
       if (!user) {
-        return this.reject(new BadRequestError('User doesn\'t exists.'));
+        return Promise.reject(new BadRequestError('User doesn\'t exists.'));
       }
 
       const adminRole = await this.roleService.findByName(ROLES.admin);
 
       if (!adminRole) {
-        return this.reject(new BadRequestError('Role doesn\'t exists.'));
+        return Promise.reject(new BadRequestError('Role doesn\'t exists.'));
       }
 
       return this.userService.addRole(user, adminRole);

@@ -6,16 +6,14 @@ import BadRequestError from './errors/badRequestError';
 
 export default class AuditableService extends BaseService {
   async isOwner({ id, userId }) {
-    try {
+    return this.wrapError(async () => {
       const info = await this.findById(id);
 
       if (!info) {
-        return this.reject(new BadRequestError('User wasn\'t found'));
+        return Promise.reject(new BadRequestError('User wasn\'t found'));
       }
 
       return info.userId === userId;
-    } catch (error) {
-      return this.reject(new InternalError(error));
-    }
+    });
   }
 }

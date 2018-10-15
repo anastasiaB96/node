@@ -28,20 +28,12 @@ export default class BaseController {
     try {
       const result = await operation();
 
-      return this.resolve(result);
+      return Promise.resolve(result);
     } catch (error) {
-      return this.throwError(ctx, error);
+      const httpError = new HttpError(error);
+
+      return ctx.send(httpError.code, httpError.userMessage);
     }
-  }
-
-  resolve(operationResult) {
-    return Promise.resolve(operationResult);
-  }
-
-  throwError(ctx, error) {
-    const httpError = new HttpError(error);
-
-    return ctx.send(httpError.code, httpError.userMessage);
   }
 
   async getAll(ctx) {
@@ -61,7 +53,7 @@ export default class BaseController {
       const id = this.getParams(ctx).id;
       const result = await this.service.findById(id);
 
-      if (!result.length) {
+      if (!result) {
         return ctx.notFound();
       }
 

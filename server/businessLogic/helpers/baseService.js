@@ -15,97 +15,71 @@ export default class BaseService {
     try {
       const result = await operation();
 
-      return this.resolve(result);
+      return Promise.resolve(result);
     } catch (error) {
-      return this.reject(error);
+      this.logger.error(error);
+
+      return Promise.reject(new InternalError(error));
     }
-  }
-
-  resolve(operationResult) {
-    return Promise.resolve(operationResult);
-  }
-
-  reject(error) {
-    if (error instanceof InternalError) {
-      this.logger.error(error.info);
-    }
-
-    return Promise.reject(error);
   }
 
   async findAll() {
     return this.wrapError(async () => {
-      const result = await this.repository.findAll();
-
-      return this.resolve(result);
+      return await this.repository.findAll();
     });
   }
 
   async findById(id) {
     if (!id) {
-      return this.reject(new BadRequestError('Id is required'));
+      return Promise.reject(new BadRequestError('Id is required'));
     }
 
     return this.wrapError(async () => {
-      const result = await this.repository.findById(id);
-
-      return this.resolve(result);
+      return await this.repository.findById(id);
     });
   }
 
   async find(condition) {
     return this.wrapError(async () => {
-      const result = await this.repository.find(condition);
-
-      return this.resolve(result);
+      return await this.repository.find(condition);
     });
   }
 
   async create(info) {
     return this.wrapError(async () => {
-      const result = await this.repository.create(info);
-
-      return this.resolve(result);
+      return await this.repository.create(info);
     });
   }
 
   async updateById(id, data) {
     if (!id) {
-      return this.reject(new BadRequestError('Id is required'));
+      return Promise.reject(new BadRequestError('Id is required'));
     }
 
     return this.wrapError(async () => {
-      const result = await this.repository.updateById(id, data);
-
-      return this.resolve(result);
+      return await this.repository.updateById(id, data);
     });
   }
 
   async deleteAll() {
     return this.wrapError(async () => {
-      const result = await this.repository.deleteAll();
-
-      return this.resolve(result);
+      return await this.repository.deleteAll();
     });
   }
 
   async deleteById(id) {
     if (!id) {
-      return this.reject(new BadRequestError('Id is required'));
+      return Promise.reject(new BadRequestError('Id is required'));
     }
 
     return this.wrapError(async () => {
-      const result = await this.repository.deleteById(id);
-
-      return this.resolve(result);
+      return await this.repository.deleteById(id);
     });
   }
 
   async delete(condition) {
     return this.wrapError(async () => {
-      const result = await this.repository.delete(condition);
-
-      return this.resolve(result);
+      return await this.repository.delete(condition);
     });
   }
 }

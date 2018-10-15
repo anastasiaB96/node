@@ -17,27 +17,24 @@ export default class QuestionService extends AuditableService {
   async findAll() {
     return this.wrapError(async () => {
       const result = await super.findAll();
-      const mappedResult = result.length ? result.map(question => this.mapper.mapObject(question, questionDALtoDTO)) : null;
 
-      return this.resolve(mappedResult);
+      return result.length ? result.map(question => this.mapper.mapObject(question, questionDALtoDTO)) : null;
     });
   }
 
   async findById(id) {
     return this.wrapError(async () => {
       const result = await super.findById(id);
-      const mappedResult = result ? this.mapper.mapObject(result, questionDALtoDTO) : null;
 
-      return this.resolve(mappedResult);
+      return result ? this.mapper.mapObject(result, questionDALtoDTO) : null;
     });
   }
 
   async find(condition) {
     return this.wrapError(async () => {
       const result = await super.find(condition);
-      const mappedResult = result.length ? result.map(question => this.mapper.mapObject(question, questionDALtoDTO)) : null;
 
-      return this.resolve(mappedResult);
+      return result.length ? result.map(question => this.mapper.mapObject(question, questionDALtoDTO)) : null;
     });
   }
 
@@ -47,11 +44,11 @@ export default class QuestionService extends AuditableService {
       const question = await this.repository.findById(info.questionId);
 
       if (!tag) {
-        return this.reject(new BadRequestError('Unknown tag id.'));
+        return Promise.reject(new BadRequestError('Unknown tag id.'));
       }
 
       if (!question) {
-        return this.reject(new BadRequestError('Unknown question id.'));
+        return Promise.reject(new BadRequestError('Unknown question id.'));
       }
 
       return this.repository.addTagToQuestion(question, tag);
@@ -64,11 +61,11 @@ export default class QuestionService extends AuditableService {
       const question = await this.repository.findById(info.questionId);
 
       if (!tag) {
-        return this.reject(new BadRequestError('Unknown tag id.'));
+        return Promise.reject(new BadRequestError('Unknown tag id.'));
       }
 
       if (!question) {
-        return this.reject(new BadRequestError('Unknown question id.'));
+        return Promise.reject(new BadRequestError('Unknown question id.'));
       }
 
       return this.repository.removeTagFromQuestion(question, tag);
@@ -79,7 +76,7 @@ export default class QuestionService extends AuditableService {
     return this.wrapError(async () => {
       const result = await this.repository.filterByTags(searchInfo);
 
-      return this.resolve(result.map(question => this.mapper.mapObject(question, questionWithTagsDALtoDTO)));
+      return result.map(question => this.mapper.mapObject(question, questionWithTagsDALtoDTO));
     });
   }
 

@@ -11,7 +11,7 @@ export default class AnswerVoteService extends BaseService {
     return this.wrapError(async () => {
       const result = await this.find({ answerId });
 
-      return this.resolve(result ? result.length : 0);
+      return result ? result.length : 0;
     });
   }
 }

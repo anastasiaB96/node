@@ -11,18 +11,16 @@ export default class TagService extends AuditableService {
   async findAll() {
     return this.wrapError(async () => {
       const result = await super.findAll();
-      const mappedResult = result.length ? result.map(question => this.mapper.mapObject(question, tagDALtoDTO)) : null;
 
-      return this.resolve(mappedResult);
+      return result.length ? result.map(question => this.mapper.mapObject(question, tagDALtoDTO)) : null;
     });
   }
 
   async findById(id) {
     return this.wrapError(async () => {
       const result = await super.findById(id);
-      const mappedResult = result ? this.mapper.mapObject(result, tagDALtoDTO) : null;
 
-      return this.resolve(mappedResult);
+      return result ? this.mapper.mapObject(result, tagDALtoDTO) : null;
     });
   }
 
@@ -30,7 +28,7 @@ export default class TagService extends AuditableService {
     return this.wrapError(async () => {
       const createdTag = await this.repository.create(info);
 
-      return this.resolve({ id: createdTag.id });
+      return { id: createdTag.id };
     });
   }
 }

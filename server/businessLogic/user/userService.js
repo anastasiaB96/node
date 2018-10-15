@@ -17,7 +17,7 @@ export default class UserService extends BaseService {
 
       await this.addRole(createdUser, defaultRole);
 
-      return this.resolve(this.mapper.mapObject(createdUser, userDALtoDTO));
+      return this.mapper.mapObject(createdUser, userDALtoDTO);
     });
   }
 
