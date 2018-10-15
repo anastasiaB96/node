@@ -1,7 +1,6 @@
 'use strict';
 
 import BaseService from '../helpers/baseService';
-import InternalError from '../helpers/errors/internalError';
 
 export default class QuestionVoteService extends BaseService {
   constructor(logger, mapper, questionVoteRepository) {
@@ -9,12 +8,10 @@ export default class QuestionVoteService extends BaseService {
   }
 
   async getRating(questionId) {
-    try {
+    return this.wrapError(async () => {
       const result = await this.find({ questionId });
 
       return this.resolve(result ? result.length : 0);
-    } catch (error) {
-      return this.reject(new InternalError(error));
-    }
+    });
   }
 }

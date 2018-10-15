@@ -11,6 +11,16 @@ export default class BaseService {
     this.repository = repository;
   }
 
+  async wrapError(operation) {
+    try {
+      const result = await operation();
+
+      return this.resolve(result);
+    } catch (error) {
+      return this.reject(error);
+    }
+  }
+
   resolve(operationResult) {
     return Promise.resolve(operationResult);
   }
@@ -24,13 +34,11 @@ export default class BaseService {
   }
 
   async findAll() {
-    try {
+    return this.wrapError(async () => {
       const result = await this.repository.findAll();
 
       return this.resolve(result);
-    } catch (error) {
-      return this.reject(new InternalError(error));
-    }
+    });
   }
 
   async findById(id) {
@@ -38,33 +46,27 @@ export default class BaseService {
       return this.reject(new BadRequestError('Id is required'));
     }
 
-    try {
+    return this.wrapError(async () => {
       const result = await this.repository.findById(id);
 
       return this.resolve(result);
-    } catch (error) {
-      return this.reject(new InternalError(error));
-    }
+    });
   }
 
   async find(condition) {
-    try {
+    return this.wrapError(async () => {
       const result = await this.repository.find(condition);
 
       return this.resolve(result);
-    } catch (error) {
-      return this.reject(new InternalError(error));
-    }
+    });
   }
 
   async create(info) {
-    try {
+    return this.wrapError(async () => {
       const result = await this.repository.create(info);
 
       return this.resolve(result);
-    } catch (error) {
-      return this.reject(new InternalError(error));
-    }
+    });
   }
 
   async updateById(id, data) {
@@ -72,23 +74,19 @@ export default class BaseService {
       return this.reject(new BadRequestError('Id is required'));
     }
 
-    try {
+    return this.wrapError(async () => {
       const result = await this.repository.updateById(id, data);
 
       return this.resolve(result);
-    } catch (error) {
-      return this.reject(new InternalError(error));
-    }
+    });
   }
 
   async deleteAll() {
-    try {
+    return this.wrapError(async () => {
       const result = await this.repository.deleteAll();
 
       return this.resolve(result);
-    } catch (error) {
-      return this.reject(new InternalError(error));
-    }
+    });
   }
 
   async deleteById(id) {
@@ -96,22 +94,18 @@ export default class BaseService {
       return this.reject(new BadRequestError('Id is required'));
     }
 
-    try {
+    return this.wrapError(async () => {
       const result = await this.repository.deleteById(id);
 
       return this.resolve(result);
-    } catch (error) {
-      return this.reject(new InternalError(error));
-    }
+    });
   }
 
   async delete(condition) {
-    try {
+    return this.wrapError(async () => {
       const result = await this.repository.delete(condition);
 
       return this.resolve(result);
-    } catch (error) {
-      return this.reject(new InternalError(error));
-    }
+    });
   }
 }

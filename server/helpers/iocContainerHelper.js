@@ -1,8 +1,7 @@
 'use strict';
 
-import { createContainer, Lifetime, InjectionMode, asValue, asClass } from 'awilix';
+import { createContainer, Lifetime, InjectionMode, asValue } from 'awilix';
 import logger from './logger';
-import PromiseService from './promiseService'
 import { IocContainerHelper as IocContainerBusinessLayerHelper } from '../businessLogic/helpers/iocContainerHelper';
 
 class IocContainerHelper {
@@ -14,8 +13,7 @@ class IocContainerHelper {
 
   _registerHelpers(container) {
     container.register({
-      logger: asValue(logger),
-      promiseService: asClass(PromiseService)
+      logger: asValue(logger)
     }, {
       lifetime: Lifetime.SINGLETON
     });

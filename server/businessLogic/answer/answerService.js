@@ -1,7 +1,6 @@
 'use strict';
 
 import BaseAuditableService from '../helpers/baseAuditableService';
-import InternalError from '../helpers/errors/internalError';
 import * as answerDALtoDTO from './models/answerDALtoDTO.json';
 
 export default class AnswerService extends BaseAuditableService {
@@ -12,57 +11,47 @@ export default class AnswerService extends BaseAuditableService {
   }
 
   async findAll() {
-    try {
+    return this.wrapError(async () => {
       const result = await super.findAll();
       const mappedResult = result.length ? result.map(answer => this.mapper.mapObject(answer, answerDALtoDTO)) : null;
 
       return this.resolve(mappedResult);
-    } catch (error) {
-      return this.reject(new InternalError(error));
-    }
+    });
   }
 
   async findById(id) {
-    try {
+    return this.wrapError(async () => {
       const result = await super.findById(id);
       const mappedResult = result ? this.mapper.mapObject(result, answerDALtoDTO) : null;
 
       return this.resolve(mappedResult);
-    } catch (error) {
-      return this.reject(new InternalError(error));
-    }
+    });
   }
 
   async find(condition) {
-    try {
+    return this.wrapError(async () => {
       const result = await super.find(condition);
       const mappedResult = result.length ? result.map(answer => this.mapper.mapObject(answer, answerDALtoDTO)) : null;
 
       return this.resolve(mappedResult);
-    } catch (error) {
-      return this.reject(new InternalError(error));
-    }
+    });
   }
 
   async create(userId, answerInfo) {
-    try {
+    return this.wrapError(async () => {
       const model = { ...answerInfo, userId };
       const createdAnswer = await this.repository.create(model);
 
       return this.resolve({ id: createdAnswer.id });
-    } catch (error) {
-      return this.reject(new InternalError(error));
-    }
+    });
   }
 
   async calculateRating(answerId) {
-    try {
+    return this.wrapError(async () => {
       const rating = await this.answerVoteService.getRating(answerId);
 
       return this.repository.setRating(answerId, rating);
-    } catch (error) {
-      return this.reject(new InternalError(error));
-    }
+    });
   }
 
   async addVote(info) {

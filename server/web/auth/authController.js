@@ -7,12 +7,12 @@ import Controller from '../helpers/controller';
 import { userRegisterValidator, userLoginValidator, permitAdminValidator } from './authValidator';
 
 class AuthController extends Controller {
-  constructor(authService, promiseService) {
-    super(authService, promiseService);
+  constructor(authService) {
+    super(authService);
   }
 
   async register(ctx) {
-    return this.promiseService.wrapError(async () => {
+    return this.wrapError(async () => {
       const userInfo = this.getContextBody(ctx);
       const registeredUser = await this.service.register(userInfo);
 
@@ -21,7 +21,7 @@ class AuthController extends Controller {
   }
 
   async login(ctx) {
-    return this.promiseService.wrapError(async () => {
+    return this.wrapError(async () => {
       const userData = this.getContextBody(ctx);
       const loggedUser = await this.service.login(userData);
 
@@ -30,7 +30,7 @@ class AuthController extends Controller {
   }
 
   async permitAdmin(ctx) {
-    return this.promiseService.wrapError(async () => {
+    return this.wrapError(async () => {
       const userInfo = this.getContextBody(ctx);
       await this.service.permitAdmin(userInfo);
 

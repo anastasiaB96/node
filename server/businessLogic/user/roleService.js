@@ -1,7 +1,6 @@
 'use strict';
 
 import BaseService from '../helpers/baseService';
-import InternalError from '../helpers/errors/internalError';
 
 export default class RoleService extends BaseService {
   constructor(logger, mapper, roleRepository) {
@@ -9,10 +8,8 @@ export default class RoleService extends BaseService {
   }
 
   async findByName(name) {
-    try {
+    return this.wrapError(async () => {
       return this.repository.find({ name });
-    } catch (error) {
-      return this.reject(new InternalError(error));
-    }
+    });
   }
 }

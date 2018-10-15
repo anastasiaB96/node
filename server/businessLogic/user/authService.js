@@ -4,7 +4,6 @@ import jwt from 'jsonwebtoken';
 import config from 'config';
 import BaseService from '../helpers/baseService';
 import ROLES from '../../constants/roles';
-import InternalError from '../helpers/errors/internalError';
 import BadRequestError from '../helpers/errors/badRequestError';
 import * as userDALtoDTO from './models/userDALtoDTO.json';
 
@@ -22,7 +21,7 @@ export default class AuthService extends BaseService {
   }
 
   async register(userInfo) {
-    try {
+    return this.wrapError(async () => {
       const { email } = userInfo;
       const existingUser = await this.userService.findByEmail(email);
 
@@ -33,13 +32,11 @@ export default class AuthService extends BaseService {
       const createdUser = await this.userService.create(userInfo);
 
       return this.resolve({ id: createdUser.id });
-    } catch (error) {
-      return this.reject(new InternalError(error));
-    }
+    });
   }
 
   async login(userInfo) {
-    try {
+    return this.wrapError(async () => {
       const { email, password } = userInfo;
       const user = await this.userService.findByEmail(email);
 
@@ -56,13 +53,11 @@ export default class AuthService extends BaseService {
       const token = AuthService._generateJWTToken(this.mapper.mapObject(user, userDALtoDTO));
 
       return this.resolve({ name: user.firstName, token: 'Bearer ' + token });
-    } catch (error) {
-      return this.reject(new InternalError(error));
-    }
+    });
   }
 
   async permitAdmin(userInfo) {
-    try {
+    return this.wrapError(async () => {
       const { email } = userInfo;
       const user = await this.userService.findByEmail(email);
 
@@ -77,8 +72,6 @@ export default class AuthService extends BaseService {
       }
 
       return this.userService.addRole(user, adminRole);
-    } catch (error) {
-      return this.reject(new InternalError(error));
-    }
+    });
   }
 }

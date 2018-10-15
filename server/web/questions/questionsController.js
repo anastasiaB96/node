@@ -9,12 +9,12 @@ import {
 } from './questionsValidator';
 
 class QuestionsController extends AuditableController {
-  constructor(questionService, promiseService) {
-    super(questionService, promiseService);
+  constructor(questionService) {
+    super(questionService);
   }
 
   async filterByTagIds(ctx) {
-    return this.promiseService.wrapError(async () => {
+    return this.wrapError(async () => {
       const searchInfo = this.getQueryParams(ctx).id;
       const filteredResult = await this.service.filterByTags(searchInfo);
 
@@ -23,7 +23,7 @@ class QuestionsController extends AuditableController {
   }
 
   async getAnswers(ctx) {
-    return this.promiseService.wrapError(async () => {
+    return this.wrapError(async () => {
       const questionId = this.getParams(ctx).id;
       const answers = await this.service.getAnswers(questionId);
 
@@ -32,7 +32,7 @@ class QuestionsController extends AuditableController {
   }
 
   async create(ctx) {
-    return this.promiseService.wrapError(async () => {
+    return this.wrapError(async () => {
       const questionInfo = this.getContextBody(ctx);
       const userId = this.getCurrentUserId(ctx);
       const createdResult = await this.service.create({ userId, ...questionInfo });
@@ -42,7 +42,7 @@ class QuestionsController extends AuditableController {
   }
 
   async createAnswer(ctx) {
-    return this.promiseService.wrapError(async () => {
+    return this.wrapError(async () => {
       const info = {
         ...this.getContextBody(ctx),
         questionId: this.getParams(ctx).id,
@@ -63,7 +63,7 @@ class QuestionsController extends AuditableController {
   }
 
   async addVote(ctx) {
-    return this.promiseService.wrapError(async () => {
+    return this.wrapError(async () => {
       const userId = this.getCurrentUserId(ctx);
       const questionId = this.getParams(ctx).id;
 
@@ -74,7 +74,7 @@ class QuestionsController extends AuditableController {
   }
 
   async addTag(ctx) {
-    return this.promiseService.wrapError(async () => {
+    return this.wrapError(async () => {
       const questionId = this.getParams(ctx).id;
       const tagId = this.getContextBody(ctx).tagId;
       await this.service.addTagToQuestion({ questionId, tagId });
@@ -92,7 +92,7 @@ class QuestionsController extends AuditableController {
   }
 
   async deleteAllAnswers(ctx) {
-    return this.promiseService.wrapError(async () => {
+    return this.wrapError(async () => {
       const questionId = this.getParams(ctx).id;
 
       await this.service.deleteAllAnswers(questionId);
@@ -102,7 +102,7 @@ class QuestionsController extends AuditableController {
   }
 
   async removeVote(ctx) {
-    return this.promiseService.wrapError(async () => {
+    return this.wrapError(async () => {
       const userId = this.getCurrentUserId(ctx);
       const questionId = this.getParams(ctx).id;
 
@@ -113,7 +113,7 @@ class QuestionsController extends AuditableController {
   }
 
   async removeTag(ctx) {
-    return this.promiseService.wrapError(async () => {
+    return this.wrapError(async () => {
       const questionId = this.getParams(ctx).id;
       const tagId = this.getContextBody(ctx).tagId;
       await this.service.removeTagFromQuestion({ questionId, tagId });

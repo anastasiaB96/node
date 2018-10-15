@@ -1,11 +1,11 @@
 'use strict';
 
 import { get } from 'lodash';
+import HttpError from "./httpError";
 
 export default class Controller {
-  constructor(service, promiseService) {
+  constructor(service) {
     this.service = service;
-    this.promiseService = promiseService;
   }
 
   getContextBody(ctx) {
@@ -24,8 +24,28 @@ export default class Controller {
     return ctx.query;
   }
 
+  async wrapError(operation, ctx) {
+    try {
+      const result = await operation();
+
+      return this.resolve(result);
+    } catch (error) {
+      return this.throwError(ctx, error);
+    }
+  }
+
+  resolve(operationResult) {
+    return Promise.resolve(operationResult);
+  }
+
+  throwError(ctx, error) {
+    const httpError = new HttpError(error);
+
+    return ctx.send(httpError.code, httpError.userMessage);
+  }
+
   async getAll(ctx) {
-    return this.promiseService.wrapError(async () => {
+    return this.wrapError(async () => {
       const result = await this.service.findAll();
 
       if (!result.length) {
@@ -37,7 +57,7 @@ export default class Controller {
   }
 
   async getById(ctx) {
-    return this.promiseService.wrapError(async () => {
+    return this.wrapError(async () => {
       const id = this.getParams(ctx).id;
       const result = await this.service.findById(id);
 
@@ -50,7 +70,7 @@ export default class Controller {
   }
 
   async create(ctx) {
-    return this.promiseService.wrapError(async () => {
+    return this.wrapError(async () => {
       const contextBody = this.getContextBody(ctx);
       const createdResult = await this.service.create(contextBody);
 
@@ -59,7 +79,7 @@ export default class Controller {
   }
 
   async updateById(ctx) {
-    return this.promiseService.wrapError(async () => {
+    return this.wrapError(async () => {
       const id = this.getParams(ctx).id;
       const contextBody = this.getContextBody(ctx);
 
@@ -70,7 +90,7 @@ export default class Controller {
   }
 
   async deleteAll(ctx) {
-    return this.promiseService.wrapError(async () => {
+    return this.wrapError(async () => {
       const deletedItems = await this.service.deleteAll();
 
       return ctx.ok(deletedItems);
@@ -78,7 +98,7 @@ export default class Controller {
   }
 
   async deleteById(ctx) {
-    return this.promiseService.wrapError(async () => {
+    return this.wrapError(async () => {
       const id = this.getParams(ctx).id;
       const deletedItem = await this.service.deleteById(id);
 
