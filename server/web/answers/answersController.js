@@ -7,8 +7,8 @@ import AuditableController from '../helpers/auditableController';
 import { updateAnswerValidator } from './answersValidator';
 
 class AnswersController extends AuditableController {
-  constructor(answerService) {
-    super(answerService);
+  constructor(answerService, promiseService) {
+    super(answerService, promiseService);
   }
 
   async updateById(ctx) {
@@ -20,16 +20,14 @@ class AnswersController extends AuditableController {
   }
 
   async addVote(ctx) {
-    try {
+    return this.promiseService.wrapError(async () => {
       const userId = this.getCurrentUserId(ctx);
       const answerId = this.getParams(ctx).id;
 
       await this.service.addVote({ userId, answerId });
 
       return ctx.noContent();
-    } catch (error) {
-      return this.throwError(ctx, error);
-    }
+    }, ctx);
   }
 
   async deleteById(ctx) {
@@ -41,16 +39,14 @@ class AnswersController extends AuditableController {
   }
 
   async removeVote(ctx) {
-    try {
+    return this.promiseService.wrapError(async () => {
       const userId = this.getCurrentUserId(ctx);
       const answerId = this.getParams(ctx).id;
 
       await this.service.removeVote({ userId, answerId });
 
       return ctx.noContent();
-    } catch (error) {
-      return this.throwError(ctx, error);
-    }
+    }, ctx);
   }
 }
 

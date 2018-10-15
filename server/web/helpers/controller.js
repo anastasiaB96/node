@@ -1,11 +1,11 @@
 'use strict';
 
 import { get } from 'lodash';
-import HttpError from './httpError';
 
 export default class Controller {
-  constructor(service) {
+  constructor(service, promiseService) {
     this.service = service;
+    this.promiseService = promiseService;
   }
 
   getContextBody(ctx) {
@@ -24,75 +24,65 @@ export default class Controller {
     return ctx.query;
   }
 
-  throwError(ctx, error) {
-    const httpError = new HttpError(error);
-
-    return ctx.send(httpError.code, httpError.userMessage);
-  }
-
   async getAll(ctx) {
-    try {
+    return this.promiseService.wrapError(async () => {
       const result = await this.service.findAll();
 
+      if (!result.length) {
+        return ctx.notFound();
+      }
+
       return ctx.ok(result);
-    } catch (error) {
-      return this.throwError(ctx, error);
-    }
+    }, ctx);
   }
 
   async getById(ctx) {
-    try {
+    return this.promiseService.wrapError(async () => {
       const id = this.getParams(ctx).id;
       const result = await this.service.findById(id);
 
+      if (!result.length) {
+        return ctx.notFound();
+      }
+
       return ctx.ok(result);
-    } catch (error) {
-      this.throwError(ctx, error);
-    }
+    }, ctx);
   }
 
   async create(ctx) {
-    try {
+    return this.promiseService.wrapError(async () => {
       const contextBody = this.getContextBody(ctx);
       const createdResult = await this.service.create(contextBody);
 
       return ctx.created(createdResult);
-    } catch (error) {
-      return this.throwError(ctx, error);
-    }
+    }, ctx);
   }
 
   async updateById(ctx) {
-    try {
+    return this.promiseService.wrapError(async () => {
       const id = this.getParams(ctx).id;
       const contextBody = this.getContextBody(ctx);
 
       await this.service.updateById(id, contextBody);
 
       return ctx.noContent();
-    } catch (error) {
-      return this.throwError(ctx, error);
-    }
+    }, ctx);
   }
 
   async deleteAll(ctx) {
-    try {
-      const result = await this.service.deleteAll();
+    return this.promiseService.wrapError(async () => {
+      const deletedItems = await this.service.deleteAll();
 
-      return ctx.ok(result);
-    } catch (error) {
-      return this.throwError(ctx, error);
-    }
+      return ctx.ok(deletedItems);
+    }, ctx);
   }
 
   async deleteById(ctx) {
-    try {
+    return this.promiseService.wrapError(async () => {
       const id = this.getParams(ctx).id;
-      const result = await this.service.deleteById(id);
+      const deletedItem = await this.service.deleteById(id);
 
-      return ctx.ok(result);
-    } catch (error) {
-      return this.throwError(ctx, error);
-    }
+      return ctx.ok(deletedItem);
+    }, ctx);
   }
 }

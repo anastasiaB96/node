@@ -5,8 +5,8 @@
     "start": "node dist/bin/www.js",
     "build": "rimraf dist && cross-env NODE_ENV=production babel server -d dist -s",
     "dev": "nodemon server/bin/www.js",
-    "test": "cross-env NODE_ENV=test",
-    "lint": "eslint --fix server && prettier --write \"server/**/*.js\""
+    "lint": "eslint --fix server && prettier --write \"server/**/*.js\"",
+    "migrates": "NODE_ENV=development NODE_CONFIG_DIR=server/config sequelize db:migrate"
   },
   "dependencies": {
     "awilix": "^3.0.3",

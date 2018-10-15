@@ -7,20 +7,18 @@ import AuditableController from '../helpers/auditableController';
 import { createTagValidator, updateTagValidator } from './tagsValidator';
 
 class TagsController extends AuditableController {
-  constructor(tagService) {
-    super(tagService);
+  constructor(tagService, promiseService) {
+    super(tagService, promiseService);
   }
 
   async create(ctx) {
-    try {
+    return this.promiseService.wrapError(async () => {
       const tagInfo = this.getContextBody(ctx);
       const userId = this.getCurrentUserId(ctx);
       const createdResult = await this.service.create({ userId, ...tagInfo });
 
       return ctx.created(createdResult);
-    } catch (error) {
-      return this.throwError(ctx, error);
-    }
+    }, ctx);
   }
 
   async updateById(ctx) {

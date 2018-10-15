@@ -7,7 +7,7 @@ class ModelsValidator {
     this._validator = validator;
   }
 
-  validationErrors(model, constraints) {
+  getConstraintErrors(model, constraints) {
     return this._validator(model, constraints, { format: 'flat' });
   }
 }

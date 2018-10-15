@@ -9,46 +9,40 @@ import {
 } from './questionsValidator';
 
 class QuestionsController extends AuditableController {
-  constructor(questionService) {
-    super(questionService);
+  constructor(questionService, promiseService) {
+    super(questionService, promiseService);
   }
 
   async filterByTagIds(ctx) {
-    try {
+    return this.promiseService.wrapError(async () => {
       const searchInfo = this.getQueryParams(ctx).id;
       const filteredResult = await this.service.filterByTags(searchInfo);
 
       return ctx.ok(filteredResult);
-    } catch (error) {
-      return this.throwError(ctx, error);
-    }
+    }, ctx);
   }
 
   async getAnswers(ctx) {
-    try {
+    return this.promiseService.wrapError(async () => {
       const questionId = this.getParams(ctx).id;
       const answers = await this.service.getAnswers(questionId);
 
       return ctx.ok(answers);
-    } catch (error) {
-      return this.throwError(ctx, error);
-    }
+    }, ctx);
   }
 
   async create(ctx) {
-    try {
+    return this.promiseService.wrapError(async () => {
       const questionInfo = this.getContextBody(ctx);
       const userId = this.getCurrentUserId(ctx);
       const createdResult = await this.service.create({ userId, ...questionInfo });
 
       return ctx.created(createdResult);
-    } catch (error) {
-      return this.throwError(ctx, error);
-    }
+    }, ctx);
   }
 
   async createAnswer(ctx) {
-    try {
+    return this.promiseService.wrapError(async () => {
       const info = {
         ...this.getContextBody(ctx),
         questionId: this.getParams(ctx).id,
@@ -57,9 +51,7 @@ class QuestionsController extends AuditableController {
       const createdAnswer = await this.service.createAnswer(info);
 
       return ctx.created(createdAnswer);
-    } catch (error) {
-      return this.throwError(ctx, error);
-    }
+    }, ctx);
   }
 
   async updateById(ctx) {
@@ -71,28 +63,24 @@ class QuestionsController extends AuditableController {
   }
 
   async addVote(ctx) {
-    try {
+    return this.promiseService.wrapError(async () => {
       const userId = this.getCurrentUserId(ctx);
       const questionId = this.getParams(ctx).id;
 
       await this.service.addVote({ userId, questionId });
 
       return ctx.noContent();
-    } catch (error) {
-      return this.throwError(ctx, error);
-    }
+    }, ctx);
   }
 
   async addTag(ctx) {
-    try {
+    return this.promiseService.wrapError(async () => {
       const questionId = this.getParams(ctx).id;
       const tagId = this.getContextBody(ctx).tagId;
       await this.service.addTagToQuestion({ questionId, tagId });
 
       return ctx.noContent();
-    } catch (error) {
-      return this.throwError(ctx, error);
-    }
+    }, ctx);
   }
 
   async deleteById(ctx) {
@@ -104,40 +92,34 @@ class QuestionsController extends AuditableController {
   }
 
   async deleteAllAnswers(ctx) {
-    try {
+    return this.promiseService.wrapError(async () => {
       const questionId = this.getParams(ctx).id;
 
       await this.service.deleteAllAnswers(questionId);
 
       return ctx.noContent();
-    } catch (error) {
-      return this.throwError(ctx, error);
-    }
+    }, ctx);
   }
 
   async removeVote(ctx) {
-    try {
+    return this.promiseService.wrapError(async () => {
       const userId = this.getCurrentUserId(ctx);
       const questionId = this.getParams(ctx).id;
 
       await this.service.removeVote({ userId, questionId });
 
       return ctx.noContent();
-    } catch (error) {
-      return this.throwError(ctx, error);
-    }
+    }, ctx);
   }
 
   async removeTag(ctx) {
-    try {
+    return this.promiseService.wrapError(async () => {
       const questionId = this.getParams(ctx).id;
       const tagId = this.getContextBody(ctx).tagId;
       await this.service.removeTagFromQuestion({ questionId, tagId });
 
       return ctx.noContent();
-    } catch (error) {
-      return this.throwError(ctx, error);
-    }
+    }, ctx);
   }
 }
 
