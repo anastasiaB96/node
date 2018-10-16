@@ -6,8 +6,8 @@ import * as questionWithTagsDALtoDTO from './models/questionWithTagsDALtoDTO.jso
 import * as questionDALtoDTO from './models/questionDALtoDTO.json';
 
 export default class QuestionService extends AuditableService {
-  constructor(logger, mapper, questionRepository, answerService, questionVoteService, tagService) {
-    super({ logger, mapper, repository: questionRepository });
+  constructor(mapper, questionRepository, answerService, questionVoteService, tagService) {
+    super({ mapper, repository: questionRepository });
 
     this.answerService = answerService;
     this.questionVoteService = questionVoteService;

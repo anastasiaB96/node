@@ -8,8 +8,8 @@ import ValidationError from '../helpers/errors/validationError';
 import * as userDALtoDTO from './models/userDALtoDTO.json';
 
 export default class AuthService extends BaseService {
-  constructor(logger, mapper, userService, roleService, modelsValidator) {
-    super({ logger, mapper, modelsValidator });
+  constructor(mapper, userService, roleService, modelsValidator) {
+    super({ mapper, modelsValidator });
     this.userService = userService;
     this.roleService = roleService;
   }

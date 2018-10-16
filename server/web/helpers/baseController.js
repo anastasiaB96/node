@@ -26,9 +26,7 @@ export default class BaseController {
 
   async wrapError(operation, ctx) {
     try {
-      const result = await operation();
-
-      return Promise.resolve(result);
+      return await operation();
     } catch (error) {
       const httpError = new HttpError(error);
 

@@ -5,8 +5,8 @@ import ROLES from '../../constants/roles';
 import * as userDALtoDTO from './models/userDALtoDTO.json';
 
 export default class UserService extends BaseService {
-  constructor(logger, mapper, userRepository, roleService) {
-    super({ logger, mapper, repository: userRepository });
+  constructor(mapper, userRepository, roleService) {
+    super({ mapper, repository: userRepository });
     this.roleService = roleService;
   }
 

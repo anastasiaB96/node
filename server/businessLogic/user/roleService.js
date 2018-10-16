@@ -3,8 +3,8 @@
 import BaseService from '../helpers/baseService';
 
 export default class RoleService extends BaseService {
-  constructor(logger, mapper, roleRepository) {
-    super({ logger, mapper, repository: roleRepository });
+  constructor(mapper, roleRepository) {
+    super({ mapper, repository: roleRepository });
   }
 
   async findByName(name) {

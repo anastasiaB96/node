@@ -3,8 +3,8 @@
 import BaseService from '../helpers/baseService';
 
 export default class QuestionVoteService extends BaseService {
-  constructor(logger, mapper, questionVoteRepository) {
-    super({ logger, mapper, repository: questionVoteRepository });
+  constructor(mapper, questionVoteRepository) {
+    super({ mapper, repository: questionVoteRepository });
   }
 
   async getRating(questionId) {

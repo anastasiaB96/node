@@ -3,8 +3,7 @@
 import ValidationError from './errors/validationError';
 
 export default class BaseService {
-  constructor({ logger, mapper, repository, modelsValidator }) {
-    this.logger = logger;
+  constructor({ mapper, repository, modelsValidator }) {
     this.mapper = mapper;
     this.validator = modelsValidator;
     this.repository = repository;
@@ -12,9 +11,7 @@ export default class BaseService {
 
   async wrapError(operation) {
     try {
-      const result = await operation();
-
-      return Promise.resolve(result);
+      return await operation();
     } catch (error) {
       throw new Error(error);
     }

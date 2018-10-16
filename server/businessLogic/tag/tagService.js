@@ -4,8 +4,8 @@ import AuditableService from '../helpers/auditableService';
 import * as tagDALtoDTO from './models/tagDALtoDTO.json';
 
 export default class TagService extends AuditableService {
-  constructor(logger, mapper, tagRepository) {
-    super({ logger, mapper, repository: tagRepository });
+  constructor(mapper, tagRepository) {
+    super({ mapper, repository: tagRepository });
   }
 
   async findAll() {
