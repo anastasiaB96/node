@@ -1,11 +1,11 @@
 'use strict';
 
-import AuditableService from '../helpers/auditableService';
+import BaseService from '../helpers/baseService';
 import ValidationError from '../helpers/errors/validationError';
 import * as questionWithTagsDALtoDTO from './models/questionWithTagsDALtoDTO.json';
 import * as questionDALtoDTO from './models/questionDALtoDTO.json';
 
-export default class QuestionService extends AuditableService {
+export default class QuestionService extends BaseService {
   constructor(mapper, questionRepository, answerService, questionVoteService, tagService) {
     super({ mapper, repository: questionRepository });
 

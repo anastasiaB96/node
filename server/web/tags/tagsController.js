@@ -3,10 +3,10 @@
 import { createController } from 'awilix-koa';
 import { jwtProtection } from '../../middlewares/jwtProtection';
 import { adminProtection } from '../../middlewares/adminProtection';
-import AuditableController from '../helpers/auditableController';
 import { createTagValidator, updateTagValidator } from './tagsValidator';
+import BaseController from '../helpers/baseController';
 
-class TagsController extends AuditableController {
+class TagsController extends BaseController {
   constructor(tagService) {
     super(tagService);
   }
@@ -19,22 +19,6 @@ class TagsController extends AuditableController {
 
       return ctx.created(createdResult);
     }, ctx);
-  }
-
-  async updateById(ctx) {
-    if (!await this.isPermissions(ctx)) {
-      return ctx.forbidden('Sorry, you don\'t have requested permissions!');
-    }
-
-    return super.updateById(ctx);
-  }
-
-  async deleteById(ctx) {
-    if (!await this.isPermissions(ctx)) {
-      return ctx.forbidden('Sorry, you don\'t have requested permissions!');
-    }
-
-    return super.deleteById(ctx);
   }
 }
 

@@ -2,5 +2,6 @@
   "dataValues.id": "id",
   "dataValues.title": "title",
   "dataValues.body": "body",
-  "dataValues.rating": "rating"
+  "dataValues.rating": "rating",
+  "dataValues.userId": "userId"
 }

@@ -1,9 +1,9 @@
 'use strict';
 
-import AuditableService from '../helpers/auditableService';
+import BaseService from '../helpers/baseService';
 import * as tagDALtoDTO from './models/tagDALtoDTO.json';
 
-export default class TagService extends AuditableService {
+export default class TagService extends BaseService {
   constructor(mapper, tagRepository) {
     super({ mapper, repository: tagRepository });
   }

@@ -1,9 +1,9 @@
 'use strict';
 
-import AuditableService from '../helpers/auditableService';
 import * as answerDALtoDTO from './models/answerDALtoDTO.json';
+import BaseService from '../helpers/baseService';
 
-export default class AnswerService extends AuditableService {
+export default class AnswerService extends BaseService {
   constructor(mapper, answerRepository, answerVoteService) {
     super({ mapper, repository: answerRepository });
 

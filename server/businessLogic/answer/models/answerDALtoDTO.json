@@ -1,5 +1,6 @@
 {
   "dataValues.id": "id",
   "dataValues.body": "body",
-  "dataValues.rating": "rating"
+  "dataValues.rating": "rating",
+  "dataValues.userId": "userId"
 }

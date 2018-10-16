@@ -3,5 +3,6 @@
   "dataValues.title": "title",
   "dataValues.body": "body",
   "dataValues.rating": "rating",
-  "dataValues.tag.name": "tags"
+  "dataValues.tag.name": "tags",
+  "dataValues.userId": "userId"
 }

@@ -3,16 +3,18 @@
 import { createController } from 'awilix-koa';
 import { jwtProtection } from '../../middlewares/jwtProtection';
 import { adminProtection } from '../../middlewares/adminProtection';
-import AuditableController from '../helpers/auditableController';
 import { updateAnswerValidator } from './answersValidator';
+import BaseController from '../helpers/baseController';
 
-class AnswersController extends AuditableController {
-  constructor(answerService) {
+class AnswersController extends BaseController {
+  constructor(answerService, permissionsHelper) {
     super(answerService);
+
+    this.permissionsHelper = permissionsHelper;
   }
 
   async updateById(ctx) {
-    if (!await this.isPermissions(ctx)) {
+    if (!await this._isOwnerOrAdmin(ctx)) {
       return ctx.forbidden('Sorry, you don\'t have requested permissions!');
     }
 
@@ -31,7 +33,7 @@ class AnswersController extends AuditableController {
   }
 
   async deleteById(ctx) {
-    if (!await this.isPermissions(ctx)) {
+    if (!await this._isOwnerOrAdmin(ctx)) {
       return ctx.forbidden('Sorry, you don\'t have requested permissions!');
     }
 
@@ -47,6 +49,17 @@ class AnswersController extends AuditableController {
 
       return ctx.noContent();
     }, ctx);
+  }
+
+  async _isOwnerOrAdmin(ctx) {
+    const userInfo = this.getCurrentUser(ctx);
+    const answerId = this.getParams(ctx).id;
+
+    return await this.permissionsHelper.isOwnerOrAdmin(
+      userInfo,
+      async () => await this.service.findById(answerId),
+      (entity) => entity.userId
+    )
   }
 }
 
