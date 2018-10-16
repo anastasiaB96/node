@@ -1,8 +1,10 @@
 'use strict';
 
+import { businessErrorToHttpError } from "../../constants/errors";
+
 export default class HttpError {
   constructor(error) {
-    this.code = error.name;
-    this.userMessage = error.message;
+    this.code = businessErrorToHttpError[error.name];
+    this.userMessage = error.message || 'Sorry, something went wrong :(';
   }
 }

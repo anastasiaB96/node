@@ -1,7 +1,7 @@
 'use strict';
 
 import AuditableService from '../helpers/auditableService';
-import BadRequestError from '../helpers/errors/badRequestError';
+import ValidationError from '../helpers/errors/validationError';
 import * as questionWithTagsDALtoDTO from './models/questionWithTagsDALtoDTO.json';
 import * as questionDALtoDTO from './models/questionDALtoDTO.json';
 
@@ -44,11 +44,11 @@ export default class QuestionService extends AuditableService {
       const question = await this.repository.findById(info.questionId);
 
       if (!tag) {
-        return Promise.reject(new BadRequestError('Unknown tag id.'));
+        return Promise.reject(new ValidationError('Invalid tag id.'));
       }
 
       if (!question) {
-        return Promise.reject(new BadRequestError('Unknown question id.'));
+        return Promise.reject(new ValidationError('Invalid question id.'));
       }
 
       return this.repository.addTagToQuestion(question, tag);
@@ -61,11 +61,11 @@ export default class QuestionService extends AuditableService {
       const question = await this.repository.findById(info.questionId);
 
       if (!tag) {
-        return Promise.reject(new BadRequestError('Unknown tag id.'));
+        return Promise.reject(new ValidationError('Invalid tag id.'));
       }
 
       if (!question) {
-        return Promise.reject(new BadRequestError('Unknown question id.'));
+        return Promise.reject(new ValidationError('Invalid question id.'));
       }
 
       return this.repository.removeTagFromQuestion(question, tag);

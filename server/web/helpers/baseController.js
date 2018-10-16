@@ -32,7 +32,7 @@ export default class BaseController {
     } catch (error) {
       const httpError = new HttpError(error);
 
-      return ctx.send(httpError.code, httpError.userMessage);
+      return ctx.throw(httpError.code, httpError.userMessage);
     }
   }
 
@@ -77,24 +77,24 @@ export default class BaseController {
 
       await this.service.updateById(id, contextBody);
 
-      return ctx.noContent();
+      return ctx.ok();
     }, ctx);
   }
 
   async deleteAll(ctx) {
     return this.wrapError(async () => {
-      const deletedItems = await this.service.deleteAll();
+      await this.service.deleteAll();
 
-      return ctx.ok(deletedItems);
+      return ctx.noContent();
     }, ctx);
   }
 
   async deleteById(ctx) {
     return this.wrapError(async () => {
       const id = this.getParams(ctx).id;
-      const deletedItem = await this.service.deleteById(id);
+      await this.service.deleteById(id);
 
-      return ctx.ok(deletedItem);
+      return ctx.noContent();
     }, ctx);
   }
 }

@@ -1,7 +1,6 @@
 'use strict';
 
-import InternalError from './errors/internalError';
-import BadRequestError from './errors/badRequestError';
+import ValidationError from './errors/validationError';
 
 export default class BaseService {
   constructor({ logger, mapper, repository, modelsValidator }) {
@@ -17,9 +16,7 @@ export default class BaseService {
 
       return Promise.resolve(result);
     } catch (error) {
-      this.logger.error(error);
-
-      return Promise.reject(new InternalError(error));
+      throw new Error(error);
     }
   }
 
@@ -31,7 +28,7 @@ export default class BaseService {
 
   async findById(id) {
     if (!id) {
-      return Promise.reject(new BadRequestError('Id is required'));
+      return Promise.reject(new ValidationError('Invalid id'));
     }
 
     return this.wrapError(async () => {
@@ -53,7 +50,7 @@ export default class BaseService {
 
   async updateById(id, data) {
     if (!id) {
-      return Promise.reject(new BadRequestError('Id is required'));
+      return Promise.reject(new ValidationError('Invalid id'));
     }
 
     return this.wrapError(async () => {
@@ -69,7 +66,7 @@ export default class BaseService {
 
   async deleteById(id) {
     if (!id) {
-      return Promise.reject(new BadRequestError('Id is required'));
+      return Promise.reject(new ValidationError('Invalid id'));
     }
 
     return this.wrapError(async () => {

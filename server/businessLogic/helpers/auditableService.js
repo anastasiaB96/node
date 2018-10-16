@@ -1,8 +1,7 @@
 'use strict';
 
 import BaseService from './baseService';
-import InternalError from './errors/internalError';
-import BadRequestError from './errors/badRequestError';
+import ValidationError from './errors/validationError';
 
 export default class AuditableService extends BaseService {
   async isOwner({ id, userId }) {
@@ -10,7 +9,7 @@ export default class AuditableService extends BaseService {
       const info = await this.findById(id);
 
       if (!info) {
-        return Promise.reject(new BadRequestError('User wasn\'t found'));
+        return Promise.reject(new ValidationError('Invalid user id'));
       }
 
       return info.userId === userId;

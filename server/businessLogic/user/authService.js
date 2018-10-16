@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import config from 'config';
 import BaseService from '../helpers/baseService';
 import ROLES from '../../constants/roles';
-import BadRequestError from '../helpers/errors/badRequestError';
+import ValidationError from '../helpers/errors/validationError';
 import * as userDALtoDTO from './models/userDALtoDTO.json';
 
 export default class AuthService extends BaseService {
@@ -26,7 +26,7 @@ export default class AuthService extends BaseService {
       const existingUser = await this.userService.findByEmail(email);
 
       if (existingUser) {
-        return Promise.reject(new BadRequestError('User already exists.'));
+        return Promise.reject(new ValidationError('User already exists.'));
       }
 
       const createdUser = await this.userService.create(userInfo);
@@ -41,13 +41,13 @@ export default class AuthService extends BaseService {
       const user = await this.userService.findByEmail(email);
 
       if (!user) {
-        return Promise.reject(new BadRequestError('User doesn\'t exists.'));
+        return Promise.reject(new ValidationError('User doesn\'t exists.'));
       }
 
       const isValid = await user.validPassword(password);
 
       if (!isValid) {
-        return Promise.reject(new BadRequestError('Invalid credentials.'));
+        return Promise.reject(new ValidationError('Invalid credentials.'));
       }
 
       const token = AuthService._generateJWTToken(this.mapper.mapObject(user, userDALtoDTO));
@@ -62,13 +62,13 @@ export default class AuthService extends BaseService {
       const user = await this.userService.findByEmail(email);
 
       if (!user) {
-        return Promise.reject(new BadRequestError('User doesn\'t exists.'));
+        return Promise.reject(new ValidationError('User doesn\'t exists.'));
       }
 
       const adminRole = await this.roleService.findByName(ROLES.admin);
 
       if (!adminRole) {
-        return Promise.reject(new BadRequestError('Role doesn\'t exists.'));
+        return Promise.reject(new ValidationError('Role doesn\'t exists.'));
       }
 
       return this.userService.addRole(user, adminRole);
