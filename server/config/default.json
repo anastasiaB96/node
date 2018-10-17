@@ -3,12 +3,6 @@
     "port": 3004
   },
   "db": {
-    "database": "posts",
-    "username": "anastasia",
-    "password": "9122930",
-    "host": "localhost",
-    "port": 5432,
-    "dialect": "postgres",
     "operatorsAliases": false
   },
   "auth": {
