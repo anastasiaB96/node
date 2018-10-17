@@ -29,7 +29,7 @@ export default class DatabaseContext {
   }
 
   _getModels() { // TODO files reading
-    const files = this._glob.readdirSync('server/dataAccess/**/*.js');
+    const files = this._glob.readdirSync('./**/*.js');
     const models = files
       .filter(file => {
         return (file.indexOf('models') !== -1) && (file.indexOf('.') !== -1)
