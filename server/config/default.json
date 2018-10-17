@@ -8,7 +8,8 @@
     "password": "9122930",
     "host": "localhost",
     "port": 5432,
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "operatorsAliases": false
   },
   "auth": {
     "secret": "mego-secret-key",
