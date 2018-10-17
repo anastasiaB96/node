@@ -4,7 +4,7 @@ const path = require('path');
 const basePath = './server/dataAccess';
 
 module.exports = {
-  'config': path.resolve(basePath, 'config.js'),
+  'config': path.resolve(basePath, 'migrations/config.js'),
   'migrations-path': path.resolve(basePath, 'migrations'),
   'models-path': path.resolve(basePath, 'models'),
   'seeders-path': path.resolve(basePath, 'seeders')
