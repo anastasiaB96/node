@@ -15,10 +15,13 @@
     ]
   ],
   "env": {
-    "production": {
+    "development": {
       "plugins": [
         "source-map-support"
-      ],
+      ]
+    },
+    "production": {
+      "plugins": [],
       "ignore": [
         "**/__tests__/**"
       ]
