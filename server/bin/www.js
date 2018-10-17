@@ -4,7 +4,7 @@ import config from 'config';
 import { createServer } from '../helpers/server';
 import logger from '../helpers/logger';
 
-const port = config.get('server.port');
+const port = process.env.PORT || _config.default.get('server.port') || 4000;;
 
 createServer()
   .then(app => {
