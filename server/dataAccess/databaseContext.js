@@ -4,6 +4,7 @@ import path from 'path';
 import Glob from 'glob-fs';
 import { Sequelize } from 'sequelize';
 import dbConfig from './config';
+import config from 'config';
 
 export default class DatabaseContext {
   constructor() {
@@ -29,13 +30,14 @@ export default class DatabaseContext {
   }
 
   _getModels() { // TODO files reading
-    const files = this._glob.readdirSync('server/dataAccess/**/*.js');
+    const rootDirectory = config.get('rootDirectory');
+    const files = this._glob.readdirSync(rootDirectory + '/dataAccess/**/*.js');
     const models = files
       .filter(file => {
         return (file.indexOf('models') !== -1) && (file.indexOf('.') !== -1)
       })
       .map(file => {
-        const model = require(path.join(__dirname, file.replace('server\\dataAccess\\', ''))).default;
+        const model = require(path.join(__dirname, file.replace(rootDirectory + '\\dataAccess\\', ''))).default;
 
         return {
           [model.name]: model.init(this._sequelize),

@@ -6,5 +6,6 @@
     "dialectOptions": {
       "ssl": true
     }
-  }
+  },
+  "rootDirectory": "dist"
 }
