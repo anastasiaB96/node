@@ -8,5 +8,6 @@
   "auth": {
     "secret": "mego-secret-key",
     "tokenExpiration": "1h"
-  }
+  },
+  "rootDirectory": "server"
 }

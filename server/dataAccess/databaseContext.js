@@ -1,15 +1,12 @@
 'use strict';
 
-import path from 'path';
-import Glob from 'glob-fs';
+import glob from 'glob';
 import { Sequelize } from 'sequelize';
 import dbConfig from './config';
 import config from 'config';
 
 export default class DatabaseContext {
   constructor() {
-    this._glob = new Glob();
-
     this._sequelize = new Sequelize(
       dbConfig.database,
       dbConfig.username,
@@ -31,13 +28,14 @@ export default class DatabaseContext {
 
   _getModels() { // TODO files reading
     const rootDirectory = config.get('rootDirectory');
-    const files = this._glob.readdirSync(rootDirectory + '/dataAccess/**/*.js');
+    const files = glob.sync(`${rootDirectory}/dataAccess/**/*.js`, { absolute: true });
     const models = files
       .filter(file => {
         return (file.indexOf('models') !== -1) && (file.indexOf('.') !== -1)
       })
       .map(file => {
-        const model = require(path.join(__dirname, file.replace(rootDirectory + '\\dataAccess\\', ''))).default;
+        const model = require(file.replace(`${rootDirectory}\\dataAccess\\`, '')).default;
+        console.log(model);
 
         return {
           [model.name]: model.init(this._sequelize),
