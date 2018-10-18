@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [{
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Prod",
+            "program": "${workspaceFolder}\\dist\\bin\\www.js",
+            "env": {
+                "NODE_ENV": "production",
+                "NODE_CONFIG_DIR": "dist/config",
+                "DATABASE_URL": "postgres://mpwaqxemexivld:2a5f38b820042aae2cf9c4110e99c3dc4d324e07ab7d7704747f5abb2139aaca@ec2-54-217-236-201.eu-west-1.compute.amazonaws.com:5432/d5cbevbt3ge8vc"
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Dev",
+            "program": "${workspaceFolder}\\dist\\bin\\www.js",
+            "env": {
+                "NODE_ENV": "development",
+                "NODE_CONFIG_DIR": "dist/config"
+            }
+        }
+    ]
+}

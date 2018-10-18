@@ -42,11 +42,7 @@ export default class BaseController {
     return this.wrapError(async () => {
       const result = await this.service.findAll();
 
-      if (!result.length) {
-        return ctx.notFound();
-      }
-
-      return ctx.ok(result);
+      return ctx.ok(result || []);
     }, ctx);
   }
 
